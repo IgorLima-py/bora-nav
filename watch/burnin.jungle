@@ -1,0 +1,8 @@
+# The anti burn-in orbit in the simulator (C10): `monkeyc -f "monkey.jungle;burnin.jungle"`, only through
+# `tools/sim.py shots --burnin`. It is the demo (`demo.jungle`) without `DemoHold`: swaps the
+# `demoAfterLoad` that holds the screen (`demo/source/DemoHold.mc`, annotated `demo_hold`) for the one in
+# `demo/burnin/BurnInStart.mc`, which walks the bike to the middle of the route, measures the street-name cut
+# by amplitude, and holds the orbit at two points (`[burnin] pronto a|b`) for `sim.py` to photograph.
+base.sourcePath = source;demo/source;demo/burnin
+base.resourcePath = resources;demo/resources
+base.excludeAnnotations = canary;quadratic_parse;nodemo;demo_hold;no_near_alert

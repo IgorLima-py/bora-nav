@@ -1,0 +1,5 @@
+# DRAFT (radar, F5): the radar scenes, `monkeyc -f "monkey.jungle;radar.jungle"`. It is
+# `shots.jungle` with `demo/radar/RadarShotStart.mc` in place of `demo/shots/ShotStart.mc`.
+base.sourcePath = source;demo/source;demo/radar
+base.resourcePath = resources;demo/resources
+base.excludeAnnotations = canary;quadratic_parse;nodemo;demo_hold;no_near_alert

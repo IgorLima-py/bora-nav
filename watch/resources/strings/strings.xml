@@ -1,0 +1,130 @@
+<strings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://developer.garmin.com/downloads/connect-iq/resources.xsd">
+    <!--
+        English, the default (C16.8a): every watch language other than Portuguese reads this file.
+        The Portuguese is in `resources-por/strings/strings.xml`, with the same ids and the same
+        $1$ placeholders; `tools/idioma.py` checks both, and `sim.py tudo` runs it.
+    -->
+    <string id="AppName">Bora?</string>
+    <string id="WaitingRoute">All set</string>
+
+    <!-- Home screen. -->
+    <string id="NoPhone">Where's the phone?</string>
+    <string id="FavoritesItem">Favorites</string>
+    <string id="RecentsItem">Recent</string>
+    <string id="SettingsItem">Settings</string>
+    <string id="LinkItem">Connection</string>
+    <string id="PlacesNone">No places</string>
+    <string id="PlacesOne">1 place</string>
+    <string id="PlacesCount">$1$ places</string>
+    <string id="DestinationsNone">No destinations</string>
+    <string id="DestinationsOne">1 destination</string>
+    <string id="DestinationsCount">$1$ destinations</string>
+    <string id="SettingsHint">HUD, numbers, streets</string>
+    <string id="OpenLog">Enter opens the log</string>
+    <string id="WatchVersion">watch $1$</string>
+
+    <!-- Map action menu: each label says what tapping it will do. -->
+    <string id="MenuEndRoute">End route</string>
+    <string id="MenuZoomAuto">Use auto zoom</string>
+    <string id="MenuZoomFixed">Use fixed zoom</string>
+    <string id="MenuRecenter">Recenter</string>
+    <string id="MenuDetails">Details</string>
+    <string id="MenuLog">Log</string>
+    <string id="MenuSimulate">Simulate ride</string>
+    <string id="MenuSimulateStop">Stop simulation</string>
+
+    <!-- Riding HUD (Hud.mc, NavEngine.mc, Fmt.mc). -->
+    <string id="Recalculating">Recalculating…</string>
+    <string id="Arrived">You're here</string>
+    <string id="AndThen">then</string>
+    <string id="NoGps">no GPS</string>
+    <string id="ArrivedAt">arrived at $1$</string>
+    <string id="OffRoute">off route</string>
+    <string id="NoRoute">no route</string>
+    <string id="WaitingGps">waiting for GPS</string>
+    <string id="FindingRoute">finding the route</string>
+    <string id="GoStraight">go straight</string>
+    <string id="ExitN">exit $1$</string>
+    <string id="Now">NOW</string>
+    <string id="DecimalSep">.</string>
+
+    <!-- Weather on the clock line: 7 letters at most (WeatherInfo.conditionLabel). -->
+    <string id="WxSun">sunny</string>
+    <string id="WxCloudy">cloudy</string>
+    <string id="WxStorm">storm</string>
+    <string id="WxRain">rain</string>
+    <string id="WxSnow">snow</string>
+    <string id="WxFog">fog</string>
+    <string id="WxWind">windy</string>
+
+    <!-- Route request from the watch, on the home screen (FavoriteAsk.mc). -->
+    <string id="AskRouteStopped">Route stopped arriving</string>
+    <string id="AskNoAnswer">The phone didn't answer</string>
+    <string id="AskReceiving">Receiving route</string>
+    <string id="AskRequesting">Requesting route · $1$</string>
+
+    <!-- Favorites and Recent (FavoritesView.mc, Favorites.mc, Recents.mc). -->
+    <string id="NoFavorites">No favorites</string>
+    <string id="AddOnPhone">Add them on the phone</string>
+    <string id="NoRecents">No destinations</string>
+    <string id="RecentsAfterTrip">They show up after your 1st trip</string>
+    <string id="FavoriteN">Favorite $1$</string>
+    <string id="DestinationN">Destination $1$</string>
+
+    <!-- Details (DetailsModel.mc). -->
+    <string id="NoTurnsAhead">no turns ahead</string>
+    <string id="DistanceLeft">$1$ to go</string>
+    <string id="BatteryPct">battery $1$%</string>
+    <string id="TapAgain">Tap again</string>
+    <string id="TurnStraight">Go straight</string>
+    <string id="TurnSlightRight">Slight right</string>
+    <string id="TurnRight">Right</string>
+    <string id="TurnSharpRight">Sharp right</string>
+    <string id="TurnUTurn">U-turn</string>
+    <string id="TurnSharpLeft">Sharp left</string>
+    <string id="TurnLeft">Left</string>
+    <string id="TurnSlightLeft">Slight left</string>
+    <string id="TurnRoundaboutExit">Roundabout, exit $1$</string>
+    <string id="TurnRoundabout">Roundabout</string>
+    <string id="TurnHighwayEnter">Take the ramp</string>
+    <string id="TurnHighwayExit">Take the exit</string>
+    <string id="TurnHighwayEnterLeft">Take the ramp on the left</string>
+    <string id="TurnHighwayExitLeft">Take the exit on the left</string>
+    <string id="TurnForkLeft">Fork left</string>
+    <string id="TurnForkRight">Fork right</string>
+    <string id="TurnMerge">Merge</string>
+    <string id="TurnMergeLeft">Merge from the left</string>
+    <string id="TurnMergeRight">Merge from the right</string>
+    <string id="TurnArriveLeft">Arrive on the left</string>
+    <string id="TurnArriveRight">Arrive on the right</string>
+    <string id="TurnArrive">Arrive</string>
+    <string id="TurnDepart">Depart</string>
+    <string id="TurnContinue">Continue</string>
+
+    <!-- Watch settings (QuickSettings.mc). -->
+    <string id="On">On</string>
+    <string id="Off">Off</string>
+    <string id="OnFem">On</string>
+    <string id="OffFem">Off</string>
+    <string id="OnTest">On (test)</string>
+    <string id="OffTest">Off (test)</string>
+    <string id="HudSize">HUD size</string>
+    <string id="Numbers">Numbers</string>
+    <string id="StreetBrightness">Street brightness</string>
+    <string id="ResetDefaults">Reset to default</string>
+    <string id="ResetHint">HUD, numbers, streets, outline and map</string>
+    <string id="StreetImages">Street images</string>
+    <string id="RouteCasing">Route outline (test)</string>
+    <string id="TiltMap">Tilted map (test)</string>
+    <string id="TheRest">Everything else</string>
+    <string id="OnThePhone">on the phone</string>
+    <string id="CurrentValue">current</string>
+
+    <!-- Connection and log screens (DebugView.mc, LogView.mc). -->
+    <string id="AwaitingRoute">Waiting for route…</string>
+    <string id="RouteNumber">Route #$1$</string>
+    <string id="Receiving">receiving…</string>
+    <string id="PointsTurns">$1$ pts · $2$ turns</string>
+    <string id="BytesChunks">$1$ B in $2$ chunks</string>
+    <string id="NoEvents">no events</string>
+</strings>

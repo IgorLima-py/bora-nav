@@ -1,0 +1,75 @@
+Bora? (code name MotoNav)
+Copyright (c) 2026 Igor Lima. Source code under the MIT License (see LICENSE).
+
+This is an independent personal project. It is not affiliated with, endorsed,
+sponsored or approved by Garmin Ltd. or its subsidiaries. Garmin, Venu and
+Connect IQ are trademarks of Garmin Ltd. or its subsidiaries. The watch frame in
+docs/img/ is drawn by tools/moldura.py; no Garmin artwork or SDK material
+(simulator images, device files) is included in this repository.
+
+Third-party code
+----------------
+The watch's maneuver glyphs (watch/source/render/TurnGlyphs.mc and
+tools/glifos/glifos.json) are derived from the navigation icons of
+googlemaps-samples/android-navigation-samples (commit a73bfba),
+Copyright Google LLC, under the Apache License 2.0. The original PNGs and the
+license are in tools/glifos/google/. Modification: traced into polygons and
+recolored.
+
+The Gradle Wrapper (companion/gradle/wrapper/gradle-wrapper.jar) is part of
+Gradle (https://gradle.org), under the Apache License 2.0.
+
+The Outfit font (companion/app/src/main/res/font/) and the Nunito font
+(docs/design/relogio/fonte/) are under the SIL Open Font License 1.1; the
+license texts are in companion/licenses/OFL-Outfit.txt and
+docs/design/relogio/fonte/OFL.txt.
+
+Map data
+--------
+Street and speed-camera data: © OpenStreetMap contributors, available under the
+Open Database License (ODbL), https://www.openstreetmap.org/copyright
+
+- The streets around the route come from vector tiles generated from
+  OpenStreetMap by VersaTiles (tiles.versatiles.org, Shortbread schema), with
+  the Overpass API as the fallback.
+- The companion also has a reader for OpenMapTiles-schema tiles from OpenFreeMap
+  (tiles.openfreemap.org); it is not enabled today. Tiles from that source are
+  "OpenFreeMap © OpenMapTiles. Data from OpenStreetMap." https://openmaptiles.org/
+- The hosted VersaTiles "osm" tileset is merged with land cover:
+  © ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data
+  (2021) processed by ESA WorldCover consortium. (CC BY 4.0)
+- Speed cameras come from OpenStreetMap (highway=speed_camera) through the
+  Overpass API.
+- Address search uses Photon (photon.komoot.io), which serves OpenStreetMap data.
+- tools/fixtures/corridor_*.json and tools/fixtures/overpass_radars_*.json are
+  recorded Overpass responses with OpenStreetMap data (ODbL).
+- tools/fixtures/route_*.json are recorded OSRM responses
+  (https://routing.openstreetmap.de, run by FOSSGIS), with OpenStreetMap data
+  (ODbL).
+
+Official speed cameras missing from OpenStreetMap: pardal
+(https://github.com/Murkiriel/pardal), under the ODbL 1.0, a database derived
+from OpenStreetMap and from official open data. The app downloads
+brasil/radares.csv and uses only fixed, active cameras with a direction. The
+pardal sources, with the license its README gives each one:
+- City of São Paulo (GeoSampa, CET-SP): the city's active cameras, with speed
+  limit and direction. Municipal open data; CET's "Fiscalização Eletrônica do
+  Trânsito" dataset on the city's open data portal
+  (https://dados.prefeitura.sp.gov.br) is CC BY.
+- ANTT (cameras and signage on federal concessions): CC BY.
+- City of Rio de Janeiro (IPP, SMTR/CET-Rio): CC BY 4.0.
+- BHTrans (Belo Horizonte): CC BY.
+- Inmetro (PSIE, speed meters): Creative Commons.
+- DNIT (PNCV, SNV and ICM), PRF (mobile radar segments, violations and
+  crashes), DER-SP / Artesp, DER-GO (Goinfra), DER-PE, DER-MG, IDE-Sisema
+  (SEMAD-MG), SIE-SC, IBGE (meshes and CNEFE), Detran-DF, and the cities of
+  Fortaleza, Recife, João Pessoa and Curitiba: government open data.
+- EPTC (Porto Alegre): municipal open data.
+- PRF (spreadsheet of fixed cameras on concessions): no written license.
+
+Routing
+-------
+Directions powered by Mapbox (Mapbox Directions API, plus Mapbox geocoding as an
+alternative to Photon). Each user brings their own Mapbox access token, typed
+into the companion app; no token ships in this repository or in the APK, and
+each user is responsible for complying with the Mapbox Terms of Service.

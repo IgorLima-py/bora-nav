@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    English is the default (C16.8b): it applies to every device whose language has no folder of its own. The
+    Portuguese is in `values-pt/`, with the same keys and the same arguments (`StringsCatalogTest`).
+-->
+<resources>
+    <string name="app_name" translatable="false">Bora?</string>
+    <!-- Must match what the watch shows (see watch/source/AppVersion.mc). -->
+    <string name="app_version" translatable="false">Bora? %1$s</string>
+
+    <string name="tab_home">Home</string>
+    <string name="tab_trips">Trips</string>
+    <string name="watch_tab">Watch</string>
+
+    <string name="home_share_hint">Or share a place from Google Maps</string>
+    <string name="home_edit">Edit</string>
+    <string name="home_recents">Recent</string>
+    <string name="home_recents_empty">The next route you send to the watch shows up here.</string>
+    <string name="home_add_favorite">Add favorite</string>
+
+    <string name="watch_link">Connection</string>
+    <string name="watch_settings_hint">HUD, numbers and streets on the watch.</string>
+    <string name="watch_battery">Battery</string>
+
+    <string name="link_initializing">Talking to Garmin Connect…</string>
+    <string name="link_no_devices">Where\'s the watch? Pair it in Garmin Connect.</string>
+    <string name="link_gcm_missing">Garmin Connect is missing. Without it, Bora? can\'t talk to the watch.</string>
+    <string name="link_gcm_outdated">Garmin Connect needs an update. The installed version can\'t talk to Bora?.</string>
+    <string name="link_service_error">Garmin Connect didn\'t answer. Open the app and try again.</string>
+    <string name="link_sdk_shutdown">The connection to Garmin Connect dropped. Open the app and try again.</string>
+
+    <string name="device_connected">Connected</string>
+    <string name="device_disconnected">Where\'s the watch? Check Bluetooth and Garmin Connect.</string>
+    <string name="device_app_installed">Bora? installed on the watch</string>
+    <string name="device_app_missing">Bora? isn\'t on the watch</string>
+    <string name="device_app_unknown">Checking whether Bora? is on the watch…</string>
+
+    <string name="token_label">Mapbox token</string>
+    <string name="token_why">Without it the phone can\'t calculate routes. Search works without it.</string>
+    <string name="token_save">Save token</string>
+    <string name="token_saved">Mapbox token saved</string>
+    <string name="token_change">Change token</string>
+
+    <string name="search_label">Where to?</string>
+    <string name="search_needs_token">Save the Mapbox token to search for addresses.</string>
+    <string name="search_nothing">Nothing found for “%1$s”.</string>
+
+    <string name="confirm_title">Ride to %1$s?</string>
+    <string name="confirm_distance">%1$d km from here as the crow flies</string>
+    <string name="confirm_start">Let\'s go</string>
+    <string name="confirm_cancel">Not now</string>
+
+    <string name="action_watch_settings">Watch settings</string>
+    <string name="action_favorites">Favorites</string>
+    <string name="action_trips">Trips</string>
+    <string name="trips_title">Trips</string>
+    <string name="trips_intro">Logged on their own, from the route sent to the end of navigation on the watch. Battery is for the trip, without the arrival screen.</string>
+    <string name="trips_empty">No trips yet. The next route you send to the watch shows up here.</string>
+    <string name="settings_title">Watch settings</string>
+    <string name="settings_intro">Each setting goes to the watch on its own when you lift your finger.</string>
+    <string name="settings_send">Send again</string>
+    <string name="settings_reset">Reset all</string>
+    <!-- PardalAttributionTest checks the source names in both languages. -->
+    <string name="osm_attribution">Streets and speed cameras: © OpenStreetMap contributors (ODbL). Official cameras: pardal (ODbL), with data from CET-SP (CC BY), DER-SP, ANTT (CC BY), DNIT, Inmetro, PRF and city governments.</string>
+    <string name="settings_back">Back</string>
+
+    <string name="action_refresh">Search again</string>
+
+    <string name="nav_channel">Watch connection</string>
+    <string name="nav_notification">Navigating to %1$s</string>
+    <string name="nav_notification_plain">Navigating</string>
+    <string name="nav_notification_text">Bora? keeps talking to the watch with the screen off.</string>
+    <string name="listen_notification">Bora? listening to the watch</string>
+    <string name="listen_notification_text">Pick a favorite on the watch and the route comes from here, with the phone in your pocket.</string>
+
+    <string name="battery_exempt">Unrestricted battery: the watch can start navigation with the phone in your pocket.</string>
+    <string name="battery_restricted">The phone\'s battery saver cuts Bora? off: with the restriction on, the watch can\'t start navigation with the phone in your pocket.</string>
+    <string name="battery_allow">Allow</string>
+    <string name="battery_allow_long">Remove the battery restriction</string>
+    <string name="action_open_gcm">Open Garmin Connect</string>
+
+    <!-- The Home header (HomeStatus). -->
+    <string name="home_watch">Watch</string>
+    <string name="pending_gcm" translatable="false">Garmin Connect</string>
+    <string name="pending_watch_paired">Watch paired</string>
+    <string name="pending_watch_on">%1$s connected</string>
+    <string name="pending_app_on_watch">Bora? on the watch</string>
+    <string name="pending_battery">Unrestricted battery</string>
+    <string name="action_install">Install</string>
+    <string name="action_update">Update</string>
+    <string name="action_open">Open</string>
+    <string name="action_save">Save</string>
+    <string name="status_searching">Looking for the watch</string>
+    <string name="status_searching_detail">Talking to Garmin Connect</string>
+    <string name="status_gcm_missing">Garmin Connect is missing</string>
+    <string name="status_gcm_missing_detail">Without it, Bora? can\'t talk to the watch</string>
+    <string name="status_gcm_old">Garmin Connect needs an update</string>
+    <string name="status_gcm_old_detail">The installed version can\'t talk to Bora?</string>
+    <string name="status_gcm_error">Garmin Connect didn\'t answer</string>
+    <string name="status_gcm_error_detail">Open the app and try again</string>
+    <string name="status_no_watch">Where\'s the watch?</string>
+    <string name="status_no_watch_pair">Pair the watch in Garmin Connect</string>
+    <string name="status_no_watch_bt">Check Bluetooth and Garmin Connect</string>
+    <string name="status_calculating">Calculating the route</string>
+    <string name="status_sending">Sending the route</string>
+    <string name="status_app_missing">Bora? isn\'t on the watch</string>
+    <string name="status_app_missing_detail">Install Bora? on the %1$s</string>
+    <string name="status_one_thing">One thing left</string>
+    <string name="status_battery_detail">The phone\'s battery saver cuts Bora? off</string>
+    <string name="status_token_missing">The Mapbox token is missing</string>
+    <string name="status_token_missing_detail">Without it the phone can\'t calculate routes</string>
+    <string name="status_ready">All set</string>
+    <string name="status_ready_detail">%1$s connected · Bora? %2$s</string>
+    <string name="status_for">To %1$s</string>
+    <string name="status_for_watch">To %1$s, requested from the watch</string>
+
+    <!-- Recents and trips. -->
+    <string name="day_today">today</string>
+    <string name="day_yesterday">yesterday</string>
+    <string name="trip_running">in progress · plan %1$s</string>
+    <string name="trip_delta">(%1$s vs. plan)</string>
+    <string name="trip_planned">%1$s km planned</string>
+    <string name="trip_ridden">%1$s km ridden of %2$s km planned</string>
+    <string name="trip_avg">avg %1$s km/h</string>
+    <plurals name="trip_reroutes">
+        <item quantity="one">%d reroute</item>
+        <item quantity="other">%d reroutes</item>
+    </plurals>
+    <string name="trip_battery_watch">watch</string>
+    <string name="trip_battery_phone">phone</string>
+    <plurals name="trip_battery">
+        <item quantity="one">%1$s %2$d → %3$d%% (%4$d point)</item>
+        <item quantity="other">%1$s %2$d → %3$d%% (%4$d points)</item>
+    </plurals>
+    <string name="trip_battery_rate">%1$s %%/h</string>
+    <string name="trip_pace_learning">Your pace: learning (%1$d of %2$d trips). Until then, the time on the watch is Mapbox\'s driving time.</string>
+    <string name="trip_pace">Your pace: %1$d%% of Mapbox\'s time, from %2$d trips. The time on the watch already uses it.</string>
+    <string name="trip_end_arrived">arrived</string>
+    <string name="trip_end_cancelled">ended on the watch</string>
+    <string name="trip_end_error">watch error</string>
+    <string name="trip_end_no_word">the watch stopped answering</string>
+    <string name="trip_end_replaced">changed destination</string>
+    <string name="trip_end_interrupted">the phone app closed midway</string>
+    <string name="trip_end_running">in progress</string>
+    <string name="trip_when_format">MM/dd HH:mm</string>
+    <string name="day_format">MM/dd</string>
+
+    <!-- Favorites. -->
+    <string name="fav_seed_home">Home</string>
+    <string name="fav_seed_gym">Gym</string>
+    <string name="fav_seed_work">Work</string>
+    <string name="fav_intro">They show up on the watch, in the Favorites screen: the top button opens it, and picking one starts the route.</string>
+    <string name="fav_max">Six favorites is the watch\'s maximum.</string>
+    <string name="fav_no_place">No address — tap to fill it in (not sent to the watch)</string>
+    <string name="fav_place_saved">Address saved</string>
+    <string name="fav_name">Name (shown on the watch)</string>
+    <string name="fav_address">Address: %1$s</string>
+    <string name="fav_address_saved">saved</string>
+    <string name="fav_search_below">Search for the address below.</string>
+    <string name="fav_save">Save and send to the watch</string>
+    <string name="fav_delete">Delete</string>
+    <string name="fav_cancel">Cancel</string>
+    <string name="fav_sending">Sending to the watch…</string>
+    <plurals name="fav_sent">
+        <item quantity="one">%d favorite on the watch.</item>
+        <item quantity="other">%d favorites on the watch.</item>
+    </plurals>
+    <string name="fav_not_sent">Saved on the phone. The watch didn\'t answer — the list goes again when it connects.</string>
+
+    <!-- Watch settings. -->
+    <string name="settings_sent">Sent. The watch applies it right away.</string>
+    <string name="settings_not_confirmed">The watch didn\'t confirm. Open Bora? on it and try again.</string>
+    <string name="settings_reset_done">Watch back to defaults.</string>
+    <string name="settings_sending">Sending…</string>
+    <string name="settings_touching">Adjusting: %1$s</string>
+    <string name="settings_touch_hint">Move a setting to see what it changes on the watch</string>
+    <plurals name="settings_changed">
+        <item quantity="one">%d changed</item>
+        <item quantity="other">%d changed</item>
+    </plurals>
+    <string name="settings_effective_capped">On screen it stays at %1$d %%: the overall size already hit the watch\'s limit.</string>
+    <string name="settings_effective">On screen: %1$d %%, with the overall size at %2$d %%.</string>
+    <string name="settings_default">Back to default (%1$s)</string>
+    <string name="settings_conflict">The second alert (%1$d m) must come closer to the turn than “never alert closer than” (%2$d m); the watch would reject it.</string>
+    <string name="settings_motorway">Avoid expressways</string>
+    <string name="settings_motorway_hint">Routes and reroutes stay off the express lanes of the Marginal, where motorcycles are banned. Turn it off on the highway, where the highway is the way.</string>
+    <string name="settings_drill">Crash the app</string>
+    <string name="settings_drill_hint">On the next trip, %1$d min after leaving, the phone app kills itself once, as Android would, and the drill disarms itself. The watch keeps going on its own GPS; rerouting only comes back on the next trip.</string>
+
+    <string name="section_turns">Turn alerts</string>
+    <string name="section_radars">Speed cameras</string>
+    <string name="section_map">Map</string>
+    <string name="section_route">Route</string>
+    <string name="section_size">Size on screen</string>
+    <string name="section_burn_in">Screen protection</string>
+    <string name="section_tests">Tests and diagnostics</string>
+
+    <string name="set_lead_s">Alert before the turn</string>
+    <string name="set_lead_s_hint">How long before the turn, at the speed you\'re going.</string>
+    <string name="set_lead_min_m">Never alert closer than</string>
+    <string name="set_lead_min_m_hint">When slow, the alert comes at least this far from the turn.</string>
+    <string name="set_near_m">Second alert, right at the turn</string>
+    <string name="set_near_m_hint">At this distance comes the “now” alert. It must be shorter than the one above.</string>
+    <string name="set_pulse_ms">Length of each buzz</string>
+    <string name="set_pulse_ms_hint">The short buzz of a turn; the long buzz is twice as long.</string>
+    <string name="set_zoom">Zoom when the route opens</string>
+    <string name="set_zoom_hint">The watch\'s top button changes it on the go.</string>
+    <string name="set_corridor_pct">Street brightness</string>
+    <string name="set_corridor_pct_hint">The gray of the streets around the route.</string>
+    <string name="set_hud_pct">Overall size</string>
+    <string name="set_hud_pct_hint">Makes everything bigger or smaller at once, on top of each part\'s setting.</string>
+    <string name="set_orbit_px">Shift against screen burn-in</string>
+    <string name="set_orbit_px_hint">The HUD slowly moves a few pixels so it doesn\'t mark the panel. 0 turns it off.</string>
+    <string name="set_orbit_s">Time at each position</string>
+    <string name="set_orbit_s_hint">How long the HUD stays at each point of the shift.</string>
+    <string name="set_dist_pct">Distance to the turn</string>
+    <string name="set_dist_pct_hint">The big number and its unit (m, km).</string>
+    <string name="set_eta_pct">Arrival time</string>
+    <string name="set_eta_pct_hint">At the bottom of the screen.</string>
+    <string name="set_text_pct">Text</string>
+    <string name="set_text_pct_hint">Clock, street name, distance left and the “then”.</string>
+    <string name="set_arrow_pct">Arrow</string>
+    <string name="set_arrow_pct_hint">The maneuver arrow and the arrival check.</string>
+    <string name="set_plate_w_pct">Sign padding at the sides</string>
+    <string name="set_plate_w_pct_hint">Space between the text and the frame. The letters don\'t change.</string>
+    <string name="set_plate_h_pct">Sign padding at top and bottom</string>
+    <string name="set_plate_h_pct_hint">0%% is a tight sign. The letters don\'t change.</string>
+    <string name="set_gps_drill_min">GPS gap</string>
+    <string name="set_gps_drill_min_hint">On each trip, this many minutes after leaving, the watch fakes 90 s without GPS and uses the phone\'s, to prove the handover and the return. For the phone to give its position, open the app on it once before leaving. 0 turns it off.</string>
+    <string name="set_street_img">Streets as an image</string>
+    <string name="set_street_img_hint">On, the streets are drawn once into an image. Off, street by street every frame.</string>
+    <string name="set_map_tilt">Tilted map</string>
+    <string name="set_map_tilt_hint">The map flattened around the bike. Off, the map stays flat.</string>
+    <string name="set_street_16bit">16-bit image</string>
+    <string name="set_street_16bit_hint">Off, the image takes twice the memory and the tilted map may fall back to flat.</string>
+    <string name="set_street_diag">Street diagnostics</string>
+    <string name="set_street_diag_hint">One lever at a time, with “Tilted map” off. Pick one, wait about 10 seconds with the route on the map and see whether the streets show up; the watch shows “D” and the number to the left of the bike. On the probes (4 to 7), count how many colored X appear. On the grids (8 to 10), ride a bit and see whether the streets follow. Needs watch v1.2.9. Go back to Normal after the test.</string>
+    <string name="set_vibe_on">Buzz on the wrist</string>
+    <string name="set_vibe_on_hint">Before each turn (2 buzzes for left, 3 for right), on arrival and when you leave the route. The settings below are only felt with this on. Needs watch v1.2.7.</string>
+    <string name="set_radar_vibe">Buzz for speed cameras</string>
+    <string name="set_radar_vibe_hint">One buzz when the camera sign shows up, once per camera. Works even with “Buzz on the wrist” off. Needs watch v1.2.9.</string>
+
+    <string name="zoom_0">0.6 m/px</string>
+    <string name="zoom_1">1.2 m/px</string>
+    <string name="zoom_2">2.5 m/px</string>
+    <string name="zoom_3">5 m/px</string>
+
+    <string name="diag_0">Normal</string>
+    <string name="diag_1">1 · Street by street, no image (control)</string>
+    <string name="diag_2">2 · Single 454 px image</string>
+    <string name="diag_3">3 · Single 480 px image</string>
+    <string name="diag_4">4 · Probe: 1 image of 480 px</string>
+    <string name="diag_5">5 · Probe: 2 images of 480 px</string>
+    <string name="diag_6">6 · Probe: 3 images of 480 px</string>
+    <string name="diag_7">7 · Probe: 4 images of 480 px</string>
+    <string name="diag_8">8 · 2×2 tiles of 480 px</string>
+    <string name="diag_9">9 · 3×3 tiles of 320 px</string>
+    <string name="diag_10">10 · 4×4 tiles of 240 px</string>
+
+    <!-- The part the watch preview lights up (WatchPreview). -->
+    <string name="part_hud">everything at once</string>
+    <string name="part_dist">the distance to the turn</string>
+    <string name="part_eta">the arrival time</string>
+    <string name="part_text">the clock, the street name and the distance left</string>
+    <string name="part_arrow">the arrow</string>
+    <string name="part_plate_w">the sign padding at the sides</string>
+    <string name="part_plate_h">the sign padding at top and bottom</string>
+    <string name="part_orbit">the margin the clock, the sign and the arrival keep from the edge</string>
+    <string name="part_zoom">the map zoom</string>
+    <string name="part_corridor">the street brightness</string>
+    <string name="part_tilt">the tilted map</string>
+    <string name="part_street_img">the street lines</string>
+    <string name="part_radar">the speed camera sign, which shows up with the buzz</string>
+
+
+    <!-- Sharing and the route. -->
+    <string name="share_reading">Reading what was shared…</string>
+    <string name="share_no_location_permission">Without location permission there\'s no way to know where you\'re leaving from.</string>
+    <string name="share_close">Close</string>
+    <string name="share_nothing">Nothing to navigate to came in this share.</string>
+    <string name="share_no_token">Save the Mapbox token in Bora?\'s Watch tab.</string>
+    <string name="share_locating">Getting your position…</string>
+    <string name="share_no_fix">No current position — step out somewhere with open sky and try again.</string>
+    <string name="share_resolving">Finding the destination…</string>
+    <string name="share_too_far">The destination came out %1$d km from here — that\'s probably not the shared link. Share again with the Maps button.</string>
+    <string name="share_no_coords">Couldn\'t find the coordinates in that link. Open the place in Maps and use Share → Bora?.</string>
+    <string name="share_not_found">Couldn\'t find the coordinates of “%1$s”.</string>
+    <string name="share_unrecognized">Share not recognized</string>
+    <string name="share_unexpected">Unexpected error: %1$s</string>
+    <string name="share_calculating">Calculating the route…</string>
+    <string name="share_sending">Sending to the watch…</string>
+    <string name="share_done">Route on the watch · %1$d B in %2$d ms</string>
+    <string name="share_progress">Sending %1$d/%2$d chunks…</string>
+    <string name="share_destination">Destination</string>
+    <string name="share_send_failed">The watch didn\'t take the route. Open Bora? on it and share again.</string>
+    <string name="watch_not_connected">Watch not connected</string>
+
+    <!-- Errors the screen shows; the log keeps the technical text in Portuguese. -->
+    <string name="err_route">Couldn\'t calculate the route. Try again.</string>
+    <string name="err_token_missing">The Mapbox token is missing.</string>
+    <string name="err_token_refused">Mapbox refused the token. Check it in the Watch tab.</string>
+    <string name="err_search">Search unavailable.</string>
+    <string name="err_offline">No internet to search for the address.</string>
+
+    <!-- First use (C16.8b). -->
+    <string name="setup_title">Welcome to Bora?</string>
+    <string name="setup_step">Step %1$d of %2$d</string>
+    <string name="setup_next">Continue</string>
+    <string name="setup_back">Back</string>
+    <string name="setup_skip">Skip</string>
+    <string name="setup_token_title">The Mapbox token</string>
+    <string name="setup_token_body">Bora? calculates routes with Mapbox, and each person uses their own token. The account is free, and the free plan covers one person\'s use. Create the account, copy the “Default public token” (it starts with pk.) and paste it here.</string>
+    <string name="setup_token_link">Create a free Mapbox account</string>
+    <string name="setup_token_bad">That doesn\'t look like a Mapbox public token: those start with pk.</string>
+    <string name="setup_token_ok">Token saved.</string>
+    <string name="setup_perms_title">Permissions</string>
+    <string name="setup_perms_body">Three things, and each one says what it\'s for.</string>
+    <string name="setup_perm_location">Location</string>
+    <string name="setup_perm_location_why">So the route starts where you are.</string>
+    <string name="setup_perm_notify">Notifications</string>
+    <string name="setup_perm_notify_why">The ongoing notice while Bora? talks to the watch.</string>
+    <string name="setup_perm_battery">Unrestricted battery</string>
+    <string name="setup_perm_battery_why">So the watch can start a route with the phone in your pocket.</string>
+    <string name="setup_allow">Allow</string>
+    <string name="setup_granted">Done</string>
+    <string name="setup_watch_title">The watch</string>
+    <string name="setup_watch_body">Bora? talks to the watch through the Garmin Connect app. Install Bora? on the watch from Connect IQ, and keep the watch paired and nearby.</string>
+    <string name="setup_watch_gcm">Garmin Connect installed</string>
+    <string name="setup_watch_paired">Watch paired in Garmin Connect</string>
+    <string name="setup_watch_app">Bora? installed on the watch</string>
+    <string name="setup_watch_test">Test the connection</string>
+    <string name="setup_watch_testing">Testing…</string>
+    <string name="setup_watch_test_ok">The watch answered.</string>
+    <string name="setup_watch_test_fail">The watch didn\'t answer. Open Bora? on it and try again.</string>
+    <string name="setup_done_title">All set</string>
+    <string name="setup_done_body">Search for a place on Home, or share a place from Google Maps with Bora?. The route goes to the watch.</string>
+    <string name="setup_done_missing">Still missing: %1$s. You can sort it out later in the Watch tab.</string>
+    <string name="setup_finish">Let\'s go</string>
+    <string name="setup_again">Run the first-time setup again</string>
+</resources>

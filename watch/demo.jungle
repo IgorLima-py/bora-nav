@@ -1,0 +1,7 @@
+# Demo overlay (C2b): `monkeyc -f "monkey.jungle;demo.jungle"`, only through
+# `tools/sim.py demo`. Adds `DemoFeed` and the São Paulo messages that
+# `DemoFramesTest` (companion) recorded, and swaps the empty `demoStart`
+# (`source/DemoHook.mc`, annotated `nodemo`) for the real one.
+base.sourcePath = source;demo/source
+base.resourcePath = resources;demo/resources
+base.excludeAnnotations = canary;quadratic_parse;nodemo;no_near_alert

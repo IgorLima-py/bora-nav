@@ -1,0 +1,5 @@
+# Canary overlay (C2a): `monkeyc -f "monkey.jungle;canary.jungle"`.
+# Swaps monkey.jungle's `canary` exclusion for an annotation that does not exist,
+# which turns on `CanaryTest.mc`. Only `tools/sim.py test --canary` uses it. The
+# `quadratic_parse` stays out: the test canary is another one.
+base.excludeAnnotations = no_canary;quadratic_parse;no_near_alert

@@ -1,0 +1,50 @@
+# Normalized line endings: without this, the same file in CRLF on one machine and LF on another
+# differs byte by byte and every line shows as changed.
+* text=auto eol=lf
+
+# Windows PowerShell 5.1 wants CRLF and UTF-8 *with BOM* (without the BOM it misreads accents).
+# `eol=crlf` covers the half git controls.
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Binary: never normalize.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.xlsx binary
+*.zip binary
+
+# What stays out of the public copy. It is made with `git archive`, which skips every path marked
+# export-ignore (docs/PUBLICAR.md). A folder with export-ignore takes its content along, so the folders
+# that do go public switch the attribute off for themselves and their content. From docs/ only what the
+# code and the README use goes public: the protocol contract, the README images and the source of truth
+# of the watch screens (tokens.json, font and mockups, read by tools/design_tokens.py).
+docs/** export-ignore
+docs/05-PROTOCOL.md -export-ignore
+docs/img -export-ignore
+docs/img/** -export-ignore
+docs/design -export-ignore
+docs/design/telas.md export-ignore
+docs/design/relogio -export-ignore
+docs/design/relogio/** -export-ignore
+docs/design/relogio/tokens_waze.json export-ignore
+CLAUDE.md export-ignore
+AGENTS.md export-ignore
+.agents/** export-ignore
+.claude/** export-ignore
+# Maintainer-only tools: machine-specific runners, the personal radar coverage study, marketing images
+# and the script that builds the public copy (its scans quote what must not go).
+tools/publicar.sh export-ignore
+tools/recriar_bora.sh export-ignore
+tools/atualizar_bora.sh export-ignore
+tools/bateria.py export-ignore
+tools/cobertura.py export-ignore
+tools/test_cobertura.py export-ignore
+tools/comparar_telas.py export-ignore
+tools/marca.py export-ignore
+tools/ui_waze.py export-ignore
+tools/mtpgarmin.c export-ignore
+companion/app/src/test/java/dev/igor/motonav/corridor/RadarCoverageTest.kt export-ignore

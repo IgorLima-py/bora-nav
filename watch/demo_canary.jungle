@@ -1,0 +1,6 @@
+# Demo canary (C2b): `monkeyc -f "monkey.jungle;demo.jungle;demo_canary.jungle"`.
+# Puts back the quadratic `parseCorridor` (`add` per point, the 2026-08-01 one) in
+# place of the linear one. With SP's real corridor it MUST die by watchdog: if
+# `tools/sim.py demo --canary` does not see `Watchdog Tripped`, the instrument is
+# blind.
+base.excludeAnnotations = canary;linear_parse;nodemo;no_near_alert

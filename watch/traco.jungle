@@ -1,0 +1,8 @@
+# The stroke bench (C16.5): `monkeyc -f "monkey.jungle;traco.jungle"`, only through
+# `tools/sim.py shots --traco`. It is the demo (`demo.jungle`) without `DemoHold`: swaps the `demoAfterLoad`
+# that holds the screen (`demo/source/DemoHold.mc`, annotated `demo_hold`) for the one in
+# `demo/traco/TracoStart.mc`, which draws the route and streets the old way and the new way, side by side,
+# through the same `MapRenderer` as the map, for `sim.py` to photograph and zoom in.
+base.sourcePath = source;demo/source;demo/traco
+base.resourcePath = resources;demo/resources
+base.excludeAnnotations = canary;quadratic_parse;nodemo;demo_hold;no_near_alert

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<iq:manifest version="3" xmlns:iq="http://www.garmin.com/xml/connectiq">
+    <!--
+        MotoNav watch app. The application id below is a fixed UUID: the companion
+        app references the very same value (see companion MotoNavIds.WATCH_APP_UUID
+        and docs/DECISIONS.md). Never regenerate it.
+    -->
+    <iq:application id="2c29817b21c0413583b3e4f4e2d253dd"
+                   type="watch-app"
+                   name="@Strings.AppName"
+                   entry="MotoNavApp"
+                   launcherIcon="@Drawables.LauncherIcon"
+                   minApiLevel="5.0.0">
+
+        <iq:products>
+            <iq:product id="venu445mm"/>
+        </iq:products>
+
+        <!--
+            `Background` was here "reserved for the future" (03 §manifest) and
+            cost a lot: with it, the runtime treats the app as a possible background
+            service and **forbids `Toybox.Timer`** — `onStart` died with
+            "Module 'Toybox.Timer' not available to 'Background'". Comes back when
+            a real ServiceDelegate exists, with the scope handled.
+        -->
+        <iq:permissions>
+            <iq:uses-permission id="Communications"/>
+            <iq:uses-permission id="Positioning"/>
+        </iq:permissions>
+
+        <iq:languages>
+            <iq:language>eng</iq:language>
+            <iq:language>por</iq:language>
+        </iq:languages>
+
+        <iq:barrels/>
+
+    </iq:application>
+</iq:manifest>

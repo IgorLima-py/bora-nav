@@ -1,0 +1,20 @@
+project.manifest = manifest.xml
+
+# Explicit paths. Without them monkeyc also picked up `demo/source` (and `probe/source`)
+# in the real build: measured on 2026-09-29, the demo's `phoneTransmit`
+# collided with the app's. The demo and the probe come in only through their own jungles.
+base.sourcePath = source
+base.resourcePath = resources
+# Portuguese (C16.8a). `resources/` is the English one, which applies to every language without a folder of its own.
+base.lang.por = resources-por
+
+# Out of every real build:
+# - `canary`: the test that fails on purpose (`source/test/CanaryTest.mc`);
+#   `canary.jungle` turns it on for `tools/sim.py test --canary`.
+# - `quadratic_parse`: the `parseCorridor` with `add` per point that killed the app on
+#   2026-08-01; `demo_canary.jungle` puts it back for
+#   `tools/sim.py demo --canary` to prove the simulator catches the watchdog.
+# - `no_near_alert`: the `AlertPolicy` without the 2nd alert; `ride_canary.jungle` puts it
+#   in place of the real one for `tools/sim.py ride --canary` to prove the virtual
+#   lap fails.
+base.excludeAnnotations = canary;quadratic_parse;no_near_alert

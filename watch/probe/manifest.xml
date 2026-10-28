@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<iq:manifest version="3" xmlns:iq="http://www.garmin.com/xml/connectiq">
+    <!--
+        Watchdog probe (C2a). Separate app, simulator only: it answers whether the
+        simulator applies the venu445mm `watchdogCount` in a normal run.
+        Its own UUID so it is never confused with MotoNav (2c29817b...).
+        How to run: `python tools/sim.py watchdog`.
+    -->
+    <iq:application id="d29ee98c04c446f8a3d5994ef2190d08"
+                   type="watch-app"
+                   name="@Strings.AppName"
+                   entry="WatchdogProbeApp"
+                   launcherIcon="@Drawables.LauncherIcon"
+                   minApiLevel="5.0.0">
+
+        <iq:products>
+            <iq:product id="venu445mm"/>
+        </iq:products>
+
+        <iq:permissions/>
+
+        <iq:languages>
+            <iq:language>por</iq:language>
+        </iq:languages>
+
+        <iq:barrels/>
+
+    </iq:application>
+</iq:manifest>

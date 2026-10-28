@@ -1,0 +1,5 @@
+# Ride canary (C3a): `monkeyc -f "monkey.jungle;ride.jungle;ride_canary.jungle"`.
+# It puts in place an `AlertPolicy.nearAlertOn` that turns off the 2nd warning. Every maneuver
+# the `.esperado.json` says has a 2nd warning MUST fail with
+# `no 2nd alert`; if `tools/sim.py ride --canary` does not see that, the ride is blind.
+base.excludeAnnotations = canary;quadratic_parse;nodemo;demo_hold;near_alert

@@ -1,0 +1,7 @@
+# `ponte.jungle` with the real `Communications.transmit` in place of the relay:
+# `monkeyc -f "monkey.jungle;ponte_socket.jungle"`, only through
+# `tools/ponte.py --socket`. It reproduces the simulator freeze
+# (CIQQA-4579) and checks whether a new SDK fixed it.
+base.sourcePath = source;ponte/source
+base.resourcePath = resources
+base.excludeAnnotations = canary;quadratic_parse;nobridge;nodemo;no_near_alert;bridge_relay

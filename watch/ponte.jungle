@@ -1,0 +1,9 @@
+# Bridge overlay (C7a): `monkeyc -f "monkey.jungle;ponte.jungle"`, only through
+# `tools/ponte.py`. Adds the `bridgeMessage` that answers the companion's
+# proof (in place of the empty one in `source/BridgeHook.mc`, annotated `nobridge`) and
+# swaps the real `phoneTransmit` (`source/DemoHook.mc`, annotated `nodemo`)
+# for the console relay: `transmit` over TETHERED freezes the app in the SDK 9.2.0
+# simulator (`ponte/source/Ponte.mc`).
+base.sourcePath = source;ponte/source
+base.resourcePath = resources
+base.excludeAnnotations = canary;quadratic_parse;nobridge;nodemo;no_near_alert;bridge_socket

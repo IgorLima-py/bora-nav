@@ -1,0 +1,229 @@
+[diag] 4974s start v0.18.0-f3a
+[demo] start 0 config + 11 messages, route 42, 4 LODs
+[diag] 4975s rx Str48 -> 35B
+[diag] 4975s blk 0x01 0/1 27B
+[diag] 4975s new route, stats reset
+[diag] 4975s applied 0x01 pts 0 trn 0
+[diag] 4975s ack-> 0x01
+[diag] 4975s tx ok
+[diag] 4976s rx Str3868 -> 2900B
+[diag] 4976s blk 0x02 0/1 2892B
+[diag] 4976s applied 0x02 pts 722 trn 0
+[diag] 4976s ack-> 0x02
+[diag] 4976s tx ok
+[diag] 4977s rx Str400 -> 298B
+[diag] 4977s blk 0x03 0/1 290B
+[diag] 4977s applied 0x03 pts 722 trn 16
+[diag] 4977s ack-> 0x03
+[diag] 4977s tx ok
+[diag] 4977s complete 3233B 1984ms
+[diag] 4977s tx ok
+[diag] 4977s gps all systems L1
+[diag] 4977s map on
+[demo] center on point 323 de 722 (22385 m)
+[diag] 4978s rx Str5464 -> 4096B
+[diag] 4978s blk 0x04 0/2 4088B
+[diag] 4979s rx Str4940 -> 3703B
+[diag] 4979s blk 0x04 1/2 3695B
+[diag] 4979s applied 0x04 pts 722 trn 16
+[diag] 4979s ack-> 0x04
+[diag] 4979s tx ok
+[diag] 4979s complete 11032B 4516ms
+[diag] 4979s tx ok
+[diag] 4980s rx Str5464 -> 4096B
+[diag] 4980s blk 0x04 0/3 4088B
+[diag] 4981s rx Str5464 -> 4096B
+[diag] 4981s blk 0x04 1/3 4088B
+[diag] 4982s corridor lod 0 454 ways 1378 pts
+[diag] 4982s rx Str1032 -> 773B
+[diag] 4982s blk 0x04 2/3 765B
+[diag] 4982s applied 0x04 pts 722 trn 16
+[diag] 4982s ack-> 0x04
+[diag] 4982s tx ok
+[diag] 4982s complete 19997B 7000ms
+[diag] 4982s tx ok
+[diag] 4983s rx Str2200 -> 1649B
+[diag] 4983s blk 0x04 0/1 1641B
+[diag] 4983s applied 0x04 pts 722 trn 16
+[diag] 4983s ack-> 0x04
+[diag] 4983s tx ok
+[diag] 4983s complete 21646B 8016ms
+[diag] 4983s tx ok
+[diag] 4984s frame avg 60ms peak 93ms n8 seg 71 · corr 0 route 0 hud 47ms · work peak 362/800
+[diag] 4984s phase navigating · screen map · route 42 722pts · corridor 1 lods 1378 pts 16 on screen · zoom 1.2 · off · no fix · mem 176/763KB · bat 90% · eta - · fix -
+[diag] 4984s rx Str5464 -> 4096B
+[diag] 4984s blk 0x04 0/2 4088B
+[diag] 4985s corridor lod 1 596 ways 1490 pts
+[diag] 4985s rx Str2680 -> 2008B
+[diag] 4985s blk 0x04 1/2 2000B
+[diag] 4985s corridor lod 2 112 ways 270 pts
+[diag] 4985s applied 0x04 pts 722 trn 16
+[diag] 4985s ack-> 0x04
+[diag] 4985s tx ok
+[diag] 4985s complete 27750B 10016ms
+[diag] 4985s tx ok
+[diag] 4988s corridor lod 3 399 ways 1023 pts
+[demo] ready 11 messages
+[ride] start 722 pts 16 maneuvers 22385.2 m period 250 ms
+[ride] maneuver 0 type 0 at 0.0 m
+[ride] maneuver 1 type 8 at 30.6 m
+[ride] maneuver 2 type 3 at 64.7 m
+[ride] maneuver 3 type 3 at 436.9 m
+[ride] maneuver 4 type 4 at 726.8 m
+[ride] maneuver 5 type 3 at 1235.2 m
+[ride] maneuver 6 type 8 at 1483.4 m
+[ride] maneuver 7 type 7 at 1569.0 m
+[ride] maneuver 8 type 8 at 11810.9 m
+[ride] maneuver 9 type 1 at 20607.1 m
+[ride] maneuver 10 type 7 at 20843.5 m
+[ride] maneuver 11 type 7 at 21117.3 m
+[ride] maneuver 12 type 2 at 21152.1 m
+[ride] maneuver 13 type 8 at 22061.1 m
+[ride] maneuver 14 type 8 at 22117.0 m
+[ride] maneuver 15 type 12 at 22385.2 m
+[diag] 4988s vibe turn 1 alert 1 at 30.6m 15.0km/h 2p
+[diag] 4988s vibe turn 1 alert 2 at 17.9m 24.5km/h 2p
+[diag] 4989s tx ok
+[diag] 4989s vibe turn 2 alert 1 at 31.1m 18.8km/h 3p
+[diag] 4994s frame avg 63ms peak 125ms n28 seg 74 · corr 0 route 16 hud 47ms · work peak 771/800
+[diag] 4994s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 16 on screen · zoom 1.2 · on route · 50km/h · mem 172/763KB · bat 90% · eta 3330s · fix replay
+[diag] 4997s vibe turn 3 alert 1 at 99.4m 50.0km/h 3p
+[diag] 5004s frame avg 74ms peak 203ms n40 seg 64 · corr 0 route 0 hud 47ms · work peak 503/236
+[diag] 5004s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 10 on screen · zoom 1.2 · on route · 50km/h · mem 172/763KB · bat 90% · eta 2617s · fix replay
+[diag] 5004s tx ok
+[diag] 5004s vibe turn 4 alert 1 at 111.0m 50.0km/h 3p
+[diag] 5014s frame avg 82ms peak 125ms n40 seg 123 · corr 0 route 16 hud 47ms · work peak 772/531
+[diag] 5014s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 36 on screen · zoom 1.2 · on route · 50km/h · mem 172/763KB · bat 90% · eta 2305s · fix replay
+[diag] 5015s vibe turn 5 alert 1 at 102.0m 50.0km/h 3p
+[diag] 5019s tx ok
+[diag] 5022s vibe turn 6 alert 1 at 104.2m 50.0km/h 2p
+[diag] 5024s frame avg 70ms peak 94ms n40 seg 139 · corr 15 route 16 hud 47ms · work peak 880/591
+[diag] 5024s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 51 on screen · zoom 1.2 · on route · 34km/h · mem 172/763KB · bat 90% · eta 2151s · fix replay
+[diag] 5024s vibe turn 6 alert 2 at 16.8m 30.0km/h 2p
+[diag] 5025s vibe turn 7 alert 1 at 70.6m 39.3km/h 2p
+[diag] 5034s frame avg 86ms peak 110ms n40 seg 142 · corr 15 route 16 hud 47ms · work peak 864/591
+[diag] 5034s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 53 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 90% · eta 2063s · fix replay
+[diag] 5034s tx ok
+[diag] 5044s frame avg 116ms peak 265ms n39 seg 122 · corr 16 route 0 hud 62ms · work peak 882/577
+[diag] 5044s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 47 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 90% · eta 1866s · fix replay
+[diag] 5049s tx ok
+[diag] 5054s frame avg 99ms peak 188ms n39 seg 142 · corr 32 route 0 hud 62ms · work peak 940/724 CAPPED
+[diag] 5054s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 60 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 90% · eta 1747s · fix replay
+[diag] 5064s frame avg 100ms peak 141ms n40 seg 138 · corr 16 route 0 hud 63ms · work peak 974/762 CAPPED
+[diag] 5064s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 53 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 90% · eta 1658s · fix replay
+[diag] 5064s tx ok
+[diag] 5074s frame avg 107ms peak 219ms n40 seg 42 · corr 16 route 0 hud 78ms · work peak 889/222 CAPPED
+[diag] 5074s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 44 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 90% · eta 1587s · fix replay
+[diag] 5079s tx ok
+[diag] 5084s frame avg 104ms peak 218ms n39 seg 78 · corr 16 route 0 hud 78ms · work peak 729/280 CAPPED
+[diag] 5084s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 38 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 90% · eta 1526s · fix replay
+[diag] 5094s frame avg 106ms peak 203ms n38 seg 72 · corr 15 route 0 hud 63ms · work peak 680/220
+[diag] 5094s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 24 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 89% · eta 1473s · fix replay
+[diag] 5094s tx ok
+[diag] 5104s frame avg 104ms peak 188ms n35 seg 91 · corr 15 route 16 hud 63ms · work peak 678/555 CAPPED
+[diag] 5104s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 47 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 89% · eta 1422s · fix replay
+[diag] 5109s tx ok
+[diag] 5114s frame avg 92ms peak 125ms n40 seg 118 · corr 16 route 0 hud 62ms · work peak 875/735
+[diag] 5114s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 50 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 89% · eta 1371s · fix replay
+[diag] 5124s frame avg 87ms peak 156ms n38 seg 107 · corr 0 route 15 hud 47ms · work peak 834/729
+[diag] 5124s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 54 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 89% · eta 1324s · fix replay
+[diag] 5124s tx ok
+[diag] 5134s frame avg 87ms peak 140ms n40 seg 171 · corr 31 route 0 hud 47ms · work peak 1040/837
+[diag] 5134s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 64 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 89% · eta 1275s · fix replay
+[diag] 5139s tx ok
+[diag] 5144s frame avg 99ms peak 187ms n40 seg 118 · corr 15 route 16 hud 47ms · work peak 1036/754
+[diag] 5144s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 53 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 89% · eta 1227s · fix replay
+[diag] 5154s frame avg 91ms peak 219ms n40 seg 151 · corr 16 route 0 hud 47ms · work peak 950/789
+[diag] 5154s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 73 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 89% · eta 1180s · fix replay
+[diag] 5154s tx ok
+[diag] 5164s frame avg 82ms peak 109ms n40 seg 121 · corr 15 route 0 hud 47ms · work peak 1102/909
+[diag] 5164s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 60 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 89% · eta 1133s · fix replay
+[diag] 5169s tx ok
+[diag] 5174s frame avg 81ms peak 125ms n40 seg 115 · corr 16 route 0 hud 94ms · work peak 926/909
+[diag] 5174s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 54 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 89% · eta 1086s · fix replay
+[diag] 5184s frame avg 90ms peak 157ms n40 seg 75 · corr 0 route 16 hud 47ms · work peak 847/666
+[diag] 5184s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 39 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 89% · eta 1038s · fix replay
+[diag] 5184s tx ok
+[diag] 5194s frame avg 76ms peak 94ms n40 seg 151 · corr 47 route 0 hud 47ms · work peak 960/524
+[diag] 5194s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 76 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 89% · eta 991s · fix replay
+[diag] 5199s tx ok
+[diag] 5204s frame avg 85ms peak 156ms n40 seg 129 · corr 16 route 0 hud 63ms · work peak 1074/832
+[diag] 5204s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 78 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 88% · eta 944s · fix replay
+[diag] 5212s vibe turn 8 alert 1 at 105.1m 50.0km/h 2p
+[diag] 5214s frame avg 72ms peak 94ms n40 seg 66 · corr 0 route 16 hud 47ms · work peak 912/832
+[diag] 5214s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 40 on screen · zoom 1.2 · on route · 35km/h · mem 173/763KB · bat 88% · eta 899s · fix replay
+[diag] 5214s tx ok
+[diag] 5214s vibe turn 8 alert 2 at 21.6m 30.0km/h 2p
+[diag] 5224s frame avg 76ms peak 94ms n40 seg 122 · corr 16 route 16 hud 47ms · work peak 877/832
+[diag] 5224s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 57 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 88% · eta 861s · fix replay
+[diag] 5229s tx ok
+[diag] 5234s frame avg 85ms peak 156ms n40 seg 115 · corr 16 route 0 hud 47ms · work peak 1033/854
+[diag] 5234s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 60 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 88% · eta 811s · fix replay
+[diag] 5244s frame avg 76ms peak 94ms n40 seg 70 · corr 15 route 0 hud 47ms · work peak 875/854
+[diag] 5244s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 50 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 88% · eta 762s · fix replay
+[diag] 5244s tx ok
+[diag] 5254s frame avg 66ms peak 109ms n40 seg 170 · corr 32 route 0 hud 47ms · work peak 1087/974
+[diag] 5254s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 82 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 88% · eta 714s · fix replay
+[diag] 5259s tx ok
+[diag] 5264s frame avg 73ms peak 94ms n40 seg 151 · corr 16 route 0 hud 31ms · work peak 1161/1034
+[diag] 5264s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 71 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 88% · eta 666s · fix replay
+[diag] 5274s frame avg 67ms peak 140ms n40 seg 126 · corr 15 route 16 hud 47ms · work peak 1143/749 CAPPED
+[diag] 5274s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 76 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 88% · eta 619s · fix replay
+[diag] 5274s tx ok
+[diag] 5284s frame avg 94ms peak 312ms n40 seg 100 · corr 16 route 15 hud 63ms · work peak 1030/685
+[diag] 5284s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 56 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 88% · eta 571s · fix replay
+[diag] 5289s tx ok
+[diag] 5294s frame avg 93ms peak 203ms n40 seg 110 · corr 15 route 0 hud 47ms · work peak 844/762
+[diag] 5294s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 57 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 88% · eta 524s · fix replay
+[diag] 5304s frame avg 92ms peak 203ms n40 seg 144 · corr 32 route 0 hud 47ms · work peak 1048/605
+[diag] 5304s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 91 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 88% · eta 477s · fix replay
+[diag] 5304s tx ok
+[diag] 5314s frame avg 83ms peak 156ms n40 seg 82 · corr 15 route 0 hud 47ms · work peak 804/675
+[diag] 5314s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 50 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 87% · eta 430s · fix replay
+[diag] 5319s tx ok
+[diag] 5324s frame avg 75ms peak 140ms n40 seg 105 · corr 16 route 0 hud 47ms · work peak 762/630
+[diag] 5324s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 49 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 87% · eta 383s · fix replay
+[diag] 5334s frame avg 86ms peak 156ms n40 seg 150 · corr 31 route 0 hud 47ms · work peak 935/800
+[diag] 5334s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 87 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 87% · eta 336s · fix replay
+[diag] 5334s tx ok
+[diag] 5344s frame avg 95ms peak 172ms n40 seg 130 · corr 16 route 0 hud 63ms · work peak 1056/562 CAPPED
+[diag] 5344s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 126 on screen · zoom 1.2 · on route · 50km/h · mem 174/763KB · bat 87% · eta 289s · fix replay
+[diag] 5349s tx ok
+[diag] 5354s frame avg 92ms peak 188ms n40 seg 239 · corr 16 route 0 hud 31ms · work peak 1104/1032 CAPPED
+[diag] 5354s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 139 on screen · zoom 1.2 · on route · 50km/h · mem 174/763KB · bat 87% · eta 242s · fix replay
+[diag] 5364s frame avg 68ms peak 140ms n40 seg 150 · corr 31 route 16 hud 93ms · work peak 1280/725
+[diag] 5364s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 84 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 87% · eta 195s · fix replay
+[diag] 5364s tx ok
+[diag] 5374s frame avg 89ms peak 125ms n40 seg 153 · corr 31 route 16 hud 47ms · work peak 1103/843 CAPPED
+[diag] 5374s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 112 on screen · zoom 1.2 · on route · 50km/h · mem 174/763KB · bat 87% · eta 148s · fix replay
+[diag] 5375s vibe turn 10 alert 1 at 105.0m 50.0km/h 2p
+[diag] 5379s tx ok
+[diag] 5383s vibe turn 11 alert 1 at 104.1m 50.0km/h 2p
+[diag] 5384s frame avg 111ms peak 266ms n40 seg 174 · corr 63 route 0 hud 46ms · work peak 1213/376 CAPPED
+[diag] 5384s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 118 on screen · zoom 1.2 · on route · 41km/h · mem 173/763KB · bat 87% · eta 116s · fix replay
+[diag] 5386s vibe turn 12 alert 1 at 32.8m 15.0km/h 3p
+[diag] 5387s vibe turn 12 alert 2 at 19.1m 27.7km/h 3p
+[diag] 5394s frame avg 91ms peak 141ms n40 seg 166 · corr 16 route 0 hud 47ms · work peak 1292/600
+[diag] 5394s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 95 on screen · zoom 1.2 · on route · 50km/h · mem 173/763KB · bat 87% · eta 81s · fix replay
+[diag] 5394s tx ok
+[diag] 5402s vibe turn 13 alert 1 at 101.4m 50.0km/h 2p
+[diag] 5404s frame avg 84ms peak 234ms n40 seg 99 · corr 0 route 16 hud 31ms · work peak 1221/720
+[diag] 5404s phase navigating · screen map · route 42 722pts · corridor 4 lods 4161 pts 50 on screen · zoom 1.2 · on route · 31km/h · mem 173/763KB · bat 87% · eta 31s · fix replay
+[diag] 5404s vibe turn 13 alert 2 at 23.3m 30.0km/h 2p
+[diag] 5404s vibe turn 14 alert 1 at 53.8m 31.3km/h 2p
+[diag] 5405s vibe turn 14 alert 2 at 16.8m 30.0km/h 2p
+[diag] 5409s tx ok
+[diag] 5411s vibe arrival
+[diag] 5411s nav-ended reason 0
+[diag] 5411s tx ok
+[diag] 5411s tx ok
+[diag] 5411s arrived at destination at 29m
+[diag] 5411s trail 338 fixes lost 0
+[ride] end arrival in 1688 fixes
+[diag] 5414s frame avg 64ms peak 94ms n32 seg 122 · corr 16 route 0 hud 62ms · work peak 970/840
+[diag] 5414s phase arrived · screen map · route 42 722pts · corridor 4 lods 4161 pts 70 on screen · zoom 1.2 · on route · 15km/h · mem 172/763KB · bat 87% · eta - · fix replay
+06-01 10:00:00.000 I WatchLink: WATCH| 12s start v0.18.0-f3a
+06-01 10:00:01.000 I WatchLink: WATCH| 13s trk 0 -2354500 -4663000 120 90
+06-01 10:00:11.000 I WatchLink: WATCH| 23s trk 10 -2354500 -4662800 130 90
+06-01 10:00:21.000 I WatchLink: WATCH| 33s trk 20 -2354300 -4662600 130 0
+06-01 10:00:31.000 I WatchLink: WATCH| 43s trk 30 -2354100 -4662600 120 0

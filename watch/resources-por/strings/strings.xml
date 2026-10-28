@@ -1,0 +1,138 @@
+<strings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://developer.garmin.com/downloads/connect-iq/resources.xsd">
+    <!--
+        O português (C16.8a): o relógio em `por` lê daqui, e qualquer outro idioma lê o inglês de
+        `resources/strings/strings.xml`. Os dois têm os mesmos ids e os mesmos $1$; o
+        `tools/idioma.py` confere, e o `sim.py tudo` o roda.
+    -->
+    <string id="AppName">Bora?</string>
+    <string id="WaitingRoute">Tudo pronto</string>
+
+    <!--
+        A tela inicial (folha 1, 2026-10-17; docs/design/telas.md §4.5). Uma linha para o estado e
+        outra para a ação; coisa técnica só no item Ligação.
+    -->
+    <string id="NoPhone">Cadê o celular?</string>
+    <string id="FavoritesItem">Favoritos</string>
+    <string id="RecentsItem">Recentes</string>
+    <string id="SettingsItem">Ajustes</string>
+    <string id="LinkItem">Ligação</string>
+    <string id="PlacesNone">Nenhum lugar</string>
+    <string id="PlacesOne">1 lugar</string>
+    <string id="PlacesCount">$1$ lugares</string>
+    <string id="DestinationsNone">Nenhum destino</string>
+    <string id="DestinationsOne">1 destino</string>
+    <string id="DestinationsCount">$1$ destinos</string>
+    <string id="SettingsHint">HUD, números, ruas</string>
+    <string id="OpenLog">Enter abre o log</string>
+    <string id="WatchVersion">relógio $1$</string>
+
+    <!--
+        Menu de ações do mapa (aba da direita). Os dois rótulos do zoom são o
+        mesmo item, e cada um nomeia **o que vai acontecer** se ele for tocado —
+        num menu de ações, um item que só exibe estado ("Zoom: fixo") não diz se
+        tocá-lo liga ou desliga alguma coisa.
+    -->
+    <string id="MenuEndRoute">Encerrar rota</string>
+    <string id="MenuZoomAuto">Usar zoom automático</string>
+    <string id="MenuZoomFixed">Usar zoom fixo</string>
+    <string id="MenuRecenter">Recentrar</string>
+    <string id="MenuDetails">Detalhes</string>
+    <string id="MenuLog">Log</string>
+    <string id="MenuSimulate">Simular trajeto</string>
+    <string id="MenuSimulateStop">Parar simulação</string>
+
+    <!-- O HUD de pilotagem (Hud.mc, NavEngine.mc, Fmt.mc). -->
+    <string id="Recalculating">Recalculando…</string>
+    <string id="Arrived">Você chegou</string>
+    <string id="AndThen">e depois</string>
+    <string id="NoGps">sem GPS</string>
+    <string id="ArrivedAt">chegou às $1$</string>
+    <string id="OffRoute">fora da rota</string>
+    <string id="NoRoute">sem rota</string>
+    <string id="WaitingGps">esperando GPS</string>
+    <string id="FindingRoute">procurando a rota</string>
+    <string id="GoStraight">siga em frente</string>
+    <string id="ExitN">$1$ª saída</string>
+    <string id="Now">AGORA</string>
+    <string id="DecimalSep">,</string>
+
+    <!-- O clima da linha da hora: até 7 letras (WeatherInfo.conditionLabel). -->
+    <string id="WxSun">sol</string>
+    <string id="WxCloudy">nublado</string>
+    <string id="WxStorm">temporal</string>
+    <string id="WxRain">chuva</string>
+    <string id="WxSnow">neve</string>
+    <string id="WxFog">névoa</string>
+    <string id="WxWind">vento</string>
+
+    <!-- O pedido de rota pelo relógio, na tela inicial (FavoriteAsk.mc). -->
+    <string id="AskRouteStopped">A rota parou de chegar</string>
+    <string id="AskNoAnswer">O celular não respondeu</string>
+    <string id="AskReceiving">Recebendo rota</string>
+    <string id="AskRequesting">Pedindo rota · $1$</string>
+
+    <!-- Favoritos e Recentes (FavoritesView.mc, Favorites.mc, Recents.mc). -->
+    <string id="NoFavorites">Sem favoritos</string>
+    <string id="AddOnPhone">Cadastre no celular</string>
+    <string id="NoRecents">Sem destinos</string>
+    <string id="RecentsAfterTrip">Aparecem depois da 1ª viagem</string>
+    <string id="FavoriteN">Favorito $1$</string>
+    <string id="DestinationN">Destino $1$</string>
+
+    <!-- Detalhes (DetailsModel.mc). -->
+    <string id="NoTurnsAhead">sem manobras à frente</string>
+    <string id="DistanceLeft">faltam $1$</string>
+    <string id="BatteryPct">bateria $1$%</string>
+    <string id="TapAgain">Toque de novo</string>
+    <string id="TurnStraight">Siga em frente</string>
+    <string id="TurnSlightRight">Leve à direita</string>
+    <string id="TurnRight">Direita</string>
+    <string id="TurnSharpRight">Direita fechada</string>
+    <string id="TurnUTurn">Retorno</string>
+    <string id="TurnSharpLeft">Esquerda fechada</string>
+    <string id="TurnLeft">Esquerda</string>
+    <string id="TurnSlightLeft">Leve à esquerda</string>
+    <string id="TurnRoundaboutExit">Rotatória, $1$ª saída</string>
+    <string id="TurnRoundabout">Rotatória</string>
+    <string id="TurnHighwayEnter">Entre na via</string>
+    <string id="TurnHighwayExit">Saia da via</string>
+    <string id="TurnHighwayEnterLeft">Entre na via à esquerda</string>
+    <string id="TurnHighwayExitLeft">Saia da via à esquerda</string>
+    <string id="TurnForkLeft">Bifurcação à esquerda</string>
+    <string id="TurnForkRight">Bifurcação à direita</string>
+    <string id="TurnMerge">Junção</string>
+    <string id="TurnMergeLeft">Junção pela esquerda</string>
+    <string id="TurnMergeRight">Junção pela direita</string>
+    <string id="TurnArriveLeft">Chegada à esquerda</string>
+    <string id="TurnArriveRight">Chegada à direita</string>
+    <string id="TurnArrive">Chegada</string>
+    <string id="TurnDepart">Saída</string>
+    <string id="TurnContinue">Siga</string>
+
+    <!-- Ajustes do relógio (QuickSettings.mc). -->
+    <string id="On">Ligado</string>
+    <string id="Off">Desligado</string>
+    <string id="OnFem">Ligada</string>
+    <string id="OffFem">Desligada</string>
+    <string id="OnTest">Ligado (teste)</string>
+    <string id="OffTest">Desligado (teste)</string>
+    <string id="HudSize">Tamanho do HUD</string>
+    <string id="Numbers">Números</string>
+    <string id="StreetBrightness">Brilho das ruas</string>
+    <string id="ResetDefaults">Voltar ao padrão</string>
+    <string id="ResetHint">HUD, números, ruas, borda e mapa</string>
+    <string id="StreetImages">Ruas em imagem</string>
+    <string id="RouteCasing">Borda da rota (teste)</string>
+    <string id="TiltMap">Mapa deitado (teste)</string>
+    <string id="TheRest">O resto</string>
+    <string id="OnThePhone">no celular</string>
+    <string id="CurrentValue">agora</string>
+
+    <!-- Ligação e log (DebugView.mc, LogView.mc). -->
+    <string id="AwaitingRoute">Aguardando rota…</string>
+    <string id="RouteNumber">Rota #$1$</string>
+    <string id="Receiving">recebendo…</string>
+    <string id="PointsTurns">$1$ pts · $2$ curvas</string>
+    <string id="BytesChunks">$1$ B em $2$ chunks</string>
+    <string id="NoEvents">sem eventos</string>
+</strings>

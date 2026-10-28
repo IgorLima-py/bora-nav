@@ -1,0 +1,19 @@
+{
+  "generated_by": "python tools/preview_map.py --lods-json",
+  "route": "route_tiete_copan.json",
+  "corridor": "corridor_tiete_copan.json",
+  "ways_per_lod": [
+    546,
+    448,
+    74,
+    227
+  ],
+  "points_per_lod": [
+    2010,
+    1135,
+    170,
+    580
+  ],
+  "segments": 2600,
+  "bytes": 22059
+}

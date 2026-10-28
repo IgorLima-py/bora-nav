@@ -1,0 +1,9 @@
+# Track recorded in the simulator (C3b): `monkeyc -f "monkey.jungle;track.jungle"`, only
+# through `tools/sim.py ride --track`. It is the demo (`demo.jungle`) with the bike riding
+# a track: swaps the `demoAfterLoad` that holds the screen (`demo/source/DemoHold.mc`,
+# annotated `demo_hold`) for the one in `demo/track/TrackStart.mc`. `bin/track/` is generated
+# by `sim.py` on every run: `TrackParams.mc` with the period and, under
+# `resources/`, the track's fixes (`Rez.JsonData.TrackFixes`).
+base.sourcePath = source;demo/source;demo/track;bin/track
+base.resourcePath = resources;demo/resources;bin/track/resources
+base.excludeAnnotations = canary;quadratic_parse;nodemo;demo_hold;no_near_alert

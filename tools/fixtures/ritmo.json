@@ -1,0 +1,17 @@
+{
+  "_doc": "The personal pace (C16, PersonalPace.kt): invented trips, numbers only, no place and no time of day. Kotlin's PersonalPaceTest takes the factor from them and checks 'factor' and 'watch_s'; tools/gen_watch_test_vectors.py puts 'watch_s' in a ROUTE_UPDATE of the vectors route, and the watch's RouteUpdateTest checks that the HUD shows that time. 'mapbox_s' is the duration of the vectors route (1710 s).",
+  "mapbox_s": 1710,
+  "trips": [
+    {"planned_s": 1800, "actual_s": 1440, "planned_m": 12000, "ridden_m": 12100, "pause_s": 60, "end": "ARRIVED", "why": "in: 0.80"},
+    {"planned_s": 1200, "actual_s": 1020, "planned_m": 8000, "ridden_m": 7900, "pause_s": 90, "end": "ARRIVED", "why": "in: 0.85"},
+    {"planned_s": 2400, "actual_s": 1800, "planned_m": 23000, "ridden_m": 23400, "pause_s": 75, "end": "ARRIVED", "why": "in: 0.75"},
+    {"planned_s": 900, "actual_s": 810, "planned_m": 5000, "ridden_m": 5100, "pause_s": 40, "end": "ARRIVED", "why": "in: 0.90"},
+    {"planned_s": 3000, "actual_s": 2100, "planned_m": 30000, "ridden_m": 29500, "pause_s": 100, "end": "ARRIVED", "why": "in: 0.70"},
+    {"planned_s": 1500, "actual_s": 2400, "planned_m": 11000, "ridden_m": 11300, "pause_s": 700, "end": "ARRIVED", "why": "out: stopped 11 min midway"},
+    {"planned_s": 1200, "actual_s": 300, "planned_m": 8000, "ridden_m": 2000, "pause_s": 0, "end": "CANCELLED", "why": "out: ended on the watch"},
+    {"planned_s": 240, "actual_s": 200, "planned_m": 1500, "ridden_m": 1500, "pause_s": 0, "end": "ARRIVED", "why": "out: under 5 min planned"},
+    {"planned_s": 1800, "actual_s": 1500, "planned_m": 12000, "ridden_m": 0, "pause_s": 0, "end": "ARRIVED", "why": "out: simulated ride, no track"}
+  ],
+  "factor": 0.8,
+  "watch_s": 1368
+}

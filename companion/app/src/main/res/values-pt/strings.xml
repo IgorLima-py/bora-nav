@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    O português (C16.8b). A pasta é `values-pt`, e não `values-pt-rBR`: assim quem tem o aparelho em
+    português de Portugal também lê português, e não o inglês do `values/`. Toda chave daqui existe
+    no `values/strings.xml`, com os mesmos argumentos (`StringsCatalogTest`).
+-->
+<resources>
+    <string name="tab_home">Início</string>
+    <string name="tab_trips">Viagens</string>
+    <string name="watch_tab">Relógio</string>
+
+    <string name="home_share_hint">Ou compartilhe um lugar do Google Maps</string>
+    <string name="home_edit">Editar</string>
+    <string name="home_recents">Recentes</string>
+    <string name="home_recents_empty">A próxima rota que for ao relógio aparece aqui.</string>
+    <string name="home_add_favorite">Adicionar favorito</string>
+
+    <string name="watch_link">Ligação</string>
+    <string name="watch_settings_hint">HUD, números e ruas no relógio.</string>
+    <string name="watch_battery">Bateria</string>
+
+    <string name="link_initializing">Falando com o Garmin Connect…</string>
+    <string name="link_no_devices">Cadê o relógio? Pareie o relógio no Garmin Connect.</string>
+    <string name="link_gcm_missing">Falta o Garmin Connect. Sem ele o Bora? não fala com o relógio.</string>
+    <string name="link_gcm_outdated">Falta atualizar o Garmin Connect. A versão instalada não fala com o Bora?.</string>
+    <string name="link_service_error">O Garmin Connect não respondeu. Abra o app e tente de novo.</string>
+    <string name="link_sdk_shutdown">A ligação com o Garmin Connect caiu. Abra o app e tente de novo.</string>
+
+    <string name="device_connected">Ligado</string>
+    <string name="device_disconnected">Cadê o relógio? Veja o Bluetooth e o Garmin Connect.</string>
+    <string name="device_app_installed">Bora? instalado no relógio</string>
+    <string name="device_app_missing">Falta o Bora? no relógio</string>
+    <string name="device_app_unknown">Vendo se o Bora? está no relógio…</string>
+
+    <string name="token_label">Token do Mapbox</string>
+    <string name="token_why">Sem ele o celular não calcula a rota. A busca anda sem ele.</string>
+    <string name="token_save">Salvar token</string>
+    <string name="token_saved">Token do Mapbox salvo</string>
+    <string name="token_change">Trocar token</string>
+
+    <string name="search_label">Para onde?</string>
+    <string name="search_needs_token">Salve o token do Mapbox para buscar endereços.</string>
+    <string name="search_nothing">Nada encontrado para «%1$s».</string>
+
+    <string name="confirm_title">Bora pra %1$s?</string>
+    <string name="confirm_distance">a %1$d km daqui em linha reta</string>
+    <string name="confirm_start">Bora</string>
+    <string name="confirm_cancel">Agora não</string>
+
+    <string name="action_watch_settings">Ajustes do relógio</string>
+    <string name="action_favorites">Favoritos</string>
+    <string name="action_trips">Viagens</string>
+    <string name="trips_title">Viagens</string>
+    <string name="trips_intro">Entram sozinhas: da rota enviada ao fim da navegação no relógio. A bateria é a da viagem, sem a tela de chegada.</string>
+    <string name="trips_empty">Nenhuma viagem ainda. A próxima rota que for ao relógio aparece aqui.</string>
+    <string name="settings_title">Ajustes do relógio</string>
+    <string name="settings_intro">Cada ajuste vai para o relógio sozinho quando você solta o dedo.</string>
+    <string name="settings_send">Enviar de novo</string>
+    <string name="settings_reset">Tudo ao padrão</string>
+    <!-- O PardalAttributionTest cobra os nomes das fontes nos dois idiomas. -->
+    <string name="osm_attribution">Ruas e radares: © OpenStreetMap contributors (ODbL). Radares oficiais: pardal (ODbL), com dados da CET-SP (CC BY), DER-SP, ANTT (CC BY), DNIT, Inmetro, PRF e prefeituras.</string>
+    <string name="settings_back">Voltar</string>
+
+    <string name="action_refresh">Procurar de novo</string>
+
+    <string name="nav_channel">Ligação com o relógio</string>
+    <string name="nav_notification">Navegando para %1$s</string>
+    <string name="nav_notification_plain">Navegando</string>
+    <string name="nav_notification_text">O Bora? segue falando com o relógio com a tela apagada.</string>
+    <string name="listen_notification">Bora? ouvindo o relógio</string>
+    <string name="listen_notification_text">Escolha um favorito no relógio e a rota sai daqui, com o celular no bolso.</string>
+
+    <string name="battery_exempt">Bateria sem restrição: o relógio pode começar uma navegação com o celular no bolso.</string>
+    <string name="battery_restricted">A bateria do celular corta o Bora?: com a restrição ligada, o relógio não consegue começar uma navegação com o celular no bolso.</string>
+    <string name="battery_allow">Tirar</string>
+    <string name="battery_allow_long">Tirar a restrição de bateria</string>
+    <string name="action_open_gcm">Abrir Garmin Connect</string>
+
+    <!-- O cabeçalho do Início (HomeStatus). -->
+    <string name="home_watch">Relógio</string>
+    <string name="pending_watch_paired">Relógio pareado</string>
+    <string name="pending_watch_on">%1$s ligado</string>
+    <string name="pending_app_on_watch">Bora? no relógio</string>
+    <string name="pending_battery">Bateria sem restrição</string>
+    <string name="action_install">Instalar</string>
+    <string name="action_update">Atualizar</string>
+    <string name="action_open">Abrir</string>
+    <string name="action_save">Salvar</string>
+    <string name="status_searching">Procurando o relógio</string>
+    <string name="status_searching_detail">Falando com o Garmin Connect</string>
+    <string name="status_gcm_missing">Falta o Garmin Connect</string>
+    <string name="status_gcm_missing_detail">Sem ele o Bora? não fala com o relógio</string>
+    <string name="status_gcm_old">Falta atualizar o Garmin Connect</string>
+    <string name="status_gcm_old_detail">A versão instalada não fala com o Bora?</string>
+    <string name="status_gcm_error">O Garmin Connect não respondeu</string>
+    <string name="status_gcm_error_detail">Abra o app e tente de novo</string>
+    <string name="status_no_watch">Cadê o relógio?</string>
+    <string name="status_no_watch_pair">Pareie o relógio no Garmin Connect</string>
+    <string name="status_no_watch_bt">Veja o Bluetooth e o Garmin Connect</string>
+    <string name="status_calculating">Calculando a rota</string>
+    <string name="status_sending">Mandando a rota</string>
+    <string name="status_app_missing">Falta o Bora? no relógio</string>
+    <string name="status_app_missing_detail">Instale o Bora? no %1$s</string>
+    <string name="status_one_thing">Falta uma coisa</string>
+    <string name="status_battery_detail">A bateria do celular corta o Bora?</string>
+    <string name="status_token_missing">Falta o token do Mapbox</string>
+    <string name="status_token_missing_detail">Sem ele o celular não calcula a rota</string>
+    <string name="status_ready">Tudo pronto</string>
+    <string name="status_ready_detail">%1$s ligado · Bora? %2$s</string>
+    <string name="status_for">Para %1$s</string>
+    <string name="status_for_watch">Para %1$s, pedido pelo relógio</string>
+
+    <!-- Os recentes e as viagens. -->
+    <string name="day_today">hoje</string>
+    <string name="day_yesterday">ontem</string>
+    <string name="trip_running">em andamento · plano %1$s</string>
+    <string name="trip_delta">(%1$s do plano)</string>
+    <string name="trip_planned">%1$s km planejados</string>
+    <string name="trip_ridden">%1$s km rodados de %2$s km planejados</string>
+    <string name="trip_avg">média %1$s km/h</string>
+    <plurals name="trip_reroutes">
+        <item quantity="one">%d recálculo</item>
+        <item quantity="other">%d recálculos</item>
+    </plurals>
+    <string name="trip_battery_watch">relógio</string>
+    <string name="trip_battery_phone">celular</string>
+    <plurals name="trip_battery">
+        <item quantity="one">%1$s %2$d → %3$d%% (%4$d ponto)</item>
+        <item quantity="other">%1$s %2$d → %3$d%% (%4$d pontos)</item>
+    </plurals>
+    <string name="trip_battery_rate">%1$s %%/h</string>
+    <string name="trip_pace_learning">Seu ritmo: aprendendo (%1$d de %2$d viagens). Até lá, o tempo no relógio é o do Mapbox, de carro.</string>
+    <string name="trip_pace">Seu ritmo: %1$d%% do tempo do Mapbox, de %2$d viagens. O tempo no relógio já vem assim.</string>
+    <string name="trip_end_arrived">chegou</string>
+    <string name="trip_end_cancelled">encerrada no relógio</string>
+    <string name="trip_end_error">erro no relógio</string>
+    <string name="trip_end_no_word">o relógio parou de responder</string>
+    <string name="trip_end_replaced">trocou de destino</string>
+    <string name="trip_end_interrupted">o app do celular fechou no meio</string>
+    <string name="trip_end_running">em andamento</string>
+    <string name="trip_when_format">dd/MM HH:mm</string>
+    <string name="day_format">dd/MM</string>
+
+    <!-- Favoritos. -->
+    <string name="fav_seed_home">Casa</string>
+    <string name="fav_seed_gym">Academia</string>
+    <string name="fav_seed_work">Escritório</string>
+    <string name="fav_intro">Aparecem no relógio, na tela Favoritos: o botão de cima abre e escolher um inicia a rota.</string>
+    <string name="fav_max">Seis favoritos é o máximo do relógio.</string>
+    <string name="fav_no_place">Sem endereço — toque para preencher (não vai ao relógio)</string>
+    <string name="fav_place_saved">Endereço salvo</string>
+    <string name="fav_name">Nome (aparece no relógio)</string>
+    <string name="fav_address">Endereço: %1$s</string>
+    <string name="fav_address_saved">salvo</string>
+    <string name="fav_search_below">Busque o endereço abaixo.</string>
+    <string name="fav_save">Salvar e enviar ao relógio</string>
+    <string name="fav_delete">Apagar</string>
+    <string name="fav_cancel">Cancelar</string>
+    <string name="fav_sending">Enviando ao relógio…</string>
+    <plurals name="fav_sent">
+        <item quantity="one">%d favorito no relógio.</item>
+        <item quantity="other">%d favoritos no relógio.</item>
+    </plurals>
+    <string name="fav_not_sent">Salvo no celular. O relógio não respondeu — a lista vai de novo quando ele conectar.</string>
+
+    <!-- Ajustes do relógio. -->
+    <string name="settings_sent">Enviado. O relógio aplica na hora.</string>
+    <string name="settings_not_confirmed">O relógio não confirmou. Abra o Bora? nele e tente de novo.</string>
+    <string name="settings_reset_done">Relógio de volta ao padrão.</string>
+    <string name="settings_sending">Enviando…</string>
+    <string name="settings_touching">Mexendo em: %1$s</string>
+    <string name="settings_touch_hint">Mexa num ajuste para ver o que ele muda no relógio</string>
+    <plurals name="settings_changed">
+        <item quantity="one">%d fora do padrão</item>
+        <item quantity="other">%d fora do padrão</item>
+    </plurals>
+    <string name="settings_effective_capped">Na tela fica em %1$d %%: o tamanho geral já levou ao limite do relógio.</string>
+    <string name="settings_effective">Na tela: %1$d %%, com o tamanho geral em %2$d %%.</string>
+    <string name="settings_default">Voltar ao padrão (%1$s)</string>
+    <string name="settings_conflict">O segundo aviso (%1$d m) tem de vir mais perto da curva que o «nunca avisar a menos de» (%2$d m); o relógio recusaria o envio.</string>
+    <string name="settings_motorway">Evitar vias expressas</string>
+    <string name="settings_motorway_hint">A rota e o recálculo fogem da pista expressa da Marginal, proibida para moto. Desligue na estrada, onde a rodovia é o caminho.</string>
+    <string name="settings_drill">Derrubar o app</string>
+    <string name="settings_drill_hint">Na próxima viagem, %1$d min depois da saída, o app do celular se derruba uma vez, como o Android faria, e o ensaio desarma sozinho. O relógio segue com o GPS dele; recálculo só volta na viagem seguinte.</string>
+
+    <string name="section_turns">Avisos de curva</string>
+    <string name="section_radars">Radares</string>
+    <string name="section_map">Mapa</string>
+    <string name="section_route">Rota</string>
+    <string name="section_size">Tamanho na tela</string>
+    <string name="section_burn_in">Proteção da tela</string>
+    <string name="section_tests">Testes e diagnóstico</string>
+
+    <string name="set_lead_s">Avisar antes da curva</string>
+    <string name="set_lead_s_hint">Quanto tempo antes da curva, na velocidade em que você está.</string>
+    <string name="set_lead_min_m">Nunca avisar a menos de</string>
+    <string name="set_lead_min_m_hint">Devagar, o aviso vem pelo menos a esta distância da curva.</string>
+    <string name="set_near_m">Segundo aviso, colado na curva</string>
+    <string name="set_near_m_hint">A esta distância vem o aviso de «agora». Tem de ser menor que o de cima.</string>
+    <string name="set_pulse_ms">Duração de cada toque</string>
+    <string name="set_pulse_ms_hint">O toque curto da curva; o toque longo é o dobro.</string>
+    <string name="set_zoom">Zoom ao abrir a rota</string>
+    <string name="set_zoom_hint">O botão de cima do relógio troca na hora.</string>
+    <string name="set_corridor_pct">Brilho das ruas</string>
+    <string name="set_corridor_pct_hint">O cinza das ruas em volta da rota.</string>
+    <string name="set_hud_pct">Tamanho geral</string>
+    <string name="set_hud_pct_hint">Aumenta ou diminui tudo de uma vez, por cima dos ajustes de cada parte.</string>
+    <string name="set_orbit_px">Deslocamento contra marca na tela</string>
+    <string name="set_orbit_px_hint">O HUD anda devagar uns pixels para não marcar o painel. 0 desliga.</string>
+    <string name="set_orbit_s">Tempo em cada posição</string>
+    <string name="set_orbit_s_hint">Quanto tempo o HUD fica parado em cada ponto do deslocamento.</string>
+    <string name="set_dist_pct">Distância da curva</string>
+    <string name="set_dist_pct_hint">O número grande e a unidade (m, km).</string>
+    <string name="set_eta_pct">Hora de chegada</string>
+    <string name="set_eta_pct_hint">No pé da tela.</string>
+    <string name="set_text_pct">Textos</string>
+    <string name="set_text_pct_hint">Hora, nome da rua, distância restante e o «e depois».</string>
+    <string name="set_arrow_pct">Seta</string>
+    <string name="set_arrow_pct_hint">A seta da manobra e o check da chegada.</string>
+    <string name="set_plate_w_pct">Folga dos lados da placa</string>
+    <string name="set_plate_w_pct_hint">Espaço entre o texto e a moldura. As letras não mudam.</string>
+    <string name="set_plate_h_pct">Folga em cima e embaixo da placa</string>
+    <string name="set_plate_h_pct_hint">0%% é a placa justa. As letras não mudam.</string>
+    <string name="set_gps_drill_min">Buraco de GPS</string>
+    <string name="set_gps_drill_min_hint">Em cada viagem, este tanto de minutos depois da saída o relógio finge 90 s sem GPS e usa o do celular, para provar a troca e a volta. Para o celular dar a posição dele, abra o app nele uma vez antes de sair. 0 desliga.</string>
+    <string name="set_street_img">Ruas em imagem</string>
+    <string name="set_street_img_hint">Ligado, as ruas são desenhadas uma vez numa imagem. Desligado, rua por rua a cada quadro.</string>
+    <string name="set_map_tilt">Mapa deitado</string>
+    <string name="set_map_tilt_hint">O mapa achatado em volta da moto. Desligado, o mapa fica plano.</string>
+    <string name="set_street_16bit">Imagem de 16 bits</string>
+    <string name="set_street_16bit_hint">Desligado, a imagem ocupa o dobro de memória e o mapa deitado pode voltar a plano.</string>
+    <string name="set_street_diag">Diagnóstico das ruas</string>
+    <string name="set_street_diag_hint">Uma alavanca por vez, com «Mapa deitado» desligado. Escolha uma, espere uns 10 segundos com a rota no mapa e veja se as ruas aparecem; o relógio mostra «D» e o número à esquerda da moto. Nas sondas (4 a 7), conte quantos X coloridos aparecem. Nas grades (8 a 10), ande um pouco e veja se as ruas acompanham. Precisa do relógio v1.2.9. Volte para Normal depois do teste.</string>
+    <string name="set_vibe_on">Vibrar no pulso</string>
+    <string name="set_vibe_on_hint">Antes de cada curva (2 toques para a esquerda, 3 para a direita), na chegada e quando você sai da rota. Os ajustes abaixo só se sentem com isto ligado. Precisa do relógio v1.2.7.</string>
+    <string name="set_radar_vibe">Vibrar no radar</string>
+    <string name="set_radar_vibe_hint">Um toque quando a placa do radar aparece, uma vez por radar. Vale mesmo com «Vibrar no pulso» desligado. Precisa do relógio v1.2.9.</string>
+
+    <string name="zoom_0">0,6 m/px</string>
+    <string name="zoom_1">1,2 m/px</string>
+    <string name="zoom_2">2,5 m/px</string>
+    <string name="zoom_3">5 m/px</string>
+
+    <string name="diag_0">Normal</string>
+    <string name="diag_1">1 · Rua por rua, sem imagem (controle)</string>
+    <string name="diag_2">2 · Imagem única de 454 px</string>
+    <string name="diag_3">3 · Imagem única de 480 px</string>
+    <string name="diag_4">4 · Sonda: 1 imagem de 480 px</string>
+    <string name="diag_5">5 · Sonda: 2 imagens de 480 px</string>
+    <string name="diag_6">6 · Sonda: 3 imagens de 480 px</string>
+    <string name="diag_7">7 · Sonda: 4 imagens de 480 px</string>
+    <string name="diag_8">8 · Ladrilhos 2×2 de 480 px</string>
+    <string name="diag_9">9 · Ladrilhos 3×3 de 320 px</string>
+    <string name="diag_10">10 · Ladrilhos 4×4 de 240 px</string>
+
+    <!-- A parte que a prévia do relógio acende (WatchPreview). -->
+    <string name="part_hud">tudo de uma vez</string>
+    <string name="part_dist">a distância da curva</string>
+    <string name="part_eta">a hora de chegada</string>
+    <string name="part_text">a hora, o nome da rua e a distância restante</string>
+    <string name="part_arrow">a seta</string>
+    <string name="part_plate_w">a folga dos lados da placa</string>
+    <string name="part_plate_h">a folga em cima e embaixo da placa</string>
+    <string name="part_orbit">a margem que a hora, a placa e a chegada guardam da borda</string>
+    <string name="part_zoom">o zoom do mapa</string>
+    <string name="part_corridor">o brilho das ruas</string>
+    <string name="part_tilt">o mapa deitado</string>
+    <string name="part_street_img">o traço das ruas</string>
+    <string name="part_radar">a placa do radar, que aparece com o toque</string>
+
+
+    <!-- O compartilhamento e a rota. -->
+    <string name="share_reading">Lendo o compartilhamento…</string>
+    <string name="share_no_location_permission">Sem permissão de localização não dá para saber de onde você está saindo.</string>
+    <string name="share_close">Fechar</string>
+    <string name="share_nothing">Não veio nada para navegar neste compartilhamento.</string>
+    <string name="share_no_token">Salve o token do Mapbox na aba Relógio do Bora?.</string>
+    <string name="share_locating">Pegando sua posição…</string>
+    <string name="share_no_fix">Sem posição atual — saia para um lugar com céu aberto e tente de novo.</string>
+    <string name="share_resolving">Resolvendo o destino…</string>
+    <string name="share_too_far">O destino saiu a %1$d km daqui — o link compartilhado não deve ser esse. Compartilhe de novo pelo botão do Maps.</string>
+    <string name="share_no_coords">Não achei as coordenadas nesse link. Abra o lugar no Maps e use Compartilhar → Bora?.</string>
+    <string name="share_not_found">Não achei as coordenadas de «%1$s».</string>
+    <string name="share_unrecognized">Compartilhamento não reconhecido</string>
+    <string name="share_unexpected">Erro inesperado: %1$s</string>
+    <string name="share_calculating">Calculando a rota…</string>
+    <string name="share_sending">Enviando para o relógio…</string>
+    <string name="share_done">Rota no relógio · %1$d B em %2$d ms</string>
+    <string name="share_progress">Enviando %1$d/%2$d pedaços…</string>
+    <string name="share_destination">Destino</string>
+    <string name="share_send_failed">O relógio não recebeu a rota. Abra o Bora? nele e compartilhe de novo.</string>
+    <string name="watch_not_connected">Relógio não conectado</string>
+
+    <!-- Erros que a tela mostra; o log continua com o texto técnico em português. -->
+    <string name="err_route">Não foi possível calcular a rota. Tente de novo.</string>
+    <string name="err_token_missing">Falta o token do Mapbox.</string>
+    <string name="err_token_refused">O Mapbox recusou o token. Confira o token na aba Relógio.</string>
+    <string name="err_search">Busca indisponível.</string>
+    <string name="err_offline">Sem internet para buscar o endereço.</string>
+
+    <!-- O primeiro uso (C16.8b). -->
+    <string name="setup_title">Bem-vindo ao Bora?</string>
+    <string name="setup_step">Passo %1$d de %2$d</string>
+    <string name="setup_next">Continuar</string>
+    <string name="setup_back">Voltar</string>
+    <string name="setup_skip">Pular</string>
+    <string name="setup_token_title">O token do Mapbox</string>
+    <string name="setup_token_body">O Bora? calcula a rota pelo Mapbox, e cada pessoa usa o próprio token. A conta é grátis e o plano grátis dá para o uso de uma pessoa. Crie a conta, copie o «Default public token» (começa com pk.) e cole aqui.</string>
+    <string name="setup_token_link">Criar a conta grátis no Mapbox</string>
+    <string name="setup_token_bad">Esse não parece um token público do Mapbox: ele começa com pk.</string>
+    <string name="setup_token_ok">Token salvo.</string>
+    <string name="setup_perms_title">As permissões</string>
+    <string name="setup_perms_body">Três coisas, e cada uma diz para que serve.</string>
+    <string name="setup_perm_location">Localização</string>
+    <string name="setup_perm_location_why">Para a rota sair de onde você está.</string>
+    <string name="setup_perm_notify">Notificações</string>
+    <string name="setup_perm_notify_why">O aviso fixo enquanto o Bora? fala com o relógio.</string>
+    <string name="setup_perm_battery">Bateria sem restrição</string>
+    <string name="setup_perm_battery_why">Para o relógio começar uma rota com o celular no bolso.</string>
+    <string name="setup_allow">Permitir</string>
+    <string name="setup_granted">Pronto</string>
+    <string name="setup_watch_title">O relógio</string>
+    <string name="setup_watch_body">O Bora? fala com o relógio pelo app Garmin Connect. Instale o Bora? no relógio pelo Connect IQ e deixe o relógio pareado e por perto.</string>
+    <string name="setup_watch_gcm">Garmin Connect instalado</string>
+    <string name="setup_watch_paired">Relógio pareado no Garmin Connect</string>
+    <string name="setup_watch_app">Bora? instalado no relógio</string>
+    <string name="setup_watch_test">Testar a ligação</string>
+    <string name="setup_watch_testing">Testando…</string>
+    <string name="setup_watch_test_ok">O relógio respondeu.</string>
+    <string name="setup_watch_test_fail">O relógio não respondeu. Abra o Bora? nele e tente de novo.</string>
+    <string name="setup_done_title">Pronto</string>
+    <string name="setup_done_body">Busque um lugar no Início, ou compartilhe um lugar do Google Maps com o Bora?. A rota vai para o relógio.</string>
+    <string name="setup_done_missing">Ainda falta: %1$s. Dá para resolver depois, pela aba Relógio.</string>
+    <string name="setup_finish">Bora</string>
+    <string name="setup_again">Refazer o primeiro uso</string>
+</resources>

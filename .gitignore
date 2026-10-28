@@ -1,0 +1,65 @@
+# Secrets: never commit
+.secrets/
+*.der
+*.pem
+developer_key*
+local.properties
+*.keystore
+*.jks
+
+# Connect IQ build output
+watch/bin/
+*.prg
+*.prg.debug.xml
+*.iq
+
+# Release files built by tools/package.py
+dist/
+
+# Android / Gradle
+companion/build/
+companion/app/build/
+companion/.gradle/
+# Kotlin 2.x compiler cache (daemon sessions), per machine.
+companion/.kotlin/
+# JVM crash dumps.
+hs_err_pid*.log
+replay_pid*.log
+.gradle/
+build/
+*.apk
+*.aab
+
+# Simulator screenshots (tools/shot_simulator.ps1): a navigation screen shows where you are.
+shots/
+# The screenshot scenario (`sim.py shots`) is code, not a capture.
+!/watch/demo/shots/
+
+# Python
+__pycache__/
+*.pyc
+
+# Editors / OS
+.vscode/
+.idea/
+*.iml
+Thumbs.db
+desktop.ini
+
+# Claude Code config: the project commands are versioned in the private repo; the rest is local.
+.claude/*
+!.claude/commands/
+!.claude/skills/
+!.claude/agents/
+!.claude/hooks/
+!.claude/settings.json
+.claude/settings.local.json
+
+# Ride output (relatorio.py --png, logs pulled from the phone): they show where you rode.
+corridas/
+
+# Device logs (motonav.log, CIQ_LOG) show where you rode.
+*.log
+
+# The real photo on the carousel cover stays on the machine.
+docs/marca/carrossel-capa.jpg

@@ -1,0 +1,5 @@
+# Watchdog probe (C2a): a separate app, simulator only. It reuses MotoNav's
+# resources (name and icon) and none of its code.
+project.manifest = probe/manifest.xml
+base.sourcePath = probe/source
+base.resourcePath = resources

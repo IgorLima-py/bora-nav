@@ -1,0 +1,493 @@
+{
+ "fixture": "tiete_copan",
+ "generated_by": "tools/esperado.py (rule of 03 §Vibration + C3a decisions)",
+ "route": {
+  "points": 479,
+  "maneuvers": 24,
+  "meters": 18856.5
+ },
+ "profile": {
+  "cruise_kmh": 50.0,
+  "turn_kmh": [
+   15.0,
+   50.0,
+   30.0,
+   15.0,
+   15.0,
+   15.0,
+   15.0,
+   15.0,
+   30.0,
+   15.0,
+   30.0,
+   30.0,
+   15.0,
+   50.0,
+   30.0,
+   30.0,
+   30.0,
+   30.0,
+   30.0,
+   15.0,
+   15.0,
+   15.0,
+   15.0,
+   15.0,
+   15.0,
+   15.0,
+   15.0,
+   15.0,
+   15.0,
+   30.0,
+   30.0
+  ],
+  "brake_mps2": 2.0,
+  "accel_mps2": 1.5,
+  "hold_m": 30.0,
+  "noise_m": 2.0,
+  "noise_rho": 0.9,
+  "seed": 3,
+  "detour_m": 0.0,
+  "detour_from": 0.0,
+  "detour_to": 0.0
+ },
+ "tolerance_m": 8.5,
+ "maneuvers": [
+  {
+   "i": 0,
+   "type": "departure",
+   "street": "Rua Guira Acangatará",
+   "at_m": 0.0,
+   "alerts": [
+    0
+   ],
+   "reason": "no_vibration"
+  },
+  {
+   "i": 1,
+   "type": "right",
+   "street": "Rua Quatiara",
+   "at_m": 97.7,
+   "pulses": 3,
+   "alert1_m": [
+    55.1,
+    96.5
+   ],
+   "alert1_kmh": [
+    19.7,
+    39.4
+   ],
+   "alerts": [
+    1
+   ],
+   "reason": "speed"
+  },
+  {
+   "i": 2,
+   "type": "new_name",
+   "street": "Praça Xavier Pinto Lima",
+   "at_m": 236.9,
+   "alerts": [
+    0
+   ],
+   "reason": "no_vibration"
+  },
+  {
+   "i": 3,
+   "type": "right",
+   "street": "Avenida Doutor Assis Ribeiro",
+   "at_m": 370.7,
+   "pulses": 3,
+   "alert1_m": [
+    92.8,
+    123.7
+   ],
+   "alert1_kmh": [
+    50.0,
+    50.0
+   ],
+   "alerts": [
+    1
+   ],
+   "reason": "speed"
+  },
+  {
+   "i": 4,
+   "type": "fork_right",
+   "street": "Avenida Guarulhos",
+   "at_m": 3508.1,
+   "pulses": 3,
+   "alert1_m": [
+    90.3,
+    121.2
+   ],
+   "alert1_kmh": [
+    50.0,
+    50.0
+   ],
+   "alerts": [
+    2
+   ],
+   "alert2_m": [
+    6.9,
+    25.0
+   ],
+   "alert2_kmh": [
+    30.0,
+    32.2
+   ]
+  },
+  {
+   "i": 5,
+   "type": "right",
+   "street": "Rua Vitória Calegari",
+   "at_m": 4146.5,
+   "pulses": 3,
+   "alert1_m": [
+    86.1,
+    116.9
+   ],
+   "alert1_kmh": [
+    50.0,
+    50.0
+   ],
+   "alerts": [
+    1
+   ],
+   "reason": "speed"
+  },
+  {
+   "i": 6,
+   "type": "highway_enter",
+   "street": "SP-070",
+   "at_m": 4437.1,
+   "pulses": 1,
+   "alert1_m": [
+    84.5,
+    115.4
+   ],
+   "alert1_kmh": [
+    50.0,
+    50.0
+   ],
+   "alerts": [
+    2
+   ],
+   "alert2_m": [
+    3.5,
+    25.0
+   ],
+   "alert2_kmh": [
+    30.0,
+    30.0
+   ]
+  },
+  {
+   "i": 7,
+   "type": "merge_left",
+   "street": "Rodovia Ayrton Senna",
+   "at_m": 4616.7,
+   "pulses": 1,
+   "alert1_m": [
+    93.7,
+    124.5
+   ],
+   "alert1_kmh": [
+    50.0,
+    50.0
+   ],
+   "alerts": [
+    2
+   ],
+   "alert2_m": [
+    0.4,
+    25.0
+   ],
+   "alert2_kmh": [
+    30.0,
+    30.0
+   ]
+  },
+  {
+   "i": 8,
+   "type": "new_name",
+   "street": "Marginal Tietê (Expressa)",
+   "at_m": 5168.7,
+   "alerts": [
+    0
+   ],
+   "reason": "no_vibration"
+  },
+  {
+   "i": 9,
+   "type": "fork_right",
+   "street": "Marginal Tietê Expressa",
+   "at_m": 10665.5,
+   "pulses": 3,
+   "alert1_m": [
+    82.7,
+    127.5
+   ],
+   "alert1_kmh": [
+    50.0,
+    50.0
+   ],
+   "alerts": [
+    2
+   ],
+   "alert2_m": [
+    2.3,
+    25.0
+   ],
+   "alert2_kmh": [
+    30.0,
+    30.0
+   ]
+  },
+  {
+   "i": 10,
+   "type": "merge_right",
+   "street": "Marginal Tietê (Expressa)",
+   "at_m": 11326.1,
+   "pulses": 1,
+   "alert1_m": [
+    86.7,
+    117.5
+   ],
+   "alert1_kmh": [
+    50.0,
+    50.0
+   ],
+   "alerts": [
+    2
+   ],
+   "alert2_m": [
+    4.9,
+    25.0
+   ],
+   "alert2_kmh": [
+    30.0,
+    30.1
+   ]
+  },
+  {
+   "i": 11,
+   "type": "highway_exit",
+   "street": "Avenida Morvan Dias de Figueiredo",
+   "at_m": 13542.3,
+   "pulses": 1,
+   "alert1_m": [
+    91.0,
+    121.9
+   ],
+   "alert1_kmh": [
+    50.0,
+    50.0
+   ],
+   "alerts": [
+    2
+   ],
+   "alert2_m": [
+    7.3,
+    25.0
+   ],
+   "alert2_kmh": [
+    30.0,
+    32.6
+   ]
+  },
+  {
+   "i": 12,
+   "type": "fork_left",
+   "street": "Avenida Morvan Dias de Figueiredo",
+   "at_m": 13928.5,
+   "pulses": 2,
+   "alert1_m": [
+    84.4,
+    115.3
+   ],
+   "alert1_kmh": [
+    50.0,
+    50.0
+   ],
+   "alerts": [
+    2
+   ],
+   "alert2_m": [
+    3.4,
+    25.0
+   ],
+   "alert2_kmh": [
+    30.0,
+    30.0
+   ]
+  },
+  {
+   "i": 13,
+   "type": "new_name",
+   "street": "Ponte Fábio Lazzari",
+   "at_m": 14195.1,
+   "alerts": [
+    0
+   ],
+   "reason": "no_vibration"
+  },
+  {
+   "i": 14,
+   "type": "straight",
+   "street": "Avenida Cruzeiro do Sul",
+   "at_m": 14785.0,
+   "alerts": [
+    0
+   ],
+   "reason": "no_vibration"
+  },
+  {
+   "i": 15,
+   "type": "new_name",
+   "street": "Rua da Cantareira",
+   "at_m": 15896.9,
+   "alerts": [
+    0
+   ],
+   "reason": "no_vibration"
+  },
+  {
+   "i": 16,
+   "type": "right",
+   "street": "",
+   "at_m": 16838.4,
+   "pulses": 3,
+   "alert1_m": [
+    87.7,
+    118.6
+   ],
+   "alert1_kmh": [
+    50.0,
+    50.0
+   ],
+   "alerts": [
+    1
+   ],
+   "reason": "speed"
+  },
+  {
+   "i": 17,
+   "type": "straight",
+   "street": "Avenida Senador Queirós",
+   "at_m": 16893.7,
+   "alerts": [
+    0
+   ],
+   "reason": "no_vibration"
+  },
+  {
+   "i": 18,
+   "type": "left",
+   "street": "Avenida Cásper Líbero",
+   "at_m": 17550.7,
+   "pulses": 2,
+   "alert1_m": [
+    91.7,
+    122.5
+   ],
+   "alert1_kmh": [
+    50.0,
+    50.0
+   ],
+   "alerts": [
+    1
+   ],
+   "reason": "speed"
+  },
+  {
+   "i": 19,
+   "type": "slight_right",
+   "street": "Avenida Ipiranga",
+   "at_m": 17623.1,
+   "pulses": 3,
+   "alert1_m": [
+    61.1,
+    78.1
+   ],
+   "alert1_kmh": [
+    15.0,
+    23.1
+   ],
+   "alerts": [
+    2
+   ],
+   "alert2_m": [
+    5.3,
+    25.0
+   ],
+   "alert2_kmh": [
+    30.0,
+    30.5
+   ]
+  },
+  {
+   "i": 20,
+   "type": "new_name",
+   "street": "Praça da República",
+   "at_m": 18251.8,
+   "alerts": [
+    0
+   ],
+   "reason": "no_vibration"
+  },
+  {
+   "i": 21,
+   "type": "left",
+   "street": "Avenida São Luís",
+   "at_m": 18532.4,
+   "pulses": 2,
+   "alert1_m": [
+    90.4,
+    121.2
+   ],
+   "alert1_kmh": [
+    50.0,
+    50.0
+   ],
+   "alerts": [
+    1
+   ],
+   "reason": "speed"
+  },
+  {
+   "i": 22,
+   "type": "left",
+   "street": "Avenida São Luís",
+   "at_m": 18588.4,
+   "pulses": 2,
+   "alert1_m": [
+    44.4,
+    61.3
+   ],
+   "alert1_kmh": [
+    15.0,
+    23.4
+   ],
+   "alerts": [
+    1
+   ],
+   "reason": "speed"
+  },
+  {
+   "i": 23,
+   "type": "arrive",
+   "street": "Avenida São Luís",
+   "at_m": 18856.5,
+   "alerts": [
+    0
+   ],
+   "reason": "no_vibration"
+  }
+ ],
+ "arrival": {
+  "up_to_m": 30.0,
+  "at_s": 18827.6
+ },
+ "duration_s": 1450
+}

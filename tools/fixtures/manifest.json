@@ -1,0 +1,223 @@
+{
+  "protoVersion": 2,
+  "routeId": 1,
+  "chunkSize": 4096,
+  "polyPointCount": 265,
+  "turnCount": 17,
+  "corridorLodCount": 4,
+  "distanceM": 9526,
+  "durationS": 890,
+  "destName": "Aeroporto de Congonhas",
+  "blocks": [
+    {
+      "name": "meta",
+      "msgType": 1,
+      "chunks": 1,
+      "payloadBytes": 44,
+      "files": [
+        {
+          "file": "meta_00.bin",
+          "seq": 0,
+          "total": 1,
+          "bytes": 52
+        }
+      ]
+    },
+    {
+      "name": "poly",
+      "msgType": 2,
+      "chunks": 1,
+      "payloadBytes": 1064,
+      "files": [
+        {
+          "file": "poly_00.bin",
+          "seq": 0,
+          "total": 1,
+          "bytes": 1072
+        }
+      ]
+    },
+    {
+      "name": "turns",
+      "msgType": 3,
+      "chunks": 1,
+      "payloadBytes": 361,
+      "files": [
+        {
+          "file": "turns_00.bin",
+          "seq": 0,
+          "total": 1,
+          "bytes": 369
+        }
+      ]
+    },
+    {
+      "name": "corridor_lod0",
+      "msgType": 4,
+      "chunks": 1,
+      "payloadBytes": 1075,
+      "files": [
+        {
+          "file": "corridor_lod0_00.bin",
+          "seq": 0,
+          "total": 1,
+          "bytes": 1083
+        }
+      ]
+    },
+    {
+      "name": "corridor_lod1",
+      "msgType": 4,
+      "chunks": 1,
+      "payloadBytes": 331,
+      "files": [
+        {
+          "file": "corridor_lod1_00.bin",
+          "seq": 0,
+          "total": 1,
+          "bytes": 339
+        }
+      ]
+    },
+    {
+      "name": "corridor_lod2",
+      "msgType": 4,
+      "chunks": 1,
+      "payloadBytes": 160,
+      "files": [
+        {
+          "file": "corridor_lod2_00.bin",
+          "seq": 0,
+          "total": 1,
+          "bytes": 168
+        }
+      ]
+    },
+    {
+      "name": "corridor_lod3",
+      "msgType": 4,
+      "chunks": 1,
+      "payloadBytes": 146,
+      "files": [
+        {
+          "file": "corridor_lod3_00.bin",
+          "seq": 0,
+          "total": 1,
+          "bytes": 154
+        }
+      ]
+    },
+    {
+      "name": "radars",
+      "msgType": 8,
+      "chunks": 1,
+      "payloadBytes": 44,
+      "files": [
+        {
+          "file": "radars_00.bin",
+          "seq": 0,
+          "total": 1,
+          "bytes": 52
+        }
+      ]
+    },
+    {
+      "name": "config",
+      "msgType": 9,
+      "chunks": 1,
+      "payloadBytes": 67,
+      "files": [
+        {
+          "file": "config_00.bin",
+          "seq": 0,
+          "total": 1,
+          "bytes": 75
+        }
+      ]
+    },
+    {
+      "name": "reroute_req",
+      "msgType": 130,
+      "chunks": 1,
+      "payloadBytes": 14,
+      "files": [
+        {
+          "file": "reroute_req_00.bin",
+          "seq": 0,
+          "total": 1,
+          "bytes": 22
+        }
+      ]
+    },
+    {
+      "name": "favorites",
+      "msgType": 5,
+      "chunks": 1,
+      "payloadBytes": 56,
+      "files": [
+        {
+          "file": "favorites_00.bin",
+          "seq": 0,
+          "total": 1,
+          "bytes": 64
+        }
+      ]
+    },
+    {
+      "name": "nav_start_req",
+      "msgType": 131,
+      "chunks": 1,
+      "payloadBytes": 1,
+      "files": [
+        {
+          "file": "nav_start_req_00.bin",
+          "seq": 0,
+          "total": 1,
+          "bytes": 9
+        }
+      ]
+    },
+    {
+      "name": "route_update",
+      "msgType": 6,
+      "chunks": 1,
+      "payloadBytes": 4,
+      "files": [
+        {
+          "file": "route_update_00.bin",
+          "seq": 0,
+          "total": 1,
+          "bytes": 12
+        }
+      ]
+    },
+    {
+      "name": "phone_fix",
+      "msgType": 10,
+      "chunks": 1,
+      "payloadBytes": 16,
+      "files": [
+        {
+          "file": "phone_fix_00.bin",
+          "seq": 0,
+          "total": 1,
+          "bytes": 24
+        }
+      ]
+    },
+    {
+      "name": "fix_req",
+      "msgType": 134,
+      "chunks": 1,
+      "payloadBytes": 1,
+      "files": [
+        {
+          "file": "fix_req_00.bin",
+          "seq": 0,
+          "total": 1,
+          "bytes": 9
+        }
+      ]
+    }
+  ]
+}

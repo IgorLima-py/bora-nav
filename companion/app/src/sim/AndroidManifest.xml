@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Only in the `sim` variant (C7a): the receiver for the bridge proof and the watch → phone relay, triggered by
+    `tools/ponte.py` with `adb shell am broadcast`. Exported because `adb` is
+    another process; neither the S25 debug nor the release has this component.
+
+    C7b: `TokenReceiver` receives the Mapbox token from `tools/e2e.py`, by the same path.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <receiver
+            android:name=".sim.BridgeReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="dev.igor.motonav.sim.PONTE" />
+                <action android:name="dev.igor.motonav.sim.RELAY" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".sim.TokenReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="dev.igor.motonav.sim.TOKEN" />
+            </intent-filter>
+        </receiver>
+        <!-- C12: the e2e's public-place favorites (favorite 1). -->
+        <receiver
+            android:name=".sim.FavoritesReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="dev.igor.motonav.sim.FAVORITES" />
+            </intent-filter>
+        </receiver>
+        <!-- C13a: the e2e doze canary, which stops the foreground service. -->
+        <receiver
+            android:name=".sim.ServiceReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="dev.igor.motonav.sim.STOP_NAV_SERVICE" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

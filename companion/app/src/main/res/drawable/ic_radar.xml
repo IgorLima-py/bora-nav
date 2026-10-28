@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Radar (watch settings, C16.6): a speed camera on a pole, on the Bora? geometry, straight stroke and sharp corners. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path android:pathData="M4,6 H16 V12 H4 Z M16,8 L20,6 V12 L16,10 M10,12 V20 M6,20 H14" android:strokeColor="#FFFFFFFF" android:strokeWidth="2" android:strokeLineCap="butt" android:strokeLineJoin="miter" />
+</vector>

@@ -1,0 +1,8 @@
+# The arrows sheet (C16.5): `monkeyc -f "monkey.jungle;setas.jungle"`, only through
+# `tools/sim.py shots --setas`. It is the demo (`demo.jungle`) without `DemoHold`: it swaps the `demoAfterLoad`
+# that holds the screen (`demo/source/DemoHold.mc`, annotated `demo_hold`) for the one in
+# `demo/setas/SetasStart.mc`, which draws all the maneuver arrows, the status icons and the return arrow
+# through the same `TurnArrow` and `StatusIcons` as the HUD, on 3 pages, for `sim.py` to photograph.
+base.sourcePath = source;demo/source;demo/setas
+base.resourcePath = resources;demo/resources
+base.excludeAnnotations = canary;quadratic_parse;nodemo;demo_hold;no_near_alert

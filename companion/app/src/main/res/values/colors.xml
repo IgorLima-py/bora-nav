@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_launcher_background">#000000</color>
+    <!-- A tinta do Bora? (`ui/theme/Color.kt`, Ink): o fundo da janela antes do Compose. -->
+    <color name="bora_ink">#0B0F13</color>
+</resources>

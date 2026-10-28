@@ -1,0 +1,229 @@
+[diag] 4974s start v0.18.0-f3a
+[demo] inicio 0 config + 11 mensagens, rota 42, 4 LODs
+[diag] 4975s rx Str48 -> 35B
+[diag] 4975s blk 0x01 0/1 27B
+[diag] 4975s rota nova, zerou stats
+[diag] 4975s aplicou 0x01 pts 0 trn 0
+[diag] 4975s ack-> 0x01
+[diag] 4975s tx ok
+[diag] 4976s rx Str3868 -> 2900B
+[diag] 4976s blk 0x02 0/1 2892B
+[diag] 4976s aplicou 0x02 pts 722 trn 0
+[diag] 4976s ack-> 0x02
+[diag] 4976s tx ok
+[diag] 4977s rx Str400 -> 298B
+[diag] 4977s blk 0x03 0/1 290B
+[diag] 4977s aplicou 0x03 pts 722 trn 16
+[diag] 4977s ack-> 0x03
+[diag] 4977s tx ok
+[diag] 4977s completa 3233B 1984ms
+[diag] 4977s tx ok
+[diag] 4977s gps todos os sistemas L1
+[diag] 4977s mapa on
+[demo] centro no ponto 323 de 722 (22385 m)
+[diag] 4978s rx Str5464 -> 4096B
+[diag] 4978s blk 0x04 0/2 4088B
+[diag] 4979s rx Str4940 -> 3703B
+[diag] 4979s blk 0x04 1/2 3695B
+[diag] 4979s aplicou 0x04 pts 722 trn 16
+[diag] 4979s ack-> 0x04
+[diag] 4979s tx ok
+[diag] 4979s completa 11032B 4516ms
+[diag] 4979s tx ok
+[diag] 4980s rx Str5464 -> 4096B
+[diag] 4980s blk 0x04 0/3 4088B
+[diag] 4981s rx Str5464 -> 4096B
+[diag] 4981s blk 0x04 1/3 4088B
+[diag] 4982s corredor lod 0 454 ways 1378 pts
+[diag] 4982s rx Str1032 -> 773B
+[diag] 4982s blk 0x04 2/3 765B
+[diag] 4982s aplicou 0x04 pts 722 trn 16
+[diag] 4982s ack-> 0x04
+[diag] 4982s tx ok
+[diag] 4982s completa 19997B 7000ms
+[diag] 4982s tx ok
+[diag] 4983s rx Str2200 -> 1649B
+[diag] 4983s blk 0x04 0/1 1641B
+[diag] 4983s aplicou 0x04 pts 722 trn 16
+[diag] 4983s ack-> 0x04
+[diag] 4983s tx ok
+[diag] 4983s completa 21646B 8016ms
+[diag] 4983s tx ok
+[diag] 4984s frame med 60ms pico 93ms n8 seg 71 · corr 0 rota 0 hud 47ms · work pico 362/800
+[diag] 4984s fase navegando · tela mapa · rota 42 722pts · corredor 1 lods 1378 pts 16 na tela · zoom 1.2 · fora · sem fix · mem 176/763KB · bat 90% · eta - · fix -
+[diag] 4984s rx Str5464 -> 4096B
+[diag] 4984s blk 0x04 0/2 4088B
+[diag] 4985s corredor lod 1 596 ways 1490 pts
+[diag] 4985s rx Str2680 -> 2008B
+[diag] 4985s blk 0x04 1/2 2000B
+[diag] 4985s corredor lod 2 112 ways 270 pts
+[diag] 4985s aplicou 0x04 pts 722 trn 16
+[diag] 4985s ack-> 0x04
+[diag] 4985s tx ok
+[diag] 4985s completa 27750B 10016ms
+[diag] 4985s tx ok
+[diag] 4988s corredor lod 3 399 ways 1023 pts
+[demo] pronto 11 mensagens
+[ride] inicio 722 pts 16 manobras 22385.2 m periodo 250 ms
+[ride] manobra 0 tipo 0 em 0.0 m
+[ride] manobra 1 tipo 8 em 30.6 m
+[ride] manobra 2 tipo 3 em 64.7 m
+[ride] manobra 3 tipo 3 em 436.9 m
+[ride] manobra 4 tipo 4 em 726.8 m
+[ride] manobra 5 tipo 3 em 1235.2 m
+[ride] manobra 6 tipo 8 em 1483.4 m
+[ride] manobra 7 tipo 7 em 1569.0 m
+[ride] manobra 8 tipo 8 em 11810.9 m
+[ride] manobra 9 tipo 1 em 20607.1 m
+[ride] manobra 10 tipo 7 em 20843.5 m
+[ride] manobra 11 tipo 7 em 21117.3 m
+[ride] manobra 12 tipo 2 em 21152.1 m
+[ride] manobra 13 tipo 8 em 22061.1 m
+[ride] manobra 14 tipo 8 em 22117.0 m
+[ride] manobra 15 tipo 12 em 22385.2 m
+[diag] 4988s vibra curva 1 aviso 1 a 30.6m 15.0km/h 2p
+[diag] 4988s vibra curva 1 aviso 2 a 17.9m 24.5km/h 2p
+[diag] 4989s tx ok
+[diag] 4989s vibra curva 2 aviso 1 a 31.1m 18.8km/h 3p
+[diag] 4994s frame med 63ms pico 125ms n28 seg 74 · corr 0 rota 16 hud 47ms · work pico 771/800
+[diag] 4994s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 16 na tela · zoom 1.2 · na rota · 50km/h · mem 172/763KB · bat 90% · eta 3330s · fix replay
+[diag] 4997s vibra curva 3 aviso 1 a 99.4m 50.0km/h 3p
+[diag] 5004s frame med 74ms pico 203ms n40 seg 64 · corr 0 rota 0 hud 47ms · work pico 503/236
+[diag] 5004s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 10 na tela · zoom 1.2 · na rota · 50km/h · mem 172/763KB · bat 90% · eta 2617s · fix replay
+[diag] 5004s tx ok
+[diag] 5004s vibra curva 4 aviso 1 a 111.0m 50.0km/h 3p
+[diag] 5014s frame med 82ms pico 125ms n40 seg 123 · corr 0 rota 16 hud 47ms · work pico 772/531
+[diag] 5014s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 36 na tela · zoom 1.2 · na rota · 50km/h · mem 172/763KB · bat 90% · eta 2305s · fix replay
+[diag] 5015s vibra curva 5 aviso 1 a 102.0m 50.0km/h 3p
+[diag] 5019s tx ok
+[diag] 5022s vibra curva 6 aviso 1 a 104.2m 50.0km/h 2p
+[diag] 5024s frame med 70ms pico 94ms n40 seg 139 · corr 15 rota 16 hud 47ms · work pico 880/591
+[diag] 5024s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 51 na tela · zoom 1.2 · na rota · 34km/h · mem 172/763KB · bat 90% · eta 2151s · fix replay
+[diag] 5024s vibra curva 6 aviso 2 a 16.8m 30.0km/h 2p
+[diag] 5025s vibra curva 7 aviso 1 a 70.6m 39.3km/h 2p
+[diag] 5034s frame med 86ms pico 110ms n40 seg 142 · corr 15 rota 16 hud 47ms · work pico 864/591
+[diag] 5034s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 53 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 90% · eta 2063s · fix replay
+[diag] 5034s tx ok
+[diag] 5044s frame med 116ms pico 265ms n39 seg 122 · corr 16 rota 0 hud 62ms · work pico 882/577
+[diag] 5044s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 47 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 90% · eta 1866s · fix replay
+[diag] 5049s tx ok
+[diag] 5054s frame med 99ms pico 188ms n39 seg 142 · corr 32 rota 0 hud 62ms · work pico 940/724 CORTOU
+[diag] 5054s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 60 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 90% · eta 1747s · fix replay
+[diag] 5064s frame med 100ms pico 141ms n40 seg 138 · corr 16 rota 0 hud 63ms · work pico 974/762 CORTOU
+[diag] 5064s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 53 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 90% · eta 1658s · fix replay
+[diag] 5064s tx ok
+[diag] 5074s frame med 107ms pico 219ms n40 seg 42 · corr 16 rota 0 hud 78ms · work pico 889/222 CORTOU
+[diag] 5074s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 44 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 90% · eta 1587s · fix replay
+[diag] 5079s tx ok
+[diag] 5084s frame med 104ms pico 218ms n39 seg 78 · corr 16 rota 0 hud 78ms · work pico 729/280 CORTOU
+[diag] 5084s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 38 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 90% · eta 1526s · fix replay
+[diag] 5094s frame med 106ms pico 203ms n38 seg 72 · corr 15 rota 0 hud 63ms · work pico 680/220
+[diag] 5094s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 24 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 89% · eta 1473s · fix replay
+[diag] 5094s tx ok
+[diag] 5104s frame med 104ms pico 188ms n35 seg 91 · corr 15 rota 16 hud 63ms · work pico 678/555 CORTOU
+[diag] 5104s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 47 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 89% · eta 1422s · fix replay
+[diag] 5109s tx ok
+[diag] 5114s frame med 92ms pico 125ms n40 seg 118 · corr 16 rota 0 hud 62ms · work pico 875/735
+[diag] 5114s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 50 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 89% · eta 1371s · fix replay
+[diag] 5124s frame med 87ms pico 156ms n38 seg 107 · corr 0 rota 15 hud 47ms · work pico 834/729
+[diag] 5124s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 54 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 89% · eta 1324s · fix replay
+[diag] 5124s tx ok
+[diag] 5134s frame med 87ms pico 140ms n40 seg 171 · corr 31 rota 0 hud 47ms · work pico 1040/837
+[diag] 5134s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 64 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 89% · eta 1275s · fix replay
+[diag] 5139s tx ok
+[diag] 5144s frame med 99ms pico 187ms n40 seg 118 · corr 15 rota 16 hud 47ms · work pico 1036/754
+[diag] 5144s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 53 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 89% · eta 1227s · fix replay
+[diag] 5154s frame med 91ms pico 219ms n40 seg 151 · corr 16 rota 0 hud 47ms · work pico 950/789
+[diag] 5154s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 73 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 89% · eta 1180s · fix replay
+[diag] 5154s tx ok
+[diag] 5164s frame med 82ms pico 109ms n40 seg 121 · corr 15 rota 0 hud 47ms · work pico 1102/909
+[diag] 5164s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 60 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 89% · eta 1133s · fix replay
+[diag] 5169s tx ok
+[diag] 5174s frame med 81ms pico 125ms n40 seg 115 · corr 16 rota 0 hud 94ms · work pico 926/909
+[diag] 5174s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 54 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 89% · eta 1086s · fix replay
+[diag] 5184s frame med 90ms pico 157ms n40 seg 75 · corr 0 rota 16 hud 47ms · work pico 847/666
+[diag] 5184s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 39 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 89% · eta 1038s · fix replay
+[diag] 5184s tx ok
+[diag] 5194s frame med 76ms pico 94ms n40 seg 151 · corr 47 rota 0 hud 47ms · work pico 960/524
+[diag] 5194s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 76 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 89% · eta 991s · fix replay
+[diag] 5199s tx ok
+[diag] 5204s frame med 85ms pico 156ms n40 seg 129 · corr 16 rota 0 hud 63ms · work pico 1074/832
+[diag] 5204s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 78 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 88% · eta 944s · fix replay
+[diag] 5212s vibra curva 8 aviso 1 a 105.1m 50.0km/h 2p
+[diag] 5214s frame med 72ms pico 94ms n40 seg 66 · corr 0 rota 16 hud 47ms · work pico 912/832
+[diag] 5214s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 40 na tela · zoom 1.2 · na rota · 35km/h · mem 173/763KB · bat 88% · eta 899s · fix replay
+[diag] 5214s tx ok
+[diag] 5214s vibra curva 8 aviso 2 a 21.6m 30.0km/h 2p
+[diag] 5224s frame med 76ms pico 94ms n40 seg 122 · corr 16 rota 16 hud 47ms · work pico 877/832
+[diag] 5224s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 57 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 88% · eta 861s · fix replay
+[diag] 5229s tx ok
+[diag] 5234s frame med 85ms pico 156ms n40 seg 115 · corr 16 rota 0 hud 47ms · work pico 1033/854
+[diag] 5234s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 60 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 88% · eta 811s · fix replay
+[diag] 5244s frame med 76ms pico 94ms n40 seg 70 · corr 15 rota 0 hud 47ms · work pico 875/854
+[diag] 5244s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 50 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 88% · eta 762s · fix replay
+[diag] 5244s tx ok
+[diag] 5254s frame med 66ms pico 109ms n40 seg 170 · corr 32 rota 0 hud 47ms · work pico 1087/974
+[diag] 5254s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 82 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 88% · eta 714s · fix replay
+[diag] 5259s tx ok
+[diag] 5264s frame med 73ms pico 94ms n40 seg 151 · corr 16 rota 0 hud 31ms · work pico 1161/1034
+[diag] 5264s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 71 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 88% · eta 666s · fix replay
+[diag] 5274s frame med 67ms pico 140ms n40 seg 126 · corr 15 rota 16 hud 47ms · work pico 1143/749 CORTOU
+[diag] 5274s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 76 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 88% · eta 619s · fix replay
+[diag] 5274s tx ok
+[diag] 5284s frame med 94ms pico 312ms n40 seg 100 · corr 16 rota 15 hud 63ms · work pico 1030/685
+[diag] 5284s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 56 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 88% · eta 571s · fix replay
+[diag] 5289s tx ok
+[diag] 5294s frame med 93ms pico 203ms n40 seg 110 · corr 15 rota 0 hud 47ms · work pico 844/762
+[diag] 5294s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 57 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 88% · eta 524s · fix replay
+[diag] 5304s frame med 92ms pico 203ms n40 seg 144 · corr 32 rota 0 hud 47ms · work pico 1048/605
+[diag] 5304s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 91 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 88% · eta 477s · fix replay
+[diag] 5304s tx ok
+[diag] 5314s frame med 83ms pico 156ms n40 seg 82 · corr 15 rota 0 hud 47ms · work pico 804/675
+[diag] 5314s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 50 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 87% · eta 430s · fix replay
+[diag] 5319s tx ok
+[diag] 5324s frame med 75ms pico 140ms n40 seg 105 · corr 16 rota 0 hud 47ms · work pico 762/630
+[diag] 5324s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 49 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 87% · eta 383s · fix replay
+[diag] 5334s frame med 86ms pico 156ms n40 seg 150 · corr 31 rota 0 hud 47ms · work pico 935/800
+[diag] 5334s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 87 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 87% · eta 336s · fix replay
+[diag] 5334s tx ok
+[diag] 5344s frame med 95ms pico 172ms n40 seg 130 · corr 16 rota 0 hud 63ms · work pico 1056/562 CORTOU
+[diag] 5344s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 126 na tela · zoom 1.2 · na rota · 50km/h · mem 174/763KB · bat 87% · eta 289s · fix replay
+[diag] 5349s tx ok
+[diag] 5354s frame med 92ms pico 188ms n40 seg 239 · corr 16 rota 0 hud 31ms · work pico 1104/1032 CORTOU
+[diag] 5354s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 139 na tela · zoom 1.2 · na rota · 50km/h · mem 174/763KB · bat 87% · eta 242s · fix replay
+[diag] 5364s frame med 68ms pico 140ms n40 seg 150 · corr 31 rota 16 hud 93ms · work pico 1280/725
+[diag] 5364s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 84 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 87% · eta 195s · fix replay
+[diag] 5364s tx ok
+[diag] 5374s frame med 89ms pico 125ms n40 seg 153 · corr 31 rota 16 hud 47ms · work pico 1103/843 CORTOU
+[diag] 5374s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 112 na tela · zoom 1.2 · na rota · 50km/h · mem 174/763KB · bat 87% · eta 148s · fix replay
+[diag] 5375s vibra curva 10 aviso 1 a 105.0m 50.0km/h 2p
+[diag] 5379s tx ok
+[diag] 5383s vibra curva 11 aviso 1 a 104.1m 50.0km/h 2p
+[diag] 5384s frame med 111ms pico 266ms n40 seg 174 · corr 63 rota 0 hud 46ms · work pico 1213/376 CORTOU
+[diag] 5384s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 118 na tela · zoom 1.2 · na rota · 41km/h · mem 173/763KB · bat 87% · eta 116s · fix replay
+[diag] 5386s vibra curva 12 aviso 1 a 32.8m 15.0km/h 3p
+[diag] 5387s vibra curva 12 aviso 2 a 19.1m 27.7km/h 3p
+[diag] 5394s frame med 91ms pico 141ms n40 seg 166 · corr 16 rota 0 hud 47ms · work pico 1292/600
+[diag] 5394s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 95 na tela · zoom 1.2 · na rota · 50km/h · mem 173/763KB · bat 87% · eta 81s · fix replay
+[diag] 5394s tx ok
+[diag] 5402s vibra curva 13 aviso 1 a 101.4m 50.0km/h 2p
+[diag] 5404s frame med 84ms pico 234ms n40 seg 99 · corr 0 rota 16 hud 31ms · work pico 1221/720
+[diag] 5404s fase navegando · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 50 na tela · zoom 1.2 · na rota · 31km/h · mem 173/763KB · bat 87% · eta 31s · fix replay
+[diag] 5404s vibra curva 13 aviso 2 a 23.3m 30.0km/h 2p
+[diag] 5404s vibra curva 14 aviso 1 a 53.8m 31.3km/h 2p
+[diag] 5405s vibra curva 14 aviso 2 a 16.8m 30.0km/h 2p
+[diag] 5409s tx ok
+[diag] 5411s vibra chegada
+[diag] 5411s nav-ended motivo 0
+[diag] 5411s tx ok
+[diag] 5411s tx ok
+[diag] 5411s chegou ao destino a 29m
+[diag] 5411s trilha 338 fixes perdi 0
+[ride] fim chegada em 1688 fixes
+[diag] 5414s frame med 64ms pico 94ms n32 seg 122 · corr 16 rota 0 hud 62ms · work pico 970/840
+[diag] 5414s fase chegou · tela mapa · rota 42 722pts · corredor 4 lods 4161 pts 70 na tela · zoom 1.2 · na rota · 15km/h · mem 172/763KB · bat 87% · eta - · fix replay
+06-01 10:00:00.000 I WatchLink: RELÓGIO| 12s start v0.18.0-f3a
+06-01 10:00:01.000 I WatchLink: RELÓGIO| 13s trk 0 -2354500 -4663000 120 90
+06-01 10:00:11.000 I WatchLink: RELÓGIO| 23s trk 10 -2354500 -4662800 130 90
+06-01 10:00:21.000 I WatchLink: RELÓGIO| 33s trk 20 -2354300 -4662600 130 0
+06-01 10:00:31.000 I WatchLink: RELÓGIO| 43s trk 30 -2354100 -4662600 120 0

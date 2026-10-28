@@ -1,0 +1,27 @@
+{
+ "fixture": "tiete_copan",
+ "route": {
+  "points": 479,
+  "maneuvers": 24,
+  "meters": 18856.5
+ },
+ "fixes": 1425,
+ "holes": [
+  {
+   "after_s": 500,
+   "silence_s": 26
+  }
+ ],
+ "recorder": {
+  "interval_s": 5,
+  "recorded_if_complete": 286
+ },
+ "arrival": {
+  "up_to_m": 30.0
+ },
+ "delivered_min": 1405,
+ "duration_s": 1449,
+ "noise_m": 15.0,
+ "seed": 7,
+ "generated_by": "tools/trilha.py generate"
+}

@@ -1,0 +1,6 @@
+# The home screen (sheet 1, 2026-10-18): `monkeyc -f "monkey.jungle;inicio.jungle"`, only through
+# `tools/sim.py shots --inicio`. Swaps the empty `demoStart` (`source/DemoHook.mc`, annotated `nodemo`)
+# for the one in `demo/inicio/InicioStart.mc`, which puts the home screen in each sheet state and notifies
+# `sim.py` with `[inicio] pronto <cena>` so it can photograph.
+base.sourcePath = source;demo/inicio
+base.excludeAnnotations = canary;quadratic_parse;nodemo;no_near_alert
