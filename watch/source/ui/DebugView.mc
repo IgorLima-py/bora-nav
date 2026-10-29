@@ -24,12 +24,13 @@ class DebugView extends WatchUi.View {
         dc.clear();
 
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, 56, Graphics.FONT_TINY, AppVersion.LABEL, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(cx, Screen.px(56), Graphics.FONT_TINY, AppVersion.LABEL, Graphics.TEXT_JUSTIFY_CENTER);
 
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, 92, Graphics.FONT_SMALL, routeTitle(route), Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(cx, Screen.px(92), Graphics.FONT_SMALL, routeTitle(route), Graphics.TEXT_JUSTIFY_CENTER);
 
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+        // `y` walks the reference screen and is scaled at each draw, so the line spacing does not drift.
         var y = 140;
         var lines = [
             route.destName,
@@ -40,17 +41,17 @@ class DebugView extends WatchUi.View {
             formatLink()
         ] as Array<String>;
         for (var i = 0; i < lines.size(); i++) {
-            dc.drawText(cx, y, Graphics.FONT_TINY, lines[i], Graphics.TEXT_JUSTIFY_CENTER);
+            dc.drawText(cx, Screen.px(y), Graphics.FONT_TINY, lines[i], Graphics.TEXT_JUSTIFY_CENTER);
             y += 34;
         }
 
         if (!_assembler.lastError.equals("")) {
             dc.setColor(0xFFB300, Graphics.COLOR_TRANSPARENT);
-            drawWrapped(dc, cx, y + 6, _assembler.lastError);
+            drawWrapped(dc, cx, Screen.px(y + 6), _assembler.lastError);
         }
     }
 
-    //! Breaks into up to two lines. The error message used to come cut off by the edge of the
+    //! Breaks into up to two lines (`y`, in px of this screen). The error message used to come cut off by the edge of the
     //! round screen ("...ato inesperado do c..."), which cost a round of
     //! street testing just to find out which error it was.
     private function drawWrapped(dc as Dc, cx as Number, y as Number, text as String) as Void {
@@ -73,7 +74,7 @@ class DebugView extends WatchUi.View {
         var rest = text.substring(cut, text.length());
         dc.drawText(cx, y, Graphics.FONT_XTINY, first != null ? first : "", Graphics.TEXT_JUSTIFY_CENTER);
         if (rest != null) {
-            dc.drawText(cx, y + 24, Graphics.FONT_XTINY, rest, Graphics.TEXT_JUSTIFY_CENTER);
+            dc.drawText(cx, y + Screen.px(24), Graphics.FONT_XTINY, rest, Graphics.TEXT_JUSTIFY_CENTER);
         }
     }
 

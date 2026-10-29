@@ -74,11 +74,13 @@ class HomeDelegate extends WatchUi.BehaviorDelegate {
             _dragMoved = false;
             return false;
         }
+        // The finger's `y` comes in px of this screen, and the drag distances are in px of the reference one.
         var dy = _dragY0 - y;
-        if (_dragMoved || dy > HomeList.DRAG_SLOP_PX || dy < -HomeList.DRAG_SLOP_PX) {
+        var slop = Screen.px(HomeList.DRAG_SLOP_PX);
+        if (_dragMoved || dy > slop || dy < -slop) {
             _dragMoved = true;
             _dragAtMs = System.getTimer();
-            _view.dragTo(HomeList.rubber(_dragS0 + dy.toFloat() / HomeList.DRAG_PX));
+            _view.dragTo(HomeList.rubber(_dragS0 + dy.toFloat() / Screen.px(HomeList.DRAG_PX)));
         }
         if (type == WatchUi.DRAG_TYPE_STOP) {
             _dragY0 = -1;

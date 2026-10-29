@@ -50,6 +50,7 @@ import hashlib
 import json
 import os
 import re
+import signal
 import socket
 import subprocess
 import sys
@@ -58,7 +59,7 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_watch import BIN, DEVICE, JUNGLE, ROOT, app_version, developer_key, monkeyc  # noqa: E402
+from build_watch import BIN, DEVICE, JUNGLE, REFERENCE, ROOT, app_version, bin_for, developer_key, monkeyc  # noqa: E402
 import trilha as trilha_tool  # noqa: E402
 from logphrases import to_english  # noqa: E402
 
@@ -212,8 +213,28 @@ def simulator_hung() -> bool:
     return probe.stdout.strip() not in ("", "0")
 
 
-#: Windows' ``simulator.ini``, where the simulator stores the watch's language (``Language=``).
-SIM_INI = Path(os.environ.get("APPDATA", "")) / "Garmin" / "ConnectIQ" / "simulator.ini"
+def simulator_off_port() -> bool:
+    """Is a simulator open and listening on a port just above [SIM_PORT] instead of on it (macOS and Linux)?
+
+    Measured on 2026-10-28 (C16.12): a simulator opened while the old one still held 1234 listened on 1235,
+    and opening another only brought the same window forward, so every run waited for 1234. The port is what
+    is checked, not just the process: one that is still opening listens on nothing yet and must be left alone.
+    """
+    if os.name == "nt":
+        return False
+    pids = subprocess.run(["pgrep", "-x", "simulator"], capture_output=True, text=True).stdout.split()
+    if not pids:
+        return False
+    probe = subprocess.run(["lsof", "-nP", "-a", "-p", ",".join(pids), "-iTCP", "-sTCP:LISTEN"],
+                           capture_output=True, text=True)
+    ports = {int(port) for port in re.findall(r":(\d+) \(LISTEN\)", probe.stdout)}
+    return any(SIM_PORT < port < SIM_PORT + 10 for port in ports)
+
+
+#: The ``simulator.ini`` where the simulator stores the watch's language (``Language=``): under
+#: ``%APPDATA%`` on Windows and under ``~/Library/Application Support`` on the Mac.
+SIM_INI = (Path(os.environ.get("APPDATA", "")) if os.name == "nt"
+           else Path.home() / "Library" / "Application Support") / "Garmin" / "ConnectIQ" / "simulator.ini"
 
 #: The ``Language=`` of each app language. They are the numbers of the FIT ``language`` enum
 #: (english 0, portuguese 14). Measured on 2026-10-28 (C16.8a, job 1043): with ``Language=14`` the
@@ -225,12 +246,23 @@ SIM_LANGUAGES = {"eng": 0, "por": 14}
 LANGUAGE = "por"
 
 
+def close_simulator() -> None:
+    """Kills the simulator process: ``simulator.exe`` on Windows, ``simulator`` inside
+    ``ConnectIQ.app`` on the Mac."""
+    if os.name == "nt":
+        command = ["taskkill", "/IM", "simulator.exe", "/F"]
+    else:
+        command = ["pkill", "-x", "simulator"]
+    subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
 def pin_language() -> None:
     """Puts the simulator in language [LANGUAGE] before opening it (C16.8a).
 
     The simulator reads ``simulator.ini`` only on opening, so if the language changes it is closed.
-    Outside Windows there is no ``simulator.ini`` here, and whatever language is set applies."""
-    if os.name != "nt" or not SIM_INI.exists():
+    The Mac's ``simulator.ini`` has no ``Language=`` line until one is written, and without it the
+    simulator opens in English (measured 2026-10-28: 10 of the 218 tests failed)."""
+    if not SIM_INI.exists():
         return
     text = SIM_INI.read_text(encoding="utf-8", errors="replace")
     line = f"Language={SIM_LANGUAGES[LANGUAGE]}"
@@ -238,8 +270,7 @@ def pin_language() -> None:
         return
     if simulator_ready() or simulator_hung():
         print(f"simulator in another language: closing it to reopen in {LANGUAGE}")
-        subprocess.run(["taskkill", "/IM", "simulator.exe", "/F"],
-                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        close_simulator()
         time.sleep(2)
     if re.search(r"^Language=\d+$", text, re.MULTILINE):
         text = re.sub(r"^Language=\d+$", line, text, flags=re.MULTILINE)
@@ -248,17 +279,42 @@ def pin_language() -> None:
     SIM_INI.write_text(text, encoding="utf-8")
 
 
+#: What the open simulator last ran: the model (``--device``) and, after an app run instead of the unit tests,
+#: `` live``. Measured on 2026-10-28 (C16.12, macOS): a simulator that had already run a live app (the photos, the
+#: demo) or another model sometimes never left the loading triangle on the next ``monkeydo`` (360 to 600 s with no
+#: output, with or without App Nap); every run on a freshly opened simulator passed, and test after test in the same
+#: one too (220/220 twice, job 41). So on macOS it is reopened after a live run, and everywhere on a change of model:
+#: ~15 s each time.
+SIM_STATE_FILE = ROOT / "watch" / "bin" / "sim_device.txt"
+
+
+def simulator_used(live: bool) -> None:
+    """Notes what is about to run in the simulator ([SIM_STATE_FILE]), before it runs: a run that dies or is
+    cancelled leaves the simulator marked all the same."""
+    SIM_STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    SIM_STATE_FILE.write_text(DEVICE + (" live" if live else "") + "\n", encoding="utf-8")
+
+
 def ensure_simulator() -> None:
     """Opens the simulator if it is closed (or hung) and waits for the port, in language
-    [LANGUAGE]."""
+    [LANGUAGE]. One that last ran another model, or a live app on macOS, is reopened ([SIM_STATE_FILE])."""
     pin_language()
+    last = SIM_STATE_FILE.read_text(encoding="utf-8").split() if SIM_STATE_FILE.exists() else [DEVICE]
+    stale = last[:1] != [DEVICE] or (sys.platform == "darwin" and "live" in last[1:])
+    if stale and (simulator_ready() or simulator_off_port()):
+        print(f"simulator last ran {' '.join(last)}: closing it to open {DEVICE} clean")
+        close_simulator()
+        time.sleep(2)
     if simulator_hung():
         print("simulator hung: closing it to reopen")
-        subprocess.run(["taskkill", "/IM", "simulator.exe", "/F"],
-                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        close_simulator()
         time.sleep(2)
     if simulator_ready():
         return
+    if simulator_off_port():
+        print(f"simulator open off port {SIM_PORT}: closing it to reopen")
+        close_simulator()
+        time.sleep(2)
     print("simulator closed: opening")
     flags = 0
     if os.name == "nt":
@@ -293,12 +349,29 @@ def compile_prg(jungles: list[Path], output: Path, unit_test: bool) -> bool:
     return subprocess.run(command).returncode == 0
 
 
+def descendants(pid: int) -> list[int]:
+    """Every process under ``pid`` (``pgrep -P``, macOS and Linux)."""
+    probe = subprocess.run(["pgrep", "-P", str(pid)], capture_output=True, text=True)
+    found: list[int] = []
+    for child in map(int, probe.stdout.split()):
+        found += [child, *descendants(child)]
+    return found
+
+
 def kill_tree(process: subprocess.Popen) -> None:
     if os.name == "nt":
         subprocess.run(["taskkill", "/T", "/F", "/PID", str(process.pid)],
                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    else:
-        process.kill()
+        return
+    # The Mac's `monkeydo` is a shell script that starts `java` (MonkeyDoDeux), which starts `shell`.
+    # Killing only the script left those two behind, still attached to the simulator (measured on
+    # 2026-10-28, C16.12: three such pairs from timed-out or cancelled runs, and the next runs never
+    # started the app). The tree is listed before anything dies: an orphan's parent becomes pid 1.
+    for pid in [*descendants(process.pid), process.pid]:
+        try:
+            os.kill(pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
 
 
 def run_monkeydo(prg: Path, unit_test: bool, timeout_s: int) -> tuple[str, bool]:
@@ -307,6 +380,7 @@ def run_monkeydo(prg: Path, unit_test: bool, timeout_s: int) -> tuple[str, bool]
     if unit_test:
         # Windows' `monkeydo.bat` accepts `/t`; the macOS script only `-t` ("ILLEGAL ARGUMENT: /t").
         command.append("/t" if os.name == "nt" else "-t")
+    simulator_used(live=not unit_test)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     try:
         out, err = process.communicate(timeout=timeout_s)
@@ -319,6 +393,9 @@ def run_monkeydo(prg: Path, unit_test: bool, timeout_s: int) -> tuple[str, bool]
         kill_tree(process)
         out, err = process.communicate()
         timed_out = True
+    except BaseException:  # Ctrl+C, or a job queue's SIGTERM (see `main`)
+        kill_tree(process)
+        raise
     raw = out + b"\n" + err
     # The simulator's output starts with a BOM. A log from the Portuguese-logging watch (up to
     # v1.4.0) is turned into the English one, so the rest of the file matches English only.
@@ -486,12 +563,15 @@ def take_shot(out: Path) -> str | None:
     return None
 
 
-#: The simulator window on macOS, found by its owner. ``screencapture`` asks for the window
-#: number, and only CoreGraphics gives it: without PyObjC, a short Swift script.
+#: The simulator window on macOS, found by its owner and its title («CIQ Simulator - <device>»). ``screencapture``
+#: asks for the window number, and only CoreGraphics gives it: without PyObjC, a short Swift script. All windows, not
+#: only those on screen: measured on 2026-10-28 (C16.12), a reopened simulator came up on another desktop, and
+#: ``screencapture -l`` captures it there all the same.
 MAC_WINDOW_SWIFT = """
 import CoreGraphics
-let list = CGWindowListCopyWindowInfo([.optionOnScreenOnly], kCGNullWindowID) as! [[String: Any]]
-for w in list where (w[kCGWindowOwnerName as String] as? String ?? "") == "Connect IQ Device Simulator" {
+let list = CGWindowListCopyWindowInfo([.optionAll], kCGNullWindowID) as! [[String: Any]]
+for w in list where (w[kCGWindowOwnerName as String] as? String ?? "") == "Connect IQ Device Simulator"
+        && (w[kCGWindowName as String] as? String ?? "").hasPrefix("CIQ Simulator") {
     print(w[kCGWindowNumber as String] as? Int ?? 0); break
 }
 """
@@ -571,6 +651,7 @@ def run_live(prg: Path, timeout_s: int, on_line, on_idle) -> tuple[str, bool]:
     from ``communicate()``, which only returns at the end. ``on_line(line, s)`` runs for
     each line and ``on_idle(s)`` every 0.2 s, both on the main thread.
     """
+    simulator_used(live=True)
     process = subprocess.Popen([str(tool("monkeydo")), str(prg), DEVICE],
                                stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     pending: list[str] = []
@@ -595,19 +676,23 @@ def run_live(prg: Path, timeout_s: int, on_line, on_idle) -> tuple[str, bool]:
             lines.append(line)
             on_line(line, time.monotonic() - started)
 
-    while True:
-        drain()
-        if process.poll() is not None and not reader.is_alive():
+    try:
+        while True:
             drain()
-            break
-        if time.monotonic() - started > timeout_s:
-            kill_tree(process)
-            reader.join(timeout=5)
-            drain()
-            timed_out = True
-            break
-        on_idle(time.monotonic() - started)
-        time.sleep(0.2)
+            if process.poll() is not None and not reader.is_alive():
+                drain()
+                break
+            if time.monotonic() - started > timeout_s:
+                kill_tree(process)
+                reader.join(timeout=5)
+                drain()
+                timed_out = True
+                break
+            on_idle(time.monotonic() - started)
+            time.sleep(0.2)
+    except BaseException:  # Ctrl+C, or a job queue's SIGTERM (see `main`)
+        kill_tree(process)
+        raise
     return "\n".join(lines) + "\n", timed_out
 
 
@@ -2318,6 +2403,7 @@ def write_stamp() -> Path:
         "prg": prg.name,
         "sha256": hashlib.sha256(prg.read_bytes()).hexdigest(),
         "versao": app_version(),
+        "device": DEVICE,
         "quando": time.strftime("%Y-%m-%d %H:%M:%S"),
     }, indent=2) + "\n", encoding="utf-8")
     return STAMP
@@ -2354,12 +2440,20 @@ def cmd_all() -> int:
         print(f"  {'ok    ' if code == 0 else 'FAILED'} {label}")
     ok = len(steps) == 5 and all(code == 0 for _, code in steps)
     print(f"\nsim.py all: {'GREEN' if ok else 'RED'} · MotoNav {app_version()}")
-    if ok:
+    if ok and DEVICE != REFERENCE:
+        # Only the wrist's build goes to the watch: another model's lives in `watch/bin/<device>`, where
+        # `sideload.ps1` does not look, and gets no stamp at all (C16.12 review).
+        print(f"no stamp: built for {DEVICE}; only the {REFERENCE} build goes to the watch")
+    elif ok:
         print(f"stamp: {write_stamp().relative_to(ROOT)}")
     return 0 if ok else 1
 
 
 def main() -> int:
+    global DEVICE
+    # A job queue cancels with SIGTERM, which by default ends Python without running any `except`, and
+    # `monkeydo` stayed behind (C16.12). As SystemExit it goes through the runners' `kill_tree`.
+    signal.signal(signal.SIGTERM, lambda *_: sys.exit(128 + signal.SIGTERM))
     if hasattr(sys.stdout, "reconfigure"):
         # line_buffering: without it, the subprocesses' output (monkeyc, build_watch)
         # shows up before ours and `all` comes out of order.
@@ -2367,6 +2461,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--language", "--idioma", dest="language", choices=sorted(SIM_LANGUAGES), default="por",
                         help="the watch language in the simulator (C16.8a); comes before the command")
+    parser.add_argument("--device", default=DEVICE,
+                        help="the manifest product to build and run (default: the Venu 4 45 mm); comes before the command")
     sub = parser.add_subparsers(dest="command", required=True)
     test = sub.add_parser("test", help="unit tests in the simulator")
     test.add_argument("--canary", action="store_true", help="turns on the test that fails on purpose")
@@ -2419,6 +2515,11 @@ def main() -> int:
     args = parser.parse_args()
     global LANGUAGE
     LANGUAGE = args.language
+    DEVICE = args.device
+    os.environ["MOTONAV_DEVICE"] = DEVICE   # build_watch.py, which `all` runs as a subprocess
+    global BIN, STAMP
+    BIN = bin_for(DEVICE)
+    STAMP = BIN / "tudo.carimbo"
 
     if args.command == "test":
         return cmd_test(args.canary)

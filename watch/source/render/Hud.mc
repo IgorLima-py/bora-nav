@@ -33,6 +33,10 @@ import Toybox.WatchUi;
 //! until the corners fit inside the glass minus the margin, in closed form (a square root, no
 //! loop) and with the text width **measured** by the `Dc`. No coordinate is chosen by eye.
 //!
+//! **Every number here is in px of the reference screen** (the Venu 4 45 mm, 454 px: `DesignTokens`, the circle
+//! around 227, the pads and gaps), and [Screen.px] turns it into px of the screen the app runs on: the identity at
+//! 454. The sizes that come from `Config.groupPx` are already in px of this screen and are never converted again.
+//!
 //! **Every line of text is lost map**, so no line exists just for debug (the frame
 //! measurement goes to the phone, `MapRenderer.frameSummary`), and a line with nothing to say is not
 //! drawn: with no street name, the sign has a single line.
@@ -100,8 +104,37 @@ class Hud {
     private var _glyphH as Number = 0;
     //! The sign's breathing room (v1.1.5, `Config.plateWidePct`/`plateTallPct`): the gap from the text to the sign
     //! edge, on the sides, already in px, and the % of the breathing room above and below.
-    private var _plateSide as Number = DesignTokens.PLATE_SIDE;
+    private var _plateSide as Number = 0;
     private var _plateTall as Number = 0;
+
+    // The gaps and pads of the layout in px of this screen (the `DesignTokens` ones through `Screen.px`),
+    // set once when the HUD is built: the glass does not change while the app runs, and these are read
+    // on every frame.
+    private var _edgeMargin as Number = 0;
+    private var _tabPad as Number = 0;
+    private var _tabHalfExtra as Number = 0;
+    private var _arrivalHalfExtra as Number = 0;
+    private var _gapUnit as Number = 0;
+    private var _deltaGap as Number = 0;
+    private var _line as Number = 0;
+    private var _inset as Number = 0;
+    private var _rowPad as Number = 0;
+    private var _iconPad as Number = 0;
+    private var _tabTop as Number = 0;
+    private var _tabGap as Number = 0;
+    private var _plateTop as Number = 0;
+    private var _plateSideMax as Number = 0;
+    private var _nameExtra as Number = 0;
+    private var _rowMin as Number = 0;
+    private var _gapDone as Number = 0;
+    private var _gapArrow as Number = 0;
+    private var _arrivalEnd as Number = 0;
+    // The small literal pads of the drawing code: 2, 4, 8, 10 and 16 reference px.
+    private var _px2 as Number = 0;
+    private var _px4 as Number = 0;
+    private var _px8 as Number = 0;
+    private var _px10 as Number = 0;
+    private var _px16 as Number = 0;
 
     //! What was **requested** of each font, in px (what RNF-05 measures). The
     //! `Rnf05Test` reads these fields: if the Hud stops using the token, the test sees it.
@@ -172,7 +205,7 @@ class Hud {
     private const MARK_BEARING = 2;
     private const MARK_DONE = 3;
 
-    //! Gap of the no-phone icon's black square around the `StatusIcons` bubble.
+    //! Gap of the no-phone icon's black square around the `StatusIcons` bubble, in reference px.
     const ICON_PAD = 4;
 
     //! The state icons (C14) of the last frame, so the `hud icones ...` log
@@ -180,11 +213,35 @@ class Hud {
     private var _iconsShown as Number = -1;
 
     function initialize() {
+        _edgeMargin = Screen.px(DesignTokens.EDGE_MARGIN);
+        _tabPad = Screen.px(DesignTokens.TAB_PAD);
+        _tabHalfExtra = Screen.px(DesignTokens.TAB_EXTRA / 2);
+        _arrivalHalfExtra = Screen.px(DesignTokens.ARRIVAL_EXTRA / 2);
+        _gapUnit = Screen.px(DesignTokens.GAP_UNIT);
+        _deltaGap = Screen.px(DesignTokens.DELTA_GAP);
+        _line = Screen.px(DesignTokens.PLATE_LINE);
+        _inset = Screen.px(DesignTokens.PLATE_INSET);
+        _rowPad = Screen.px(DesignTokens.PLATE_ROW_PAD);
+        _iconPad = Screen.px(ICON_PAD);
+        _tabTop = Screen.px(DesignTokens.TAB_TOP);
+        _tabGap = Screen.px(DesignTokens.TAB_GAP);
+        _plateTop = Screen.px(DesignTokens.PLATE_TOP);
+        _plateSideMax = Screen.px(DesignTokens.PLATE_SIDE);
+        _nameExtra = Screen.px(DesignTokens.PLATE_NAME_EXTRA);
+        _rowMin = Screen.px(DesignTokens.PLATE_ROW_MIN);
+        _gapDone = Screen.px(DesignTokens.GAP_DONE);
+        _gapArrow = Screen.px(DesignTokens.GAP_ARROW);
+        _arrivalEnd = Screen.px(DesignTokens.ARRIVAL_END_Y);
+        _px2 = Screen.px(2);
+        _px4 = Screen.px(4);
+        _px8 = Screen.px(8);
+        _px10 = Screen.px(10);
+        _px16 = Screen.px(16);
     }
 
     //! Distance font size, in px. Outside the canary build it is the
     //! `DesignTokens` one at the distance group scale; `watch/canary.jungle` puts the
-    //! twin below, with 54, for `sim.py test --canary` to prove that `Rnf05Test` bites.
+    //! twin below, with 54 (reference px), for `sim.py test --canary` to prove that `Rnf05Test` bites.
     (:no_canary)
     function distancePx() as Number {
         return Config.groupPx(DesignTokens.DIST_PX, Config.KEY_DIST_PCT);
@@ -192,11 +249,11 @@ class Hud {
 
     (:canary)
     function distancePx() as Number {
-        return 54;
+        return Screen.px(54);
     }
 
-    //! **Drawn** orbit amplitude, in px. Outside the canary it is the reserved one;
-    //! `watch/canary.jungle` puts the twin below, with 40, for `sim.py test
+    //! **Drawn** orbit amplitude, in reference px ([orbit] converts it to px of this screen). Outside the
+    //! canary it is the reserved one; `watch/canary.jungle` puts the twin below, with 40, for `sim.py test
     //! --canary` to prove that `BurnInTest` bites (it shifts more than the margin).
     (:no_canary)
     function orbitAmplitude() as Number {
@@ -280,8 +337,9 @@ class Hud {
 
     //! This frame's shift and the margin reserved for it.
     private function orbit() as Void {
-        setReserve(Config.orbitPx());
-        var amp = orbitAmplitude();
+        // `Config.orbitPx()` and the amplitude are in reference px: this is where they become px of this screen.
+        setReserve(Screen.px(Config.orbitPx()));
+        var amp = Screen.px(orbitAmplitude());
         var index = orbitOverride;
         if (index < 0) {
             index = BurnIn.forced >= 0 ? BurnIn.forced
@@ -294,7 +352,7 @@ class Hud {
     //! Glass margin for the circle fit: the RNF-05 one plus the orbit's
     //! radial reserve (`_radial`, A·√2 rounded up).
     private function margin() as Number {
-        return DesignTokens.EDGE_MARGIN + _radial;
+        return _edgeMargin + _radial;
     }
 
     //! Loads the fonts on the first pass and when `Config.revision` changes. If the vector
@@ -323,8 +381,8 @@ class Hud {
         _doneH = Config.groupPx(DesignTokens.DONE_PX, Config.KEY_ARROW_PCT);
         _glyphH = tallestGlyph();
         // The side gap goes from the usual (100%) to the text 2 px from the frame (0%).
-        var tight = DesignTokens.PLATE_INSET + DesignTokens.PLATE_LINE + DesignTokens.PLATE_ROW_PAD;
-        _plateSide = tight + ((DesignTokens.PLATE_SIDE - tight) * Config.plateWidePct() + 50) / 100;
+        var tight = _inset + _line + _rowPad;
+        _plateSide = tight + ((_plateSideMax - tight) * Config.plateWidePct() + 50) / 100;
         _plateTall = Config.plateTallPct();
 
         _distPx = distancePx();
@@ -435,8 +493,9 @@ class Hud {
 
     //! Usable half-width of the screen at height `y`, in pixels.
     function halfChord(y as Number) as Number {
-        var dy = y - 227;
-        var squared = 227 * 227 - dy * dy;
+        var r = Screen.half;
+        var dy = y - r;
+        var squared = r * r - dy * dy;
         if (squared <= 0) {
             return 0;
         }
@@ -446,8 +505,8 @@ class Hud {
     //! The largest half-width of a box with the top at `y`, above the center, with the top corners
     //! on the glass minus the margin: the `meia_largura_topo` of `tools/design_tokens.py`.
     private function halfAtTop(y as Number) as Number {
-        var limit = 227 - margin();
-        var dy = 227 - y;
+        var limit = Screen.half - margin();
+        var dy = Screen.half - y;
         var squared = limit * limit - dy * dy;
         if (squared <= 0) {
             return 0;
@@ -458,23 +517,23 @@ class Hud {
     //! Smallest `y` at which a box of half-width `halfW` fits the glass at the
     //! top (the top corners are the first to go out). Rounds up.
     private function topFit(halfW as Number) as Number {
-        var limit = 227 - margin();
+        var limit = Screen.half - margin();
         var squared = limit * limit - halfW * halfW;
         if (squared <= 0) {
-            return 227;
+            return Screen.half;
         }
-        return 227 - Math.sqrt(squared.toFloat()).toNumber();
+        return Screen.half - Math.sqrt(squared.toFloat()).toNumber();
     }
 
     //! Largest `y` at which the bottom of a box of half-width `halfW` fits the
     //! glass at the bottom.
     private function bottomFit(halfW as Number) as Number {
-        var limit = 227 - margin();
+        var limit = Screen.half - margin();
         var squared = limit * limit - halfW * halfW;
         if (squared <= 0) {
-            return 227;
+            return Screen.half;
         }
-        return 227 + Math.sqrt(squared.toFloat()).toNumber();
+        return Screen.half + Math.sqrt(squared.toFloat()).toNumber();
     }
 
     //! `from`, or the first `y` below it, in steps of 2 px, that reaches `fit` (the mockup's step).
@@ -489,9 +548,9 @@ class Hud {
 
     //! Are all 4 corners inside the glass minus the margin (the RNF-05 one and the orbit one)?
     private function fitsGlass(left as Number, top as Number, right as Number, bottom as Number) as Boolean {
-        var limit = 227 - margin();
-        var xs = [left - 227, right - 227] as Array<Number>;
-        var ys = [top - 227, bottom - 227] as Array<Number>;
+        var limit = Screen.half - margin();
+        var xs = [left - Screen.half, right - Screen.half] as Array<Number>;
+        var ys = [top - Screen.half, bottom - Screen.half] as Array<Number>;
         for (var i = 0; i < 2; i++) {
             for (var j = 0; j < 2; j++) {
                 var x = xs[i] as Number;
@@ -516,12 +575,12 @@ class Hud {
         var cx = dc.getWidth() / 2;
         var text = clock() + weatherSuffix();
         var w = dc.getTextWidthInPixels(text, _text);
-        var pad = DesignTokens.TAB_EXTRA / 2;
+        var pad = _tabHalfExtra;
         // The time moves down `_reserve` px: the orbit's upward shift does not take it above
         // `TAB_TOP`. And, if it is wide (with weather, at 112%), it moves down until the corners fit.
-        var top = descend(DesignTokens.TAB_TOP + _reserve + pad, topFit(w / 2));
+        var top = descend(_tabTop + _reserve + pad, topFit(w / 2));
         var bottom = top + _clockPx + pad;
-        tab(dc, cx - w / 2 - DesignTokens.TAB_PAD, top - pad, cx + w / 2 + DesignTokens.TAB_PAD, bottom);
+        tab(dc, cx - w / 2 - _tabPad, top - pad, cx + w / 2 + _tabPad, bottom);
         dc.setColor(DesignTokens.SECONDARY, Graphics.COLOR_TRANSPARENT);
         put(dc, _text, _ascText, cx + _dx, top + _clockPx * 8 / 10 + _dy, text, Graphics.TEXT_JUSTIFY_CENTER);
         note(BOX_CLOCK, cx - w / 2, top, cx + w / 2, top + _clockPx);
@@ -618,18 +677,18 @@ class Hud {
             bounds = TurnArrow.bounds(type);
         }
         var markW = (bounds[2] - bounds[0]).toNumber();
-        var markGap = mark == MARK_DONE ? DesignTokens.GAP_DONE : DesignTokens.GAP_ARROW;
+        var markGap = mark == MARK_DONE ? _gapDone : _gapArrow;
         var mainW = dc.getTextWidthInPixels(mainText, mainFont);
         var unitW = unitText.length() > 0 ? dc.getTextWidthInPixels(unitText, _unit) : 0;
-        var total = mainW + (unitW > 0 ? DesignTokens.GAP_UNIT + unitW : 0);
+        var total = mainW + (unitW > 0 ? _gapUnit + unitW : 0);
         if (mark != MARK_NONE) {
             total += markW + markGap;
         }
 
         // The sign starts right below the time, and the name fits the glass chord at its top edge.
-        var py = DesignTokens.PLATE_TOP + _reserve;
-        if (tabBottom + DesignTokens.TAB_GAP > py) {
-            py = tabBottom + DesignTokens.TAB_GAP;
+        var py = _plateTop + _reserve;
+        if (tabBottom + _tabGap > py) {
+            py = tabBottom + _tabGap;
         }
         var lines = [] as Array<String>;
         var namePx = 0;
@@ -645,22 +704,25 @@ class Hud {
         nameShown = lines;
         namePxShown = namePx;
 
-        var line = DesignTokens.PLATE_LINE;
-        var inset = DesignTokens.PLATE_INSET;
-        var h1 = rowH + 2 * DesignTokens.PLATE_ROW_PAD + line;
+        var line = _line;
+        var inset = _inset;
+        // Half of the gap between the two lines of a long name.
+        var halfGap = _px2;
+        var nameExtra = _nameExtra;
+        var h1 = rowH + 2 * _rowPad + line;
         if (mark == MARK_NONE) {
-            h1 = rowH + DesignTokens.PLATE_NAME_EXTRA + line;
-        } else if (h1 < DesignTokens.PLATE_ROW_MIN) {
-            h1 = DesignTokens.PLATE_ROW_MIN;
+            h1 = rowH + nameExtra + line;
+        } else if (h1 < _rowMin) {
+            h1 = _rowMin;
         }
-        var h2 = two ? nameStart + DesignTokens.PLATE_NAME_EXTRA : 0;
+        var h2 = two ? nameStart + nameExtra : 0;
         if (_plateTall < 100) {
             // The top and bottom breathing room (v1.1.5): below 100% each line shrinks toward
             // what it **actually** has, 2 px from the frame and the rule. On top: this arrow (not the
             // tallest of the 31) or the height of the digits, which is 72% of the body and sits centered on the line
             // (`baseline` below); "You're here" (in Portuguese "Você chegou") has an accent and a descender, 57% of the body on each side.
             // At the bottom, the name's body. No font changes.
-            var pad = 2 * DesignTokens.PLATE_ROW_PAD + line;
+            var pad = 2 * _rowPad + line;
             var textH = mainPx * 72 / 100;
             var markH = (bounds[3] - bounds[1] + 0.999).toNumber();
             if (mark == MARK_NONE) {
@@ -671,7 +733,7 @@ class Hud {
             var row = (markH > textH ? markH : textH) + pad + (two ? 0 : line);
             h1 = squeeze(h1, row);
             if (two) {
-                h2 = squeeze(h2, (lines.size() == 1 ? namePx : 2 * namePx + 4) + pad);
+                h2 = squeeze(h2, (lines.size() == 1 ? namePx : 2 * namePx + 2 * halfGap) + pad);
             }
         }
         var height = inset + h1 + (two ? line + h2 : 0) + inset;
@@ -687,7 +749,7 @@ class Hud {
 
         dc.setColor(plate, plate);
         dc.fillRectangle(left + _dx, py + _dy, wide, height);
-        // The 2 px frame, 5 px inside the edge, and the rule between the lines, in the ink color.
+        // The frame (2 px at 454), 5 px inside the edge, and the rule between the lines, in the ink color.
         dc.setColor(ink, ink);
         var fx = left + inset + _dx;
         var fy = py + inset + _dy;
@@ -726,7 +788,7 @@ class Hud {
         var baseline = cy1 + mainPx * 36 / 100;
         put(dc, mainFont, mainAsc, textX + _dx, baseline + _dy, mainText, Graphics.TEXT_JUSTIFY_LEFT);
         if (unitW > 0) {
-            put(dc, _unit, _ascUnit, textX + mainW + DesignTokens.GAP_UNIT + _dx, baseline + _dy, unitText,
+            put(dc, _unit, _ascUnit, textX + mainW + _gapUnit + _dx, baseline + _dy, unitText,
                 Graphics.TEXT_JUSTIFY_LEFT);
         }
         if (two) {
@@ -738,9 +800,9 @@ class Hud {
                 put(dc, font, asc, cx + _dx, cy2 - namePx / 2 + namePx * 82 / 100 + _dy, lines[0] as String,
                     Graphics.TEXT_JUSTIFY_CENTER);
             } else {
-                put(dc, font, asc, cx + _dx, cy2 - namePx - 2 + namePx * 82 / 100 + _dy, lines[0] as String,
+                put(dc, font, asc, cx + _dx, cy2 - namePx - halfGap + namePx * 82 / 100 + _dy, lines[0] as String,
                     Graphics.TEXT_JUSTIFY_CENTER);
-                put(dc, font, asc, cx + _dx, cy2 + 2 + namePx * 82 / 100 + _dy, lines[1] as String,
+                put(dc, font, asc, cx + _dx, cy2 + halfGap + namePx * 82 / 100 + _dy, lines[1] as String,
                     Graphics.TEXT_JUSTIFY_CENTER);
             }
         }
@@ -748,7 +810,7 @@ class Hud {
         // "then": near the maneuver, with the next one right behind it (Waze does the same).
         if (hasTurn && !wayBack && turnDistance >= 0.0 && turnDistance <= URGENT_M
                 && index + 1 < route.turnType.size()) {
-            drawAfterStrip(dc, route.turnType[index + 1] as Number, cx, bottom + 4);
+            drawAfterStrip(dc, route.turnType[index + 1] as Number, cx, bottom + _px4);
         }
         drawStatusIcons(dc, nav, right, bottom);
     }
@@ -766,6 +828,7 @@ class Hud {
     //! (`cx`, `cy`) in a square of `side` px: the stroke-4 ring touches the edge, and the check keeps the
     //! sheet's proportion (30 px in a ring of radius 19).
     private function drawDone(dc as Dc, cx as Number, cy as Number, side as Number) as Void {
+        // `side` is already in px of this screen, so its ratio to the reference `DONE_PX` carries the screen scale.
         var pen = (side * 4 + DesignTokens.DONE_PX / 2) / DesignTokens.DONE_PX;
         if (pen < 2) {
             pen = 2;
@@ -785,21 +848,22 @@ class Hud {
         var label = Tr.s(Rez.Strings.AndThen);
         // The small arrow: half-height 13 for the 20 px text (C15b), in the same proportion.
         var arrowHalf = (_smallPx * 13 + 10) / 20;
-        var stripH = _smallPx + 8;
-        if (stripH < 2 * arrowHalf + 4) {
-            stripH = 2 * arrowHalf + 4;
+        var arrowPad = _px4;
+        var stripH = _smallPx + _px8;
+        if (stripH < 2 * arrowHalf + arrowPad) {
+            stripH = 2 * arrowHalf + arrowPad;
         }
         var textW = dc.getTextWidthInPixels(label, _small);
-        var inner = textW + 10 + 2 * arrowHalf + 4;
-        var left = cx - inner / 2 - DesignTokens.TAB_PAD;
-        var right = left + inner + 2 * DesignTokens.TAB_PAD;
+        var inner = textW + _px10 + 2 * arrowHalf + arrowPad;
+        var left = cx - inner / 2 - _tabPad;
+        var right = left + inner + 2 * _tabPad;
         note(BOX_AFTER, left, top, right, top + stripH);
         tab(dc, left, top, right, top + stripH);
         dc.setColor(DesignTokens.SECONDARY, Graphics.COLOR_TRANSPARENT);
-        put(dc, _small, _ascSmall, left + DesignTokens.TAB_PAD + _dx, top + stripH / 2 + _smallPx * 32 / 100 + _dy,
+        put(dc, _small, _ascSmall, left + _tabPad + _dx, top + stripH / 2 + _smallPx * 32 / 100 + _dy,
             label, Graphics.TEXT_JUSTIFY_LEFT);
         TurnArrow.halfOverride = arrowHalf;
-        TurnArrow.draw(dc, right - DesignTokens.TAB_PAD - arrowHalf - 2 + _dx, top + stripH / 2 + _dy, nextType,
+        TurnArrow.draw(dc, right - _tabPad - arrowHalf - _px2 + _dx, top + stripH / 2 + _dy, nextType,
             DesignTokens.PRIMARY, DesignTokens.BACKGROUND);
         TurnArrow.halfOverride = -1;
     }
@@ -836,29 +900,29 @@ class Hud {
         var deltaText = stacked ? NavEngine.formatDelta(delta) : "";
         deltaShown = deltaText;
         restShown = rest;
-        var end = DesignTokens.ARRIVAL_END_Y - _reserve;
+        var end = _arrivalEnd - _reserve;
 
         if (!stacked) {
-            var pad = DesignTokens.TAB_EXTRA / 2;
+            var pad = _tabHalfExtra;
             var w = dc.getTextWidthInPixels(main, _note);
             var bottom = rise(end - pad, bottomFit(w / 2));
             var top = bottom - _notePx;
-            tab(dc, cx - w / 2 - DesignTokens.TAB_PAD, top - pad, cx + w / 2 + DesignTokens.TAB_PAD, bottom + pad);
+            tab(dc, cx - w / 2 - _tabPad, top - pad, cx + w / 2 + _tabPad, bottom + pad);
             note(BOX_TIME, cx - w / 2, top, cx + w / 2, bottom);
             dc.setColor(colour, Graphics.COLOR_TRANSPARENT);
             put(dc, _note, _ascNote, cx + _dx, top + _notePx * 80 / 100 + _dy, main, Graphics.TEXT_JUSTIFY_CENTER);
             return;
         }
 
-        var pad = DesignTokens.ARRIVAL_EXTRA / 2;
+        var pad = _arrivalHalfExtra;
         var clockW = dc.getTextWidthInPixels(main, _time);
         var deltaW = deltaText.length() > 0 ? dc.getTextWidthInPixels(deltaText, _status) : 0;
-        var mainW = clockW + (deltaW > 0 ? DesignTokens.DELTA_GAP + deltaW : 0);
+        var mainW = clockW + (deltaW > 0 ? _deltaGap + deltaW : 0);
         var restW = dc.getTextWidthInPixels(rest, _text);
         var w = mainW > restW ? mainW : restW;
         var bottom = rise(end - pad, bottomFit(w / 2));
         var top = bottom - _timePx - _restPx;
-        tab(dc, cx - w / 2 - DesignTokens.TAB_PAD, top - pad, cx + w / 2 + DesignTokens.TAB_PAD, bottom + pad);
+        tab(dc, cx - w / 2 - _tabPad, top - pad, cx + w / 2 + _tabPad, bottom + pad);
         note(BOX_TIME, cx - w / 2, top, cx + w / 2, bottom);
 
         var base = top + _timePx * 84 / 100 + _dy;
@@ -867,7 +931,7 @@ class Hud {
         put(dc, _time, _ascTime, left, base, main, Graphics.TEXT_JUSTIFY_LEFT);
         if (deltaW > 0) {
             dc.setColor(delta > 0 ? DesignTokens.LATE : DesignTokens.ARRIVED, Graphics.COLOR_TRANSPARENT);
-            put(dc, _status, _ascStatus, left + clockW + DesignTokens.DELTA_GAP, base, deltaText,
+            put(dc, _status, _ascStatus, left + clockW + _deltaGap, base, deltaText,
                 Graphics.TEXT_JUSTIFY_LEFT);
         }
         dc.setColor(DesignTokens.SECONDARY, Graphics.COLOR_TRANSPARENT);
@@ -894,16 +958,17 @@ class Hud {
             return;
         }
         var w = StatusIcons.width(bits);
-        var side = (w > StatusIcons.SIZE ? w : StatusIcons.SIZE) + 2 * ICON_PAD;
+        var iconSize = StatusIcons.size();
+        var side = (w > iconSize ? w : iconSize) + 2 * _iconPad;
         var left = plateRight;
         var top = plateBottom - side;
         if (!fitsGlass(left, top, left + side, top + side)) {
             left = plateRight - side;
-            top = plateBottom + 4;
+            top = plateBottom + _px4;
         }
         note(BOX_ICONS, left, top, left + side, top + side);
         tab(dc, left, top, left + side, top + side);
-        StatusIcons.draw(dc, bits, left + (side - w) / 2 + _dx, top + ICON_PAD + _dy);
+        StatusIcons.draw(dc, bits, left + (side - w) / 2 + _dx, top + _iconPad + _dy);
     }
 
     //! Stores an element's box, **already shifted**, for `BurnInTest`.
@@ -1012,11 +1077,11 @@ class Hud {
     }
 
     //! Width the street name may have at height `midY`: the screen chord
-    //! minus 16 px of slack and minus the orbit's `2 x reserve` (the text moves
+    //! minus 16 px (reference) of slack and minus the orbit's `2 x reserve` (the text moves
     //! `reserve` to each side). The chord is that of the **highest** point of the orbit
     //! (`midY - reserve`): going up, the screen narrows. The C10 measurement compares with it.
     function streetBudget(midY as Number) as Number {
-        return halfChord(midY - _reserve) * 2 - 16 - 2 * _reserve;
+        return halfChord(midY - _reserve) * 2 - _px16 - 2 * _reserve;
     }
 
     //! Width of the street name at the sign's starting size (the C10 measurement compares with

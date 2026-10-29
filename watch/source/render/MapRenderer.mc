@@ -7,6 +7,13 @@ import Toybox.Math;
 //!
 //! Order per frame: corridor → route ahead → destination point → rider (sheet 4).
 //!
+//! **Screen sizes.** Every layout number below is in px of the reference glass (the Venu 4 45 mm, 454 px,
+//! see [Screen]); the members that hold one are `var`s set in [initialize] through [Screen.px] / [Screen.pxf],
+//! the identity at 454. The zoom is converted in **one place**, [beginAt]: `NavState.metersPerPx` is the ground
+//! per px of the reference glass, and `_scale` the ground per px of **this** screen, so the same area shows on
+//! every size. Everything that is a distance on the glass (cull radius, widths, puck) is scaled with it;
+//! everything that is a distance on the ground (meters, the zoom levels, [WIDTH_REF_MPP]) is not.
+//!
 //! **Tilted** (v1.1.5, sheet 8, option 25): everything that goes to the screen passes through a vertical scale
 //! [_k] around the rider, `y' = anchor + K · (y − anchor)`. It is a flattened map, with no vanishing
 //! point: widths do not flatten and the destination point stays round. The street image
@@ -34,12 +41,15 @@ import Toybox.Math;
 //! after riding with both (`DECISIONS.md`, 2026-07-31).
 class MapRenderer {
 
-    const ANCHOR_X = 227;
+    //! The rider's `x` on the reference glass; [ANCHOR_X] is it on this screen. The phone's preview mirrors the
+    //! reference values of this class (`WatchFace.kt`, `WatchFaceTest`).
+    static const ANCHOR_X_REF = 227;
+    var ANCHOR_X as Number;
     //! **The rider moves down from the center to y = 276** (C15b, dark Waze look approved by Igor on
     //! 2026-10-14): more road ahead, which is what the bike asks for and what Waze does. The decision of
     //! 2026-07-31 (center it) held with the speed strip stuck at the bottom; it no longer exists.
     //! **v1.1.5: to y = 330** (sheet 6), with the sign on top and the map tilted.
-    const ANCHOR_Y = DesignTokens.PUCK_Y;
+    var ANCHOR_Y as Number;
 
     //! Largest distance from the anchor to a lit pixel, in pixels.
     //!
@@ -51,7 +61,9 @@ class MapRenderer {
     //! 2026-08-01.
     //! With the rider at y = 330 the lit pixel farthest from the anchor is the one at the top of the glass: 227 + 103.
     //! Tilted, that pixel shows the world at 330 / K ≈ 458 px from the rider ([beginAt]).
-    const CORNER_PX = 227.0 + (DesignTokens.PUCK_Y - 227);
+    //! In px of this screen, like [ANCHOR_Y]: the cull radius is `CORNER_PX` times the ground per px of this
+    //! screen, which is the same number of meters on every size.
+    var CORNER_PX as Float;
 
     //! Cull margin, so a line entering through the edge does not vanish.
     //!
@@ -71,8 +83,9 @@ class MapRenderer {
     //! Waze. The casing is the same line, wider, underneath. Widths at the riding zoom; in the
     //! frame [_routeWidth] and [_casingWidth] apply ([widthScale]). **v1.1.5: Maps blue**
     //! (`ROUTE_LINE`) with the `ROUTE_EDGE` casing; cyan stayed on the rider.
-    const WIDTH_AHEAD = DesignTokens.ROUTE_PX;
-    const WIDTH_CASING = DesignTokens.ROUTE_PX + 2 * DesignTokens.ROUTE_CASING_PX;
+    //! In px of this screen.
+    var WIDTH_AHEAD as Number;
+    var WIDTH_CASING as Number;
 
     //! Corridor by road class (`01 §Identity`): dark gray, always more
     //! faded than the route. It is peripheral reference — what must jump to the
@@ -100,11 +113,12 @@ class MapRenderer {
     //! **C15b: wide, dark strips, 14/11/9/7 px** (dark Waze: texture, not frame).
     //! **v1.1.5: 16/12/9/7** (sheet 8), with the black casing only inside the image ([StreetCache]).
     //! **C16.5: these widths apply at the riding zoom ([WIDTH_REF_MPP])** and thin out when the
-    //! map opens ([widthScale]).
+    //! map opens ([widthScale]). In px of the reference glass: [beginAt] turns them into px of this screen.
     static const LOD_WIDTH = DesignTokens.ROAD_WIDTHS;
 
     //! The scale at which the `DesignTokens` widths apply: 1.2 m/px, the riding zoom
-    //! (`NavState.ZOOM_LEVELS[1]`), where C15b approved them.
+    //! (`NavState.ZOOM_LEVELS[1]`), where C15b approved them. In meters per px of the **reference** glass,
+    //! like `NavState.metersPerPx`: it is compared with that, never with [_scale].
     const WIDTH_REF_MPP = 1.2;
 
     //! How much the width follows the zoom: `(1.2 / m per px) ^ 0.5`, between [WIDTH_MIN_SCALE] and 1.
@@ -174,7 +188,9 @@ class MapRenderer {
     //! F4 visual polish (`07-ROADMAP.md`).
     const SHOW_NORTH = false;
 
-    // The rider and the end of the route (sheet 4, rider 6 and destination 8): measures from the sheet, in px.
+    // The rider and the end of the route (sheet 4, rider 6 and destination 8): measures from the sheet, in px
+    // of the reference glass. The frame draws the copies in px of this screen (`_ringR` and the like, set in
+    // [initialize]); these stay as the sheet's numbers, for [puckLitPx] and the burn-in test.
     static const PUCK_RING_R = 22;
     static const PUCK_RING_W = 4;
     static const PUCK_DASHES = 16;
@@ -199,10 +215,10 @@ class MapRenderer {
     //! Compass rose: center and lengths of the needle and the "N" label.
     //! It sits in the upper right corner, inside the screen circumference even
     //! with the "N" at the farthest point.
-    const NORTH_CX = 376;
-    const NORTH_CY = 112;
-    const NORTH_NEEDLE_PX = 15;
-    const NORTH_LABEL_PX = 30;
+    var NORTH_CX as Number;
+    var NORTH_CY as Number;
+    var NORTH_NEEDLE_PX as Number;
+    var NORTH_LABEL_PX as Number;
     const COLOR_NORTH = 0xFF4040;
 
     //! How many segments the last frame actually drew (route + corridor).
@@ -511,7 +527,12 @@ class MapRenderer {
     private var _cos as Float = 1.0;
     private var _centreX as Float = 0.0;
     private var _centreY as Float = 0.0;
+    //! Ground per px of **this** screen, in meters. It is `NavState.metersPerPx` times 454 / size, so the same area
+    //! shows on every size ([beginAt]); the transform, the cull and the street images use this one.
     private var _scale as Float = 2.5;
+    //! The ground per px of the **reference** glass, as `NavState` holds it: what the zoom levels, the LOD ceiling
+    //! ([LOD_MAX_SCALE]), the width law ([widthScale]) and the decimation step are written in.
+    private var _refScale as Float = 2.5;
     private var _cullM as Float = 1000.0;
     //! The frame's flattening ([tilt]) and the sine and cosine of the heading already times it: the bottom row
     //! of the transform.
@@ -528,6 +549,18 @@ class MapRenderer {
     private var _routeWidth as Number = 12;
     private var _casingWidth as Number = 18;
     private var _widthMpp as Float = -1.0;
+
+    // The rider and destination sizes in px of this screen ([initialize]).
+    private var _haloR as Number;
+    private var _ringR as Number;
+    private var _ringW as Number;
+    private var _arrowHalf as Float;
+    private var _arrowBelow as Float;
+    private var _arrowAbove as Float;
+    private var _signPx as Number;
+    private var _destDotR as Number;
+    private var _destEdgeR as Float;
+    private var _destMaxPx as Float;
 
     //! **Streets in an image** ([StreetCache]): the frame pastes the rotated image instead of drawing
     //! street by street, and the leash stops cutting streets. Off here and in the tests; the app turns it on through
@@ -565,8 +598,31 @@ class MapRenderer {
         return _k;
     }
 
+    //! Reads the screen ([Screen], set by the app before this) once: from here on the geometry of the frame is in
+    //! px of this screen. At 454 every line is the identity, and the tests (which never call `Screen.init`) get that.
     function initialize() {
         _streets = new StreetCache();
+        ANCHOR_X = Screen.px(ANCHOR_X_REF);
+        ANCHOR_Y = Screen.px(DesignTokens.PUCK_Y);
+        CORNER_PX = Screen.half.toFloat() + (ANCHOR_Y - Screen.half);
+        WIDTH_AHEAD = Screen.px(DesignTokens.ROUTE_PX);
+        WIDTH_CASING = WIDTH_AHEAD + 2 * Screen.px(DesignTokens.ROUTE_CASING_PX);
+        NORTH_CX = Screen.px(376);
+        NORTH_CY = Screen.px(112);
+        NORTH_NEEDLE_PX = Screen.px(15);
+        NORTH_LABEL_PX = Screen.px(30);
+        DIAG_LABEL_X = Screen.px(DIAG_LABEL_X_REF);
+        DIAG_LABEL_Y = Screen.px(DIAG_LABEL_Y_REF);
+        _haloR = Screen.px(DesignTokens.HALO_RADIUS);
+        _ringR = Screen.px(PUCK_RING_R);
+        _ringW = Screen.px(PUCK_RING_W);
+        _arrowHalf = Screen.pxf(PUCK_ARROW_HALF);
+        _arrowBelow = Screen.pxf(PUCK_ARROW_BELOW);
+        _arrowAbove = Screen.pxf(PUCK_ARROW_ABOVE);
+        _signPx = Screen.px(PUCK_SIGN_PX);
+        _destDotR = Screen.px(DEST_DOT_R);
+        _destEdgeR = Screen.pxf(DEST_EDGE_R);
+        _destMaxPx = Screen.pxf(DEST_MAX_PX);
     }
 
     //! Turns the image streets on or off. Turning off drops the two images; turning on tries again
@@ -604,8 +660,11 @@ class MapRenderer {
     }
 
     //! Where the lever's "D" appears: to the left of the rider, away from the top HUD and the cards.
-    const DIAG_LABEL_X = 60;
-    const DIAG_LABEL_Y = 227;
+    //! In reference px; [DIAG_LABEL_X] and [DIAG_LABEL_Y] are them on this screen.
+    static const DIAG_LABEL_X_REF = 60;
+    static const DIAG_LABEL_Y_REF = 227;
+    var DIAG_LABEL_X as Number;
+    var DIAG_LABEL_Y as Number;
 
     //! The streets image in 16 bits or at the SDK default depth (C16). Changed: the images go out and
     //! the next is born in the new format, and the pool gets another chance (the image and the tilted one).
@@ -782,10 +841,10 @@ class MapRenderer {
         if (corridor.isEmpty()) {
             return;
         }
-        // The glass center, seen from the world, is (anchor − 227) / K ahead of the rider.
+        // The glass center, seen from the world, is (anchor − glass center) / K ahead of the rider.
         _streets.setTilt(_k);
         _streets.plan(corridor, _centreX, _centreY, _sin, _cos, _scale,
-            ((ANCHOR_Y - 227) / _k).toFloat(), _roadWidth);
+            ((ANCHOR_Y - Screen.half) / _k).toFloat(), _roadWidth);
         if (!_streets.covers()) {
             // No image covers the glass (the first is still being made, the GPS jumped, the zoom changed
             // a lot): street by street, with the leash, as without the cache, until the new one is ready.
@@ -930,7 +989,7 @@ class MapRenderer {
         while (_scanLod >= 0 && _scanLod < Protocol.CORRIDOR_LOD_COUNT) {
             // Above the LOD scale ceiling the mesh becomes noise and CPU cost
             // with no information: the screen has no pixel to tell one street from another.
-            var overScale = _scale > (LOD_MAX_SCALE[_scanLod] as Float);
+            var overScale = _refScale > (LOD_MAX_SCALE[_scanLod] as Float);
             var boxes = corridor.wayBox[_scanLod] as Array<Float>;
             var blocks = corridor.blockBox[_scanLod] as Array<Float>;
             var ways = overScale ? 0 : boxes.size() / 4;
@@ -1199,7 +1258,7 @@ class MapRenderer {
         var ny = north[1] as Float;
 
         dc.setColor(COLOR_NORTH, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(3);
+        dc.setPenWidth(Screen.px(3));
         dc.drawLine(
             (NORTH_CX - nx * NORTH_NEEDLE_PX).toNumber(),
             (NORTH_CY - ny * NORTH_NEEDLE_PX).toNumber(),
@@ -1215,7 +1274,8 @@ class MapRenderer {
         );
     }
 
-    //! Smallest distance between two drawn vertices, in pixels.
+    //! Smallest distance between two drawn vertices, in px of the reference glass: [beginAt] multiplies it by
+    //! the ground per reference px, so the step is the same number of meters (and the same work) on every size.
     //!
     //! **Decimation by scale.** At 20 m/px, two consecutive route points (about
     //! 26 m apart) fall 1.3 px apart: transforming and drawing the
@@ -1240,7 +1300,11 @@ class MapRenderer {
         _cos = Math.cos(heading).toFloat();
         _centreX = centreX;
         _centreY = centreY;
-        _scale = metersPerPx;
+        // **The one place where the zoom meets the screen size.** `metersPerPx` is the ground per px of the
+        // 454 px glass; on a 390 px one each px has to cover 454 / 390 times more ground, or the map would show less.
+        // At 454 the factor is skipped, so `_scale` is `metersPerPx` itself, bit for bit.
+        _refScale = metersPerPx;
+        _scale = Screen.size == Screen.REF ? metersPerPx : (metersPerPx * Screen.REF / Screen.size).toFloat();
         _k = tilt && !_streets.tiltRefused ? DesignTokens.TILT_K.toFloat() : 1.0;
         _ksin = _sin * _k;
         _kcos = _cos * _k;
@@ -1248,24 +1312,25 @@ class MapRenderer {
         // lists on every turn: the side is that of the glass pixel farthest from the rider in the world, which
         // tilted is the top one, at CORNER_PX / K.
         _cullM = (CORNER_PX / _k * _scale * CULL_MARGIN).toFloat();
-        var step = MIN_STEP_PX * _scale;
+        var step = MIN_STEP_PX * _refScale;
         _stepSqM = (step * step).toFloat();
         if (metersPerPx != _widthMpp) {
             _widthMpp = metersPerPx;
             var roads = widthScale(metersPerPx, WIDTH_EXPONENT, WIDTH_MIN_SCALE);
             var widths = new [LOD_WIDTH.size()] as Array<Number>;
             for (var lod = 0; lod < widths.size(); lod++) {
-                widths[lod] = scaledWidth(LOD_WIDTH[lod] as Number, roads);
+                widths[lod] = scaledWidth(Screen.px(LOD_WIDTH[lod] as Number), roads);
             }
             _roadWidth = widths;
             var route = widthScale(metersPerPx, ROUTE_WIDTH_EXPONENT, ROUTE_MIN_SCALE);
             _routeWidth = scaledWidth(WIDTH_AHEAD, route);
-            var border = scaledWidth(DesignTokens.ROUTE_CASING_PX, route);
+            var border = scaledWidth(Screen.px(DesignTokens.ROUTE_CASING_PX), route);
             _casingWidth = _routeWidth + 2 * (border < 2 ? 2 : border);
         }
     }
 
     //! `(WIDTH_REF_MPP / m per px) ^ exponent`, between `floor` and 1: near does not thicken, far thins.
+    //! `metersPerPx` is the reference glass's ([_refScale]), the same unit as [WIDTH_REF_MPP].
     function widthScale(metersPerPx as Float, exponent as Float, floor as Float) as Float {
         if (metersPerPx <= WIDTH_REF_MPP) {
             return 1.0;
@@ -1516,10 +1581,12 @@ class MapRenderer {
     ) as Number {
         var lastX = startX != null ? startX : xs[from] as Float;
         var lastY = startY != null ? startY : ys[from] as Float;
+        var anchorX = ANCHOR_X;
+        var anchorY = ANCHOR_Y;
         var dx = (lastX - _centreX) / _scale;
         var dy = (lastY - _centreY) / _scale;
-        var ax = ANCHOR_X + dx * _cos - dy * _sin;
-        var ay = ANCHOR_Y - (dx * _ksin + dy * _kcos);
+        var ax = anchorX + dx * _cos - dy * _sin;
+        var ay = anchorY - (dx * _ksin + dy * _kcos);
         var ux = 0.0;
         var uy = 0.0;
         var drawn = 0;
@@ -1547,8 +1614,8 @@ class MapRenderer {
 
             dx = (px - _centreX) / _scale;
             dy = (py - _centreY) / _scale;
-            var bx = ANCHOR_X + dx * _cos - dy * _sin;
-            var by = ANCHOR_Y - (dx * _ksin + dy * _kcos);
+            var bx = anchorX + dx * _cos - dy * _sin;
+            var by = anchorY - (dx * _ksin + dy * _kcos);
             var vx = bx - ax;
             var vy = by - ay;
 
@@ -1581,20 +1648,21 @@ class MapRenderer {
     //! The route end point (sheet 4, destination 8, 2026-10-17), with 3.5 px of black around it so it does
     //! not vanish in the route arriving at it. Since v1.1.5 in the route color (`ROUTE_LINE`): cyan is the
     //! rider's.
-    //! Only when it falls less than [DEST_MAX_PX] from the glass center; otherwise, the `dc` would clip everything.
+    //! Only when it falls less than [DEST_MAX_PX] (`_destMaxPx`) from the glass center; otherwise, the `dc` would clip everything.
     private function drawDestination(dc as Dc, route as RouteModel) as Void {
         var last = route.xs.size() - 1;
         var x = screenX(route.xs[last] as Float, route.ys[last] as Float);
         var y = screenY(route.xs[last] as Float, route.ys[last] as Float);
-        var dx = x - 227.0;
-        var dy = y - 227.0;
-        if (dx * dx + dy * dy > DEST_MAX_PX * DEST_MAX_PX) {
+        var center = Screen.half.toFloat();
+        var dx = x - center;
+        var dy = y - center;
+        if (dx * dx + dy * dy > _destMaxPx * _destMaxPx) {
             return;
         }
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(x, y, DEST_EDGE_R);
+        dc.fillCircle(x, y, _destEdgeR);
         dc.setColor(DesignTokens.ROUTE_LINE, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(x, y, DEST_DOT_R);
+        dc.fillCircle(x, y, _destDotR);
     }
 
     //! The rider (sheet 4, rider 6, 2026-10-17): the tip of the "?" in a ring, over the halo, at the anchor
@@ -1612,49 +1680,49 @@ class MapRenderer {
         var py = screenY(nav.x, nav.y);
 
         dc.setColor(DesignTokens.HALO, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(px, py, DesignTokens.HALO_RADIUS);
-        dc.setPenWidth(PUCK_RING_W);
+        dc.fillCircle(px, py, _haloR);
+        dc.setPenWidth(_ringW);
 
         var state = puckState(nav);
         if (state == PUCK_ARRIVED) {
             dc.setColor(DesignTokens.ROUTE_AHEAD, Graphics.COLOR_TRANSPARENT);
-            dc.drawCircle(px, py, PUCK_RING_R);
-            dc.fillCircle(px, py, DEST_DOT_R);
+            dc.drawCircle(px, py, _ringR);
+            dc.fillCircle(px, py, _destDotR);
             dc.setPenWidth(1);
             return;
         }
         if (state == PUCK_OK) {
             dc.setColor(DesignTokens.ROUTE_AHEAD, Graphics.COLOR_TRANSPARENT);
-            dc.drawCircle(px, py, PUCK_RING_R);
+            dc.drawCircle(px, py, _ringR);
         } else if (state == PUCK_RECALC) {
             dc.setColor(DesignTokens.ROUTE_CASING, Graphics.COLOR_TRANSPARENT);
-            dc.drawCircle(px, py, PUCK_RING_R);
+            dc.drawCircle(px, py, _ringR);
             // A step of 45 degrees per second, on the next frame (the GPS asks for one per second):
             // the arc moves without a timer of its own.
             var start = 90 - (System.getTimer() / 1000 % 8) * 45;
             dc.setColor(DesignTokens.ROUTE_AHEAD, Graphics.COLOR_TRANSPARENT);
-            dc.drawArc(px, py, PUCK_RING_R, Graphics.ARC_CLOCKWISE, start, start - 90);
+            dc.drawArc(px, py, _ringR, Graphics.ARC_CLOCKWISE, start, start - 90);
         } else {
             // 16 dashes of 10 degrees (3.8 px) around the 138 px circuit: the gap comes out at 4.8 px and closes with no seam.
             dc.setColor(DesignTokens.RING_OFF, Graphics.COLOR_TRANSPARENT);
             for (var i = 0; i < PUCK_DASHES; i++) {
                 var a = i * 360 / PUCK_DASHES;
-                dc.drawArc(px, py, PUCK_RING_R, Graphics.ARC_COUNTER_CLOCKWISE, a, a + PUCK_DASH_DEG);
+                dc.drawArc(px, py, _ringR, Graphics.ARC_COUNTER_CLOCKWISE, a, a + PUCK_DASH_DEG);
             }
         }
         dc.setPenWidth(1);
 
         if (state == PUCK_LOST) {
-            Signs.draw(dc, Signs.QUESTION, Signs.QUESTION_DOT, px, py, PUCK_SIGN_PX,
+            Signs.draw(dc, Signs.QUESTION, Signs.QUESTION_DOT, px, py, _signPx,
                 DesignTokens.SIGN_OFF, DesignTokens.ARROW_REST);
             return;
         }
         // The arrow tip of the "?" (base 52, height 33.2) with a 30 px base.
         dc.setColor(DesignTokens.PUCK, Graphics.COLOR_TRANSPARENT);
         dc.fillPolygon([
-            [px - PUCK_ARROW_HALF, py + PUCK_ARROW_BELOW],
-            [px + PUCK_ARROW_HALF, py + PUCK_ARROW_BELOW],
-            [px, py - PUCK_ARROW_ABOVE]
+            [px - _arrowHalf, py + _arrowBelow],
+            [px + _arrowHalf, py + _arrowBelow],
+            [px, py - _arrowAbove]
         ] as Array<[Numeric, Numeric]>);
     }
 
@@ -1676,7 +1744,8 @@ class MapRenderer {
     }
 
     //! Pixels the rider lights **stopped in the same place** for the whole trip (the ring and the arrow; the
-    //! halo is dark). It does not enter the HUD orbit, so `BurnInTest` holds this.
+    //! halo is dark). It does not enter the HUD orbit, so `BurnInTest` holds this. Of the reference glass: the share
+    //! of the glass it lights is the same on every size.
     static function puckLitPx() as Number {
         var ring = 2.0 * Math.PI * PUCK_RING_R * PUCK_RING_W;
         var arrow = PUCK_ARROW_HALF * (PUCK_ARROW_BELOW + PUCK_ARROW_ABOVE);

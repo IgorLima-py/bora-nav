@@ -17,9 +17,13 @@ class WatchFaceTest {
 
     private fun source(path: String) = File(repo, path).readText(Charsets.UTF_8)
 
-    /** The right side of `const NAME = ...;` (with or without `static`), without the `as Array<...>`. */
+    /**
+     * The right side of `const NAME = ...;` (with or without `static`), without the `as Array<...>`. A number the
+     * watch scales to its screen (C16.12) is a `var` there, and its value on the reference glass is `const NAME_REF`.
+     */
     private fun constant(text: String, file: String, name: String): String =
-        Regex("""const $name = (.+?);""").find(text)?.groupValues?.get(1)?.substringBefore(" as ")?.trim()
+        (Regex("""const $name = (.+?);""").find(text) ?: Regex("""const ${name}_REF = (.+?);""").find(text))
+            ?.groupValues?.get(1)?.substringBefore(" as ")?.trim()
             ?: error("no `const $name` in $file")
 
     private fun number(text: String): Double =
@@ -47,7 +51,7 @@ class WatchFaceTest {
     fun `the literals that are not const also match`() {
         val speed = source("watch/source/render/SpeedHud.mc")
         fun font(field: String) =
-            Regex("""$field = face\(DesignTokens.FACE_NUMBER, (\d+)""").find(speed)!!.groupValues[1].toInt()
+            Regex("""$field = face\(DesignTokens.FACE_NUMBER, (?:Screen\.px\()?(\d+)""").find(speed)!!.groupValues[1].toInt()
         assertEquals(font("_signFont"), MirrorLiterals.SIGN_FONT)
         assertEquals(font("_distFont"), MirrorLiterals.RADAR_DIST_FONT)
 

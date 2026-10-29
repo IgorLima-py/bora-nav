@@ -30,12 +30,13 @@ module StatusIcons {
     const RECALC = 4;
     const POS_STOPPED = 8;
 
-    //! Bubble diameter and gap between two, in px (`tokens_waze.json`: `icone_bolha` 34).
+    //! Bubble diameter and gap between two, in reference px (`tokens_waze.json`: `icone_bolha` 34): the
+    //! Venu 4 45 mm's. What is drawn and measured is [size] and [gap], through [Screen.px].
     const SIZE = 34;
     const GAP = 8;
 
     //! The dashed ring and the no-phone "?" inside the 34 bubble (sheet 4): radius 15, stroke 3 and the
-    //! 190 `Signs` frame at 23 px.
+    //! 190 `Signs` frame at 23 px (all in reference px, converted when drawn).
     const RING_R = 15;
     const STROKE = 3;
     const DASHES = 24;
@@ -93,10 +94,19 @@ module StatusIcons {
     //! (`MapRenderer.puckState`): the state sits where the eye already is.
     const ROW = NO_PHONE;
 
-    //! Row width for the [mask] bits.
+    //! The bubble diameter and the gap between two, in px of this screen.
+    function size() as Number {
+        return Screen.px(SIZE);
+    }
+
+    function gap() as Number {
+        return Screen.px(GAP);
+    }
+
+    //! Row width for the [mask] bits, in px of this screen.
     function width(bits as Number) as Number {
         var n = count(bits & ROW);
-        return n == 0 ? 0 : n * SIZE + (n - 1) * GAP;
+        return n == 0 ? 0 : n * size() + (n - 1) * gap();
     }
 
     //! The log text (`hud icones ...`), only when it changes: it is what the e2e reads.
@@ -116,14 +126,16 @@ module StatusIcons {
     function draw(dc as Dc, bits as Number, x as Number, top as Number) as Void {
         if ((bits & NO_PHONE) != 0) {
             bubble(dc, x, top);
-            noPhone(dc, x + SIZE / 2, top + SIZE / 2);
+            var half = size() / 2;
+            noPhone(dc, x + half, top + half);
         }
         dc.setPenWidth(1);
     }
 
     function bubble(dc as Dc, x as Number, y as Number) as Void {
+        var half = size() / 2;
         dc.setColor(DesignTokens.ICON_BUBBLE, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(x + SIZE / 2, y + SIZE / 2, SIZE / 2);
+        dc.fillCircle(x + half, y + half, half);
     }
 
     //! The colors the row uses, so `StatusIconsTest` can check that amber is gone.
@@ -137,13 +149,14 @@ module StatusIcons {
     //! sign 0.684 of the side; the sheet's dashing (stroke 0.45 and gap 0.9 of the stroke) in 24 strokes of
     //! 1.6 px, with butt caps.
     function noPhone(dc as Dc, cx as Number, cy as Number) as Void {
+        var radius = Screen.px(RING_R);
         dc.setColor(DesignTokens.RING_OFF, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(STROKE);
+        dc.setPenWidth(Screen.px(STROKE));
         for (var i = 0; i < DASHES; i++) {
             var a = i * 360 / DASHES;
-            dc.drawArc(cx, cy, RING_R, Graphics.ARC_COUNTER_CLOCKWISE, a, a + DASH_DEG);
+            dc.drawArc(cx, cy, radius, Graphics.ARC_COUNTER_CLOCKWISE, a, a + DASH_DEG);
         }
-        Signs.draw(dc, Signs.QUESTION, Signs.QUESTION_DOT, cx, cy, SIGN_PX, DesignTokens.SIGN_OFF,
+        Signs.draw(dc, Signs.QUESTION, Signs.QUESTION_DOT, cx, cy, Screen.px(SIGN_PX), DesignTokens.SIGN_OFF,
             DesignTokens.ARROW_REST);
     }
 }

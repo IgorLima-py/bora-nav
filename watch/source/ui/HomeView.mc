@@ -58,9 +58,13 @@ class HomeView extends WatchUi.View {
     private var _fitText as String = "";
     private var _fit as Array = [] as Array;
     //! The header gradient, computed once: the color of each 2 px band and the half chord of the
-    //! circle of radius 207 on each screen row.
+    //! circle of radius 207 (reference px) on each screen row.
     private var _bands as Array<Number> = [] as Array<Number>;
     private var _halfChord as Array<Number> = [] as Array<Number>;
+    //! The wordmark's scale transform, created on the first frame of a screen other than the reference one;
+    //! `_markScales` goes `false` if the device refuses it ([drawMark]).
+    private var _markTransform as Graphics.AffineTransform? = null;
+    private var _markScales as Boolean = true;
 
     private var _mark as WatchUi.BitmapResource?;
     private var _fonts as Dictionary<String, Graphics.FontType> = {} as Dictionary<String, Graphics.FontType>;
@@ -99,18 +103,23 @@ class HomeView extends WatchUi.View {
             WatchUi.loadResource(Rez.Strings.SettingsItem) as String,
             WatchUi.loadResource(Rez.Strings.LinkItem) as String,
         ] as Array<String>;
+        // The ramp is defined on the reference screen (HEADER_MID at y 113, black at 205) and sampled in bands
+        // of 2 px of this screen: the stops are scaled, the bands stay thin.
         _bands = [] as Array<Number>;
-        for (var y = 0; y < 205; y += 2) {
-            _bands.add(y <= 113
-                ? HomeList.mix(DesignTokens.PILL, DesignTokens.HEADER_MID, y / 113.0)
-                : HomeList.mix(DesignTokens.HEADER_MID, 0, (y - 113) / 92.0));
+        var midY = Screen.pxf(113);
+        var endY = Screen.pxf(205);
+        for (var y = 0; y < endY; y += 2) {
+            _bands.add(y <= midY
+                ? HomeList.mix(DesignTokens.PILL, DesignTokens.HEADER_MID, y / midY)
+                : HomeList.mix(DesignTokens.HEADER_MID, 0, (y - midY) / (endY - midY)));
         }
         _halfChord = [] as Array<Number>;
-        for (var y = 0; y <= 454; y++) {
-            _halfChord.add(HomeList.chordAt(y, 207) / 2);
+        var radius = Screen.px(207);
+        for (var y = 0; y <= Screen.size; y++) {
+            _halfChord.add(HomeList.chordAt(y, radius) / 2);
         }
-        // The faces the list uses while moving (in steps of 2 px, [HomeList.textPx]): created here, so the
-        // first drag does not pay for them in the middle of the movement.
+        // The faces the list uses while moving (in steps of 2 reference px, [HomeList.textPx]): created here, so
+        // the first drag does not pay for them in the middle of the movement.
         for (var px = 22; px <= 38; px += 2) {
             font(false, px);
         }
@@ -199,18 +208,20 @@ class HomeView extends WatchUi.View {
         }
         if (s > 0.4) {
             var op = (s - 0.4) * 2;
-            Signs.draw(dc, Signs.QUESTION, Signs.QUESTION_DOT, 227, 54.5, 44.2,
+            Signs.draw(dc, Signs.QUESTION, Signs.QUESTION_DOT, Screen.half, Screen.pxf(54.5), Screen.pxf(44.2),
                 HomeList.dim(DesignTokens.PRIMARY, op), HomeList.dim(DesignTokens.ROUTE_AHEAD, op));
         }
 
         dc.setColor(DesignTokens.CARD, DesignTokens.CARD);
-        dc.fillRoundedRectangle(HomeList.CARD_X, HomeList.CARD_Y, HomeList.CARD_W, HomeList.CARD_H, HomeList.CARD_R);
+        dc.fillRoundedRectangle(Screen.px(HomeList.CARD_X), Screen.px(HomeList.CARD_Y), Screen.px(HomeList.CARD_W),
+            Screen.px(HomeList.CARD_H), Screen.px(HomeList.CARD_R));
         for (var i = 0; i < HomeList.COUNT; i++) {
             drawItem(dc, i, i - s, ring, now);
         }
         // The card's arrow is the tip of the "?": the focused item is going somewhere.
         dc.setColor(DesignTokens.ROUTE_AHEAD, Graphics.COLOR_TRANSPARENT);
-        dc.fillPolygon([[362.9, 230.2], [362.9, 261.8], [383.0, 246.0]] as Array<[Numeric, Numeric]>);
+        dc.fillPolygon([[Screen.pxf(362.9), Screen.pxf(230.2)], [Screen.pxf(362.9), Screen.pxf(261.8)],
+            [Screen.pxf(383.0), Screen.pxf(246.0)]] as Array<[Numeric, Numeric]>);
 
         if (s > 2.5) {
             drawFooter(dc, s);
@@ -315,33 +326,62 @@ class HomeView extends WatchUi.View {
 
     // --- header -------------------------------------------------------------------------------
 
-    //! The gradient, the brand and the status line. They rise `200 × s` px and darken by
+    //! The gradient, the brand and the status line. They rise `200 × s` px (reference) and darken by
     //! `max(0, 1 − 1.6 × s)`; the brand is a bitmap and does not darken, so it vanishes at s > 0.5.
     private function drawHeader(dc as Dc, s as Float, ring as Number) as Void {
-        var shift = (200 * s).toNumber();
+        var shift = (Screen.pxf(200) * s).toNumber();
         var fade = 1.0 - 1.6 * s;
         // One 2 px band per row, clipped to the circle of radius 207: PILL at y 0, HEADER_MID at
-        // y 113 and black at y 205.
+        // y 113 and black at y 205 (reference px, scaled in [onLayout]).
         for (var i = 0; i < _bands.size(); i++) {
             var sy = i * 2 - shift;
             if (sy + 1 < 0 || sy + 1 >= _halfChord.size()) {
                 continue;
             }
-            var half = _halfChord[sy + 1] as Number;
-            if (half <= 0) {
+            var halfWidth = _halfChord[sy + 1] as Number;
+            if (halfWidth <= 0) {
                 continue;
             }
             dc.setColor(HomeList.dim(_bands[i] as Number, fade), Graphics.COLOR_TRANSPARENT);
-            dc.fillRectangle(227 - half, sy, half * 2, 2);
+            dc.fillRectangle(Screen.half - halfWidth, sy, halfWidth * 2, 2);
         }
         var mark = _mark;
         if (mark != null && s <= 0.5) {
-            dc.drawBitmap(125, 62 - shift, mark);
+            drawMark(dc, mark, Screen.px(62) - shift);
         }
-        drawStateLine(dc, 150 - shift, ring, fade);
+        drawStateLine(dc, Screen.px(150) - shift, ring, fade);
     }
 
-    //! The brand dot, 10 px of slack and the text, the whole thing centered on the glass.
+    //! The wordmark, a 204 × 62 bitmap drawn for the reference screen, with its top edge at `y` and centered:
+    //! the other screens scale it with a transform. If the device refuses the transform, the bitmap goes at its
+    //! own size, centered on the same spot, and the header does not try again.
+    private function drawMark(dc as Dc, mark as WatchUi.BitmapResource, y as Number) as Void {
+        if (Screen.size == Screen.REF) {
+            dc.drawBitmap(125, y, mark);
+            return;
+        }
+        if (_markScales && Graphics has :AffineTransform) {
+            try {
+                var transform = _markTransform;
+                if (transform == null) {
+                    transform = new Graphics.AffineTransform();
+                    _markTransform = transform;
+                }
+                var k = Screen.pxf(1);
+                transform.setMatrix([k, 0.0, Screen.pxf(125), 0.0, k, y.toFloat()]
+                    as [Float, Float, Float, Float, Float, Float]);
+                dc.drawBitmap2(0, 0, mark, { :transform => transform, :filterMode => Graphics.FILTER_MODE_BILINEAR });
+                return;
+            } catch (ex) {
+                _markScales = false;
+                Diag.add("home mark: no scale transform");
+            }
+        }
+        dc.drawBitmap(Screen.half - mark.getWidth() / 2, y + (Screen.px(62) - mark.getHeight()) / 2, mark);
+    }
+
+    //! The brand dot, 10 px of slack and the text (22 px with the dot's 12), the whole thing centered on the
+    //! glass.
     private function drawStateLine(dc as Dc, y as Number, ring as Number, fade as Float) as Void {
         var ask = getApp().getFavoriteAsk();
         var text = _ready;
@@ -361,24 +401,27 @@ class HomeView extends WatchUi.View {
         // The usable width is that of the row at rest (y 150): the text does not change size going up.
         if (!text.equals(_fitText) || _fit.size() < 2) {
             var fonts = [font(false, 24), font(false, 23)] as Array<Graphics.FontType>;
-            _fit = HomeList.fitState(dc, text, fonts, HomeList.chordAt(150, 200) - 40);
+            _fit = HomeList.fitState(dc, text, fonts,
+                HomeList.chordAt(Screen.px(150), Screen.px(200)) - Screen.px(40));
             _fitText = text;
         }
         var face = _fit[0] as Graphics.FontType;
         var line = _fit[1] as String;
-        var width = 12 + 10 + dc.getTextWidthInPixels(line, face);
-        var x0 = 227 - width / 2;
+        var dot = Screen.px(6);
+        var lead = Screen.px(22);
+        var width = lead + dc.getTextWidthInPixels(line, face);
+        var x0 = Screen.half - width / 2;
         if (dotColor < 0) {
             dc.setColor(HomeList.dim(DesignTokens.ARROW_REST, fade), Graphics.COLOR_TRANSPARENT);
-            dc.setPenWidth(3);
-            dc.drawCircle(x0 + 6, y, 5);
+            dc.setPenWidth(Screen.px(3));
+            dc.drawCircle(x0 + dot, y, Screen.px(5));
             dc.setPenWidth(1);
         } else {
             dc.setColor(HomeList.dim(dotColor, fade), Graphics.COLOR_TRANSPARENT);
-            dc.fillCircle(x0 + 6, y, 6);
+            dc.fillCircle(x0 + dot, y, dot);
         }
         dc.setColor(HomeList.dim(textColor, fade), Graphics.COLOR_TRANSPARENT);
-        dc.drawText(x0 + 22, y, face, line, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(x0 + lead, y, face, line, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 
     // --- list ---------------------------------------------------------------------------------
@@ -391,9 +434,9 @@ class HomeView extends WatchUi.View {
         var iconOp = HomeList.at(HomeList.ICON_OP, d);
         if (iconOp > 0.02) {
             // The icon is drawn with primitives: the size moves without steps.
-            var px = HomeList.at(HomeList.ICON_PX, d);
-            var ix = HomeList.at(HomeList.ICON_X, d);
-            var iy = HomeList.at(HomeList.ICON_Y, d);
+            var px = Screen.pxf(HomeList.at(HomeList.ICON_PX, d));
+            var ix = Screen.pxf(HomeList.at(HomeList.ICON_X, d));
+            var iy = Screen.pxf(HomeList.at(HomeList.ICON_Y, d));
             drawIcon(dc, index, ix, iy, px, iconOp, ring, now);
         }
 
@@ -403,8 +446,9 @@ class HomeView extends WatchUi.View {
             var size = HomeList.textPx(d);
             var face = font(bold, size);
             dc.setColor(HomeList.textColor(d), Graphics.COLOR_TRANSPARENT);
-            drawAtBaseline(dc, HomeList.at(HomeList.TEXT_X, d), HomeList.at(HomeList.TEXT_BASE, d), face,
-                ascentOf(bold, size), _titles[index] as String, Graphics.TEXT_JUSTIFY_LEFT);
+            drawAtBaseline(dc, Screen.pxf(HomeList.at(HomeList.TEXT_X, d)),
+                Screen.pxf(HomeList.at(HomeList.TEXT_BASE, d)), face, ascentOf(bold, size),
+                _titles[index] as String, Graphics.TEXT_JUSTIFY_LEFT);
         }
 
         // The support line only shows at d = 0 and vanishes with |d|.
@@ -412,8 +456,9 @@ class HomeView extends WatchUi.View {
         var subOp = 1.0 - abs * 2;
         if (subOp > 0.02) {
             dc.setColor(HomeList.dim(DesignTokens.SECONDARY, subOp), Graphics.COLOR_TRANSPARENT);
-            drawAtBaseline(dc, HomeList.at(HomeList.TEXT_X, d) + 1, HomeList.at(HomeList.TEXT_BASE, d) + 35,
-                font(false, 24), ascentOf(false, 24), subtitle(index), Graphics.TEXT_JUSTIFY_LEFT);
+            drawAtBaseline(dc, Screen.pxf(HomeList.at(HomeList.TEXT_X, d) + 1),
+                Screen.pxf(HomeList.at(HomeList.TEXT_BASE, d) + 35), font(false, 24), ascentOf(false, 24),
+                subtitle(index), Graphics.TEXT_JUSTIFY_LEFT);
         }
     }
 
@@ -449,40 +494,44 @@ class HomeView extends WatchUi.View {
     private function drawFooter(dc as Dc, s as Float) as Void {
         var op = (s - 2.5) * 2;
         dc.setColor(HomeList.dim(DesignTokens.SECONDARY, op), Graphics.COLOR_TRANSPARENT);
-        drawAtBaseline(dc, 227, 354, font(false, 24), ascentOf(false, 24), Tr.f(Rez.Strings.WatchVersion, [AppVersion.LABEL]),
-            Graphics.TEXT_JUSTIFY_CENTER);
+        drawAtBaseline(dc, Screen.half, Screen.px(354), font(false, 24), ascentOf(false, 24),
+            Tr.f(Rez.Strings.WatchVersion, [AppVersion.LABEL]), Graphics.TEXT_JUSTIFY_CENTER);
         dc.setColor(HomeList.dim(DesignTokens.ARROW_REST, op), Graphics.COLOR_TRANSPARENT);
-        drawAtBaseline(dc, 227, 392, font(false, 22), ascentOf(false, 22), _openLog, Graphics.TEXT_JUSTIFY_CENTER);
+        drawAtBaseline(dc, Screen.half, Screen.px(392), font(false, 22), ascentOf(false, 22), _openLog,
+            Graphics.TEXT_JUSTIFY_CENTER);
     }
 
     //! The scroll arc on the right (radius 196, from −24° to +24°) and the position thumb.
     private function drawScroll(dc as Dc, s as Float) as Void {
-        dc.setPenWidth(5);
+        var radius = Screen.px(196);
+        dc.setPenWidth(Screen.px(5));
         dc.setColor(DesignTokens.AFTER_STRIP, Graphics.COLOR_TRANSPARENT);
-        dc.drawArc(227, 227, 196, Graphics.ARC_CLOCKWISE, 24, 336);
+        dc.drawArc(Screen.half, Screen.half, radius, Graphics.ARC_CLOCKWISE, 24, 336);
         dc.setColor(DesignTokens.SECONDARY, Graphics.COLOR_TRANSPARENT);
-        dc.drawArc(227, 227, 196, Graphics.ARC_CLOCKWISE, degrees(24 - 12 * s), degrees(12 - 12 * s));
+        dc.drawArc(Screen.half, Screen.half, radius, Graphics.ARC_CLOCKWISE, degrees(24 - 12 * s), degrees(12 - 12 * s));
         dc.setPenWidth(1);
     }
 
     // --- ring ---------------------------------------------------------------------------------
 
-    //! The edge ring (radius 214, stroke 8).
+    //! The edge ring (radius 214, stroke 8, reference px).
     private function drawRing(dc as Dc, ring as Number, now as Number) as Void {
+        var radius = Screen.px(214);
         if (ring == RING_NO_PHONE) {
-            // 67 strokes of 6 px with 14 gaps make the full turn.
-            dc.setPenWidth(8);
+            // 67 strokes of 6 px with 14 gaps make the full turn. The angle of a stroke is that of the
+            // reference ring, the same on every screen.
+            dc.setPenWidth(Screen.px(8));
             dc.setColor(DesignTokens.RING_OFF, Graphics.COLOR_TRANSPARENT);
             var step = 360.0 / 67;
             var dash = 6 * 180.0 / (Math.PI * 214);
             for (var i = 0; i < 67; i++) {
                 var a = 90 - i * step;
-                dc.drawArc(227, 227, 214, Graphics.ARC_CLOCKWISE, degrees(a), degrees(a - dash));
+                dc.drawArc(Screen.half, Screen.half, radius, Graphics.ARC_CLOCKWISE, degrees(a), degrees(a - dash));
             }
             dc.setPenWidth(1);
             return;
         }
-        ringArcs(dc, 227, 227, 214, 8, ring, now, _sweepStart, 1.0);
+        ringArcs(dc, Screen.half, Screen.half, radius, Screen.px(8), ring, now, _sweepStart, 1.0);
     }
 
     //! The full ring, the sweep or the spinning arc: the same drawing on the edge ring and on the Link
@@ -580,10 +629,12 @@ class HomeView extends WatchUi.View {
 
     // --- text ---------------------------------------------------------------------------------
 
-    //! The system vector face at size `px`, created once and kept. Without it (device
-    //! without the face), it falls back to the nearest bitmap font.
+    //! The system vector face at size `px` **of the reference screen**, created once and kept: the size is
+    //! scaled here, and only here (with [ascentOf]), so the callers never scale a font size; the cache is by
+    //! the scaled size. Without the face (device without it), it falls back to the nearest bitmap font.
     private function font(bold as Boolean, px as Number) as Graphics.FontType {
-        var key = (bold ? "b" : "r") + px.toString();
+        var size = Screen.px(px);
+        var key = (bold ? "b" : "r") + size.toString();
         var cached = _fonts.get(key);
         if (cached != null) {
             return cached as Graphics.FontType;
@@ -595,7 +646,7 @@ class HomeView extends WatchUi.View {
                 : ["RobotoCondensedRegular", "RobotoRegular"] as Array<String>;
             for (var i = 0; i < faces.size() && face == null; i++) {
                 try {
-                    face = Graphics.getVectorFont({ :face => faces[i] as String, :size => px });
+                    face = Graphics.getVectorFont({ :face => faces[i] as String, :size => size });
                 } catch (ex) {
                     face = null;
                 }
@@ -604,22 +655,24 @@ class HomeView extends WatchUi.View {
         var result = (face != null ? face : (px >= 40 ? Graphics.FONT_MEDIUM
             : (px >= 28 ? Graphics.FONT_SMALL : Graphics.FONT_TINY))) as Graphics.FontType;
         _fonts.put(key, result);
-        var ascent = px * 8 / 10;
+        var ascent = size * 8 / 10;
         if (Graphics has :getFontAscent) {
             try {
                 ascent = Graphics.getFontAscent(result);
             } catch (ex) {
-                ascent = px * 8 / 10;
+                ascent = size * 8 / 10;
             }
         }
         _ascents.put(key, ascent);
         return result;
     }
 
+    //! The ascent, in px of this screen, of the face [font] gives for the same `px` (of the reference screen).
     private function ascentOf(bold as Boolean, px as Number) as Number {
         font(bold, px);
-        var ascent = _ascents.get((bold ? "b" : "r") + px.toString());
-        return ascent != null ? ascent as Number : px * 8 / 10;
+        var size = Screen.px(px);
+        var ascent = _ascents.get((bold ? "b" : "r") + size.toString());
+        return ascent != null ? ascent as Number : size * 8 / 10;
     }
 
     //! The text with the baseline at `baseline`, as the SVG mockup positions each text.

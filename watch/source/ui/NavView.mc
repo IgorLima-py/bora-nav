@@ -292,46 +292,49 @@ class DetailsView extends WatchUi.View {
         dc.setColor(Graphics.COLOR_TRANSPARENT, Graphics.COLOR_BLACK);
         dc.clear();
 
+        // The lines are placed in px of the reference screen and scaled to this one; the fonts are the system's,
+        // which each device already sizes for its own glass.
         // Destination, truncated by the screen chord at that height.
         dc.setColor(DesignTokens.SECONDARY, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, 52, Graphics.FONT_XTINY, fit(dc, model.destination, 52, Graphics.FONT_XTINY),
+        var destY = Screen.px(52);
+        dc.drawText(cx, destY, Graphics.FONT_XTINY, fit(dc, model.destination, destY, Graphics.FONT_XTINY),
             Graphics.TEXT_JUSTIFY_CENTER);
 
         // The next maneuvers: the first highlighted, the others in the secondary tone.
-        var y = 92;
         for (var i = 0; i < model.upcoming.size(); i++) {
+            var y = Screen.px(92 + 34 * i);
             dc.setColor(i == 0 ? DesignTokens.PRIMARY : DesignTokens.SECONDARY, Graphics.COLOR_TRANSPARENT);
             dc.drawText(cx, y, Graphics.FONT_XTINY,
                 fit(dc, model.upcoming[i] as String, y, Graphics.FONT_XTINY), Graphics.TEXT_JUSTIFY_CENTER);
-            y += 34;
         }
 
         // Route totals, what is left and the battery.
         dc.setColor(DesignTokens.PRIMARY, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, 206, Graphics.FONT_TINY, model.total, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(cx, Screen.px(206), Graphics.FONT_TINY, model.total, Graphics.TEXT_JUSTIFY_CENTER);
         dc.setColor(DesignTokens.SECONDARY, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, 252, Graphics.FONT_XTINY, model.left, Graphics.TEXT_JUSTIFY_CENTER);
-        dc.drawText(cx, 284, Graphics.FONT_XTINY, model.battery, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(cx, Screen.px(252), Graphics.FONT_XTINY, model.left, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(cx, Screen.px(284), Graphics.FONT_XTINY, model.battery, Graphics.TEXT_JUSTIFY_CENTER);
 
         // The button: amber when armed, so the second tap is not blind.
-        var left = DetailsModel.BTN_LEFT;
-        var top = DetailsModel.BTN_TOP;
-        var width = DetailsModel.BTN_RIGHT - DetailsModel.BTN_LEFT;
-        var height = DetailsModel.BTN_BOTTOM - DetailsModel.BTN_TOP;
+        var button = DetailsModel.endButton();
+        var left = button[0] as Number;
+        var top = button[1] as Number;
+        var width = (button[2] as Number) - left;
+        var height = (button[3] as Number) - top;
         dc.setColor(armed ? DesignTokens.URGENT : 0x333333, Graphics.COLOR_TRANSPARENT);
-        dc.fillRoundedRectangle(left, top, width, height, DesignTokens.CARD_RADIUS);
+        dc.fillRoundedRectangle(left, top, width, height, Screen.px(DesignTokens.CARD_RADIUS));
         dc.setColor(armed ? Graphics.COLOR_BLACK : Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         dc.drawText(cx, top + (height - dc.getFontHeight(Graphics.FONT_XTINY)) / 2, Graphics.FONT_XTINY,
             model.endLabel, Graphics.TEXT_JUSTIFY_CENTER);
     }
 
-    //! Cuts the text by the round screen's chord at that height (`y` is the top of the
+    //! Cuts the text by the round screen's chord at that height (`y`, in px of this screen, is the top of the
     //! line; it is measured at its middle).
     private function fit(dc as Dc, text as String, y as Number, font) as String {
         var mid = y + dc.getFontHeight(font) / 2;
-        var dy = mid - 227;
-        var squared = 227 * 227 - dy * dy;
-        var maxWidth = (squared > 0 ? Math.sqrt(squared.toFloat()).toNumber() : 0) * 2 - 24;
+        var dy = mid - Screen.half;
+        var squared = Screen.half * Screen.half - dy * dy;
+        var maxWidth = (squared > 0 ? Math.sqrt(squared.toFloat()).toNumber() : 0) * 2 - Screen.px(24);
         if (dc.getTextWidthInPixels(text, font) <= maxWidth) {
             return text;
         }

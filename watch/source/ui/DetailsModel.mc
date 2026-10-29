@@ -12,8 +12,9 @@ class DetailsModel {
 
     const MAX_UPCOMING = 3;
 
-    //! The "End route" button, in px of the 454 screen: 220 wide, centered,
-    //! from y 326 to 396. It fits in the chord of the round screen (at 396 the chord is 303 px).
+    //! The "End route" button, in px of the 454 screen (the reference one; [endButton] gives it on this
+    //! screen): 220 wide, centered, from y 326 to 396. It fits in the chord of the round screen (at 396 the
+    //! chord is 303 px).
     static const BTN_LEFT = 117;
     static const BTN_RIGHT = 337;
     static const BTN_TOP = 326;
@@ -109,9 +110,26 @@ class DetailsModel {
         return Tr.s(Rez.Strings.TurnContinue);
     }
 
-    //! Did the touch land on the end button?
+    //! [endButton], made on the first call and kept: the glass does not change while the app runs.
+    private static var _endButton as Array<Number>? = null;
+
+    //! The end button on this screen, `[left, top, right, bottom]` in px of this screen: the view draws it and
+    //! [hitsEnd] tests the touch (which comes in px of this screen) against the same numbers.
+    static function endButton() as Array<Number> {
+        var button = _endButton;
+        if (button == null) {
+            button = [Screen.px(BTN_LEFT), Screen.px(BTN_TOP), Screen.px(BTN_RIGHT), Screen.px(BTN_BOTTOM)]
+                as Array<Number>;
+            _endButton = button;
+        }
+        return button;
+    }
+
+    //! Did the touch (`x`, `y` in px of this screen) land on the end button?
     static function hitsEnd(x as Number, y as Number) as Boolean {
-        return x >= BTN_LEFT && x <= BTN_RIGHT && y >= BTN_TOP && y <= BTN_BOTTOM;
+        var button = endButton();
+        return x >= (button[0] as Number) && x <= (button[2] as Number)
+            && y >= (button[1] as Number) && y <= (button[3] as Number);
     }
 }
 

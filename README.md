@@ -1,14 +1,14 @@
 <p align="center">
-  <img alt="Bora?: turn-by-turn motorcycle navigation on a Garmin watch, with the streets around you. A watch shows the next turn, onto Av. São Luís in 770 m, and a speed camera 90 m ahead with its 50 km/h sign, over the surrounding streets, on top of the real street map of downtown São Paulo with the cyan route to the Copan building" src="docs/img/hero.png" width="100%">
-</p>
-
-<p align="center">
   <img alt="Watch: Connect IQ, Monkey C" src="https://img.shields.io/badge/watch-Connect_IQ_·_Monkey_C-0B0F13?style=flat-square">
   <img alt="Phone: Android, Kotlin" src="https://img.shields.io/badge/phone-Android_·_Kotlin-7F52FF?style=flat-square&logo=kotlin&logoColor=white">
   <img alt="Link: BLE, custom binary protocol" src="https://img.shields.io/badge/link-BLE_·_binary_protocol-2FD3FF?style=flat-square">
-  <img alt="Tests: 218 simulator, 319 JVM" src="https://img.shields.io/badge/tests-218_simulator_·_319_JVM-3FB950?style=flat-square">
+  <img alt="Tests: 220 simulator, 319 JVM" src="https://img.shields.io/badge/tests-220_simulator_·_319_JVM-3FB950?style=flat-square">
   <img alt="Ridden: 223.5 km" src="https://img.shields.io/badge/ridden-223.5_km-F0883E?style=flat-square">
   <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-8B98A5?style=flat-square">
+</p>
+
+<p align="center">
+  <img alt="Bora?: turn-by-turn motorcycle navigation on a Garmin watch, with the streets around you. A watch shows the next turn, onto Av. São Luís in 770 m, and a speed camera 90 m ahead with its 50 km/h sign, over the surrounding streets, on top of the real street map of downtown São Paulo with the cyan route to the Copan building" src="docs/img/hero.png" width="100%">
 </p>
 
 <p align="center">
@@ -17,10 +17,11 @@
 <p align="center"><sub>Screens from the Connect IQ simulator (watch v1.2.9) on a real route in downtown São Paulo, from a preview build with the on-screen text in English (<code>tools/telas_en.py</code>). The watch frame and the map above are drawn by <code>tools/moldura.py</code>. Map data © OpenStreetMap contributors.</sub></p>
 
 Bora? is two apps that work as one. An Android companion computes the route and downloads the streets
-around it; a Connect IQ app on a **Garmin Venu 4 (45 mm)** draws them as a moving map that turns with you
-(track-up), with the next turn. It is a personal project, built for my own rides, and it is not on any store.
+around it; a Connect IQ app on a **round AMOLED Garmin watch** (I ride with a Venu 4 45 mm) draws them as a
+moving map that turns with you (track-up), with the next turn. It is a personal project, built for my own
+rides, and it is not on any store.
 
-**[Install it →](INSTALL.md)** The APK and the watch app are on the
+**[Install it →](#how-to-install)** The APK and the watch app are on the
 [releases page](https://github.com/IgorLima-py/bora-nav/releases/latest); setup takes about 15 minutes.
 
 <p align="center">
@@ -34,6 +35,27 @@ On a motorcycle you look at your wrist for about one second, with gloves on and 
 pocket. The navigation that reaches a Garmin watch today gives you an arrow and the line of the route.
 I wanted to see the street: the corner I have to take, and the ones around it, so I can tell which
 one is mine at a glance.
+
+## How to install
+
+You need a supported Garmin watch, an Android phone (8.0 or newer) with Garmin Connect paired to the
+watch, a USB cable, and a free Mapbox account. It takes about 15 minutes.
+
+1. From the [latest release](https://github.com/IgorLima-py/bora-nav/releases/latest), download the APK
+   and the `.prg` for your watch model. A `.prg` only installs on the model it was built for.
+2. Plug the watch into a computer and copy the `.prg` into `GARMIN/APPS/`. On macOS, use an MTP app such
+   as [OpenMTP](https://openmtp.ganeshrvel.com/).
+3. Install the APK on the phone. Android asks you to allow installs from that source, because the app
+   is not on the Play Store.
+4. Create a Mapbox account and copy your default public token (it starts with `pk.`).
+5. Open Bora? on the phone. The first-time setup asks for the token and the permissions, and tests the
+   connection with the watch.
+
+**Supported watches:** round AMOLED Garmin watches with a screen of 390 px or more, such as the Venu 4
+(41 and 45 mm), Venu 3 and 2, fēnix 8 and 9 AMOLED, epix Pro, Forerunner 165, 265, 570, 965 and 970, and
+vívoactive 5 and 6. The layout was drawn on the Venu 4 45 mm and is scaled to the other screens. Only
+that watch has been ridden; the others were checked in the Connect IQ simulator, one per screen size.
+[INSTALL.md](INSTALL.md) has the full list, every step in detail, and troubleshooting.
 
 ## How it works
 
@@ -50,14 +72,14 @@ flowchart LR
         cams --> pack
     end
     pack -- "BLE · Base64 chunks · ACK bitmap · resend" --> asm
-    subgraph watch["Watch · Garmin Venu 4 · Monkey C"]
+    subgraph watch["Watch · Garmin · Monkey C"]
         asm["Message assembler"] --> nav["Map matching · next turn · ETA"]
         nav --> draw["Track-up map · turn card<br/>vibration · speed-limit sign"]
     end
     share --> route
 ```
 
-| | Phone (Android, Kotlin) | Watch (Venu 4 45 mm, Monkey C) |
+| | Phone (Android, Kotlin) | Watch (Garmin, Monkey C) |
 |---|---|---|
 | **Route** | asks Mapbox Directions, recomputes it when you leave it | follows it, detects when you are off-route and asks for a new one |
 | **Streets** | downloads OpenStreetMap vector tiles along the route, simplifies and packs them by road class | draws them in world-anchored tiles, rotated with your heading |
@@ -88,7 +110,7 @@ flowchart LR
   240,000-instruction budget. It only showed up once real neighborhood streets started arriving. With a
   pre-sized array, four times the corridor costs 4.9× instead of 16×, and parsing now runs in slices of
   450 points on a timer.
-- **218 tests in the watch simulator and 319 on the JVM**, all green on 2026-10-28, plus a virtual ride
+- **220 tests in the watch simulator and 319 on the JVM**, all green on 2026-10-28, plus a virtual ride
   that drives the whole São Paulo route through the same entry point as the GPS and checks every turn
   alert against the rule.
 - **Seven attempts on the street before the transfer worked**, each stopped by a different cause that
@@ -137,7 +159,8 @@ Ridden with the app: at least **223.5 km** in October 2026, measured by the app'
   second at 15 to 25 m. I did not feel them through my gloves.
 - **Rerouting once put me on a motorway.** The fix (`exclude=motorway` in the Mapbox request) is in the
   code and has not been ridden yet.
-- **One watch.** Only the Venu 4 45 mm is supported, sideloaded, with no settings through Garmin
+- **One watch on the road.** Only the Venu 4 45 mm has been ridden. The other screen sizes (390, 416 and
+  466 px) were only checked in the simulator. The app is sideloaded, with no settings through Garmin
   Connect.
 
 ## How it was built with AI
@@ -155,7 +178,8 @@ process lives in working files, in Portuguese, that stay out of this public copy
 
 ## Build
 
-You need the Connect IQ SDK with the `venu445mm` device, a Connect IQ developer key, Python 3.11+,
+You need the Connect IQ SDK with the devices of `watch/manifest.xml` (at least `venu445mm`, the
+reference; `python3 tools/sim.py --device <id> ...` runs another one), a Connect IQ developer key, Python 3.11+,
 and JDK 21 with the Android SDK for the companion. Each user brings their own Mapbox token, typed into
 the phone app.
 
@@ -166,7 +190,7 @@ python3 tools/package.py --keystore your.keystore --alias your_alias   # release
 ```
 
 ```
-watch/       Connect IQ app (Monkey C) for the venu445mm, with its simulator tests
+watch/       Connect IQ app (Monkey C) for round AMOLED watches, with its simulator tests
 companion/   Android app (Kotlin, Compose), package dev.igor.motonav
 tools/       protocol reference (packer.py), fixtures, simulator runner and helpers
 docs/        the protocol spec, the README images and the watch screen tokens

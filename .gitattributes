@@ -45,6 +45,8 @@ tools/cobertura.py export-ignore
 tools/test_cobertura.py export-ignore
 tools/comparar_telas.py export-ignore
 tools/marca.py export-ignore
+tools/post_lado_a_lado.py export-ignore
+tools/fixtures/ruas_centro_post.json export-ignore
 tools/ui_waze.py export-ignore
 tools/mtpgarmin.c export-ignore
 companion/app/src/test/java/dev/igor/motonav/corridor/RadarCoverageTest.kt export-ignore

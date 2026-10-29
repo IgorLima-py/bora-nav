@@ -74,8 +74,9 @@ def _metal_ring(w, h, cx, cy, r_int, r_ext):
     return Image.fromarray(np.concatenate([np.clip(rgb, 0, 255), alpha[..., None]], axis=2).astype(np.uint8), "RGBA")
 
 
-def _strap(w, h, cx, cy):
-    """The two strap halves, smooth, lighter in the middle (silicone), fading out at the ends."""
+def _strap(w, h, cx, cy, brighten=1.0):
+    """The two strap halves, smooth, lighter in the middle (silicone), fading out at the ends.
+    `brighten` multiplies the gray: the post image wants it more visible on the dark background."""
     y, x = np.mgrid[0:h, 0:w].astype(np.float32)
     t = np.abs(y - cy) / (h / 2)                                   # 0 at the center, 1 at the tip
     width = (STRAP_WIDTH[0] + (STRAP_WIDTH[1] - STRAP_WIDTH[0]) * t) * SS / 2
@@ -85,6 +86,7 @@ def _strap(w, h, cx, cy):
     edge = np.clip((1 - u) * width / (1.2 * SS), 0, 1)             # side antialiasing
     end = np.clip((1 - t) / 0.30, 0, 1) ** 1.4                     # fades out before the image edge
     alpha = inside * edge * end * 255
+    gray = gray * brighten
     rgb = np.stack([gray * 0.97, gray, gray * 1.05], axis=2)
     return Image.fromarray(np.concatenate([rgb, alpha[..., None]], axis=2).clip(0, 255).astype(np.uint8), "RGBA")
 
@@ -114,7 +116,7 @@ def _circle(size, cx, cy, r):
     return m
 
 
-def frame_watch(screen: Image.Image, height: int = H) -> Image.Image:
+def frame_watch(screen: Image.Image, height: int = H, strap_brighten: float = 1.0) -> Image.Image:
     """The 454x454 screen inside the watch; returns RGBA of W x `height`, transparent background.
     A smaller `height` shortens the strap (the hero uses 720)."""
     w, h = W * SS, height * SS
@@ -127,7 +129,7 @@ def frame_watch(screen: Image.Image, height: int = H) -> Image.Image:
     ImageDraw.Draw(shadow).ellipse([cx - r, cy - r + 14 * SS, cx + r, cy + r + 14 * SS], fill=(0, 0, 0, 90))
     img.alpha_composite(shadow.filter(ImageFilter.GaussianBlur(16 * SS)))
 
-    img.alpha_composite(_strap(w, h, cx, cy))
+    img.alpha_composite(_strap(w, h, cx, cy, strap_brighten))
 
     for g in BUTTON_DEGREES:
         img.alpha_composite(_button(w, h, cx, cy, g))
@@ -196,11 +198,14 @@ def _in_center(lat, lon):
     return CENTER["lat"][0] <= lat <= CENTER["lat"][1] and CENTER["lon"][0] <= lon <= CENTER["lon"][1]
 
 
-def _map(w, h, cx, cy, px_per_m, angle_deg=0.0):
+def _map(w, h, cx, cy, px_per_m, angle_deg=0.0, tail_m=None, streets_json=None):
     """The corridor streets and the route, in RGBA of w x h, with Copan (the end of the route) at
-    (cx, cy). Draws at 2x and downsizes, so the thin stroke comes out smooth."""
+    (cx, cy). `tail_m`: only the last meters of the route (the post image, where the whole route
+    crossed the text). `streets_json`: other streets in place of the corridor's, drawn without the
+    center crop (the post uses every street around Copan, so the background has blocks and not just
+    avenues). Draws at 2x and downsizes, so the thin stroke comes out smooth."""
     k = 2
-    streets = json.loads((FIXTURES / "corridor_spmarket_copan.json").read_text(encoding="utf-8"))["elements"]
+    streets = json.loads((streets_json or FIXTURES / "corridor_spmarket_copan.json").read_text(encoding="utf-8"))["elements"]
     route = json.loads((FIXTURES / "route_spmarket_copan.json").read_text(encoding="utf-8"))
     points = _polyline(route["routes"][0]["geometry"])
     lat0, lon0 = points[-1]
@@ -218,11 +223,18 @@ def _map(w, h, cx, cy, px_per_m, angle_deg=0.0):
     order = sorted(streets, key=lambda e: ROADS.get(e.get("tags", {}).get("highway"), STREET)[0])
     for via in order:
         geo = [(g["lat"], g["lon"]) for g in via.get("geometry", [])]
-        if not any(_in_center(*g) for g in geo):
+        if streets_json is None and not any(_in_center(*g) for g in geo):
             continue
         width, gray = ROADS.get(via.get("tags", {}).get("highway"), STREET)
         d.line([xy(*g) for g in geo], fill=(gray - 6, gray, gray + 10, 255), width=width * k, joint="curve")
 
+    if tail_m is not None:
+        left, i = 0.0, len(points) - 1
+        while i > 0 and left < tail_m:
+            (la, lo), (lb, lob) = points[i - 1], points[i]
+            left += np.hypot((lob - lo) * cos0 * 111_320, (lb - la) * 110_540)
+            i -= 1
+        points = points[i:]
     stretch = [xy(*p) for p in points if _in_center(*p)]
     shine = Image.new("RGBA", img.size, (0, 0, 0, 0))
     ImageDraw.Draw(shine).line(stretch, fill=CYAN + (110,), width=34 * k, joint="curve")

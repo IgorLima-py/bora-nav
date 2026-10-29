@@ -36,9 +36,21 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 JUNGLE = ROOT / "watch" / "monkey.jungle"
-BIN = ROOT / "watch" / "bin"
 VERSION_FILE = ROOT / "watch" / "source" / "AppVersion.mc"
-DEVICE = "venu445mm"
+#: The device it builds for. The Venu 4 45 mm is the reference (the one on the wrist, and the 454 px
+#: every layout number is written in); `MOTONAV_DEVICE` picks another one of the manifest's products
+#: (`sim.py --device`, `package.py`).
+REFERENCE = "venu445mm"
+DEVICE = os.environ.get("MOTONAV_DEVICE", REFERENCE)
+
+
+def bin_for(device: str) -> Path:
+    """Where the builds of `device` go: `watch/bin` for the reference, `watch/bin/<device>` for the others, so
+    another model's `.prg` never takes the name of the wrist's (C16.12 review)."""
+    return ROOT / "watch" / "bin" if device == REFERENCE else ROOT / "watch" / "bin" / device
+
+
+BIN = bin_for(DEVICE)
 
 
 def developer_key() -> Path:

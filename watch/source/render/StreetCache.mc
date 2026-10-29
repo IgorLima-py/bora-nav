@@ -43,6 +43,14 @@ import Toybox.System;
 //! row; rotating redraws nothing. The app uses the [GRID_DEFAULT] grid in normal drawing; levers 8
 //! to 10 pick another, and 2 to 7 go back to the single image.
 //!
+//! **Screen sizes.** The bitmaps (the 640 / 816 single image, the 480 / 320 / 240 tiles) are in px of the graphics
+//! pool, measured on the Venu 4 45 mm (454 and 480 px show, 512 and up do not): they are **never scaled**, on any
+//! screen. An image px is a screen px (the paste is at `fScale / scale` ≈ 1), so the ground a tile covers follows the
+//! `scale` that [MapRenderer] hands in (ground per px of *this* screen). What is the glass, [GLASS_PX], is in px of this
+//! screen; the slacks that are about the image ([LEAD_PX], [REBUILD_SLACK_PX], [UNCOVERED_PX], [OVERLAP_PX]) are not.
+//! The 4×4 grid of 240 covers the glass of every screen of the manifest: 330 px (the 1.4 pitches that the hysteresis leaves
+//! on the near side) against 323.6 px along the heading of the 466 px glass, tilted (233 / 0.72), and less on the others.
+//!
 //! **The cost of pasting on the wrist was not measured** (left for C16). The switch in Settings
 //! ("Ruas em imagem", streets in image) exists to compare the two paths on the watch.
 class StreetCache {
@@ -80,8 +88,8 @@ class StreetCache {
     //! The pool refused the tilted image: the map stayed flat until the app reopens.
     var tiltRefused as Boolean = false;
 
-    //! Glass radius, in px.
-    const GLASS_PX = 227.0;
+    //! Glass radius, in px of this screen (the reference glass has 227): set in [initialize].
+    var GLASS_PX as Float;
 
     //! The image center goes this far ahead of the glass center, along the heading: whoever moves
     //! forward uses the front slack.
@@ -179,7 +187,8 @@ class StreetCache {
         return diag >= DIAG_PROBE_FIRST && diag < DIAG_GRID_FIRST ? diag - DIAG_PROBE_FIRST + 1 : 0;
     }
 
-    //! The same decimation as per-frame drawing (`MapRenderer.MIN_STEP_PX`).
+    //! The same decimation as per-frame drawing (`MapRenderer.MIN_STEP_PX`), in px of the reference glass: [_stepPx]
+    //! is it in px of this screen, so the step in meters is the same on every size.
     const MIN_STEP_PX = 2.5;
 
     //! The round joint only enters a real bend (`MapRenderer.STREET_JOIN_PX`).
@@ -188,6 +197,11 @@ class StreetCache {
     //! The first class drawn, the local one, gets no edge: black on the black ground does not show,
     //! and the edge only serves to cut the class below.
     const EDGE_FROM_LOD = Protocol.CORRIDOR_LOD_COUNT - 2;
+
+    //! The black edge of a street (`DesignTokens.ROAD_EDGE_PX`) and the decimation step ([MIN_STEP_PX]) in px of this
+    //! screen, set in [initialize].
+    private var _edgePx as Number;
+    private var _stepPx as Float;
 
     //! The cache cannot get an image (pool full, API missing): the map goes back to per-frame drawing.
     var failed as Boolean = false;
@@ -292,7 +306,12 @@ class StreetCache {
     const UNCOVERED_PX = 50.0;
     private var _room as Float = -320.0;
 
+    //! Reads the screen ([Screen]) once. At 454 it is the identity, and the tests (which never call
+    //! `Screen.init`) get that.
     function initialize() {
+        GLASS_PX = Screen.half.toFloat();
+        _edgePx = Screen.px(DesignTokens.ROAD_EDGE_PX);
+        _stepPx = Screen.pxf(MIN_STEP_PX);
     }
 
     //! Flat (`k` = 1) or tilted (`k` < 1). Changed: both images are of the other size, and go away.
@@ -826,7 +845,7 @@ class StreetCache {
             transform = new AffineTransform();
             _transform = transform;
         }
-        var k = 0.2;
+        var k = Screen.pxf(0.2);
         var count = _probes.size();
         for (var n = 0; n < count; n++) {
             var image = _probes[n];
@@ -836,8 +855,8 @@ class StreetCache {
                     cachedMisses++;
                 }
             }
-            var x = 227.0 - count * 50.0 + n * 100.0 + 2.0;
-            transform.setMatrix([k, 0.0, x, 0.0, k, 180.0] as [Float, Float, Float, Float, Float, Float]);
+            var x = Screen.half.toFloat() - count * Screen.pxf(50.0) + n * Screen.pxf(100.0) + Screen.pxf(2.0);
+            transform.setMatrix([k, 0.0, x, 0.0, k, Screen.pxf(180.0)] as [Float, Float, Float, Float, Float, Float]);
             dc.drawBitmap2(0, 0, image, { :transform => transform });
         }
     }
@@ -1024,7 +1043,7 @@ class StreetCache {
             var blockCount = blocks.size() / 4;
             var width = _bWidths[lod] as Number;
             if (_bPass == 0) {
-                width += 2 * DesignTokens.ROAD_EDGE_PX;
+                width += 2 * _edgePx;
             }
             // Round cap and bend on every class: the disc a little smaller than the stroke.
             var radius = (width - 2) / 2;
@@ -1143,7 +1162,7 @@ class StreetCache {
         _by = y;
         _bScale = scale;
         _bInv = (1.0 / scale).toFloat();
-        var stepM = MIN_STEP_PX * scale;
+        var stepM = _stepPx * scale;
         _bStepSq = (stepM * stepM).toFloat();
         _bColors = colors;
         _bWidths = widths;

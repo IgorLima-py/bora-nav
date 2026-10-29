@@ -98,6 +98,7 @@ class MotoNavApp extends Application.AppBase {
 
     function initialize() {
         AppBase.initialize();
+        Screen.init();
         _route = new RouteModel();
         _link = new PhoneLink();
         _assembler = new MessageAssembler(_route, _link);

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Build the files that go into a GitHub Release, in ``dist/``.
 
-- ``Bora-<watch version>.prg``: the watch app for sideloading over USB (release build).
+- ``Bora-<watch version>-<device>.prg``: the watch app for sideloading over USB (release build), one per
+  product of ``watch/manifest.xml``, because a ``.prg`` only installs on the watch it was built for.
 - ``Bora-<watch version>.iq``: the same app as a Connect IQ package (``monkeyc -e``).
 - ``Bora-<phone version>.apk``: the companion's release APK, zipaligned and signed.
 
@@ -154,11 +155,24 @@ def fix_sums(iq: Path) -> None:
     sums.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
 
 
+def products() -> list[str]:
+    """The devices of ``watch/manifest.xml``, in its order."""
+    manifest = build_watch.JUNGLE.with_name("manifest.xml").read_text(encoding="utf-8")
+    found = re.findall(r'<iq:product id="([^"]+)"\s*/>', manifest)
+    if not found:
+        sys.exit("no <iq:product> in watch/manifest.xml")
+    return found
+
+
 def watch(out: list[Path]) -> None:
     version = build_watch.app_version()
     common = ["-f", str(build_watch.JUNGLE), "-y", str(build_watch.developer_key()), "-r", "-l", "2"]
-    prg = DIST / f"Bora-{version}.prg"
-    run([str(build_watch.monkeyc()), *common, "-d", build_watch.DEVICE, "-o", str(prg)])
+    devices = products()
+    for i, device in enumerate(devices, 1):
+        print(f"[{i}/{len(devices)}] {device}", flush=True)
+        prg = DIST / f"Bora-{version}-{device}.prg"
+        run([str(build_watch.monkeyc()), *common, "-d", device, "-o", str(prg)])
+        out.append(prg)
     iq = DIST / f"Bora-{version}.iq"
     run([str(build_watch.monkeyc()), *common, "-e", "-o", str(iq)])
     # monkeyc leaves its intermediates and the crash-log map next to the output; the map stays in watch/bin
@@ -168,7 +182,7 @@ def watch(out: list[Path]) -> None:
     for debug in DIST.glob("*.debug.xml"):
         debug.unlink()
     scrub_iq(iq)
-    out += [prg, iq]
+    out.append(iq)
 
 
 def phone(out: list[Path], keystore: Path, alias: str) -> None:

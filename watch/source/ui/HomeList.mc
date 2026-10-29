@@ -8,6 +8,10 @@ import Toybox.Math;
 //!
 //! The items move by `d = index − s`, where `s` is the list position (0 with Favorites in focus and 3
 //! with Link). Each table column is a `d` from −2 to 3, and between them everything is linear.
+//!
+//! **The numbers here are px of the reference screen** (the 454 px Venu 4 45 mm): the tables, the card, the
+//! drag distances. [HomeView] scales what it draws and [HomeDelegate] what it measures, both with [Screen];
+//! only [hit] and [chordAt], which take a coordinate of the touch or of the screen, work in px of this screen.
 module HomeList {
     const FAVORITES = 0;
     const RECENTS = 1;
@@ -189,16 +193,18 @@ module HomeList {
         return focus < 0 ? 0 : (focus >= COUNT ? COUNT - 1 : focus);
     }
 
-    //! What the touch at `y` hit (§4.4): the card opens the focused item; the neighbor below and the one
-    //! above move one step. The gap between them does nothing, so a glove does not open the wrong screen.
+    //! What the touch at `y` (px of this screen) hit (§4.4): the card opens the focused item; the neighbor below
+    //! and the one above move one step. The gap between them does nothing, so a glove does not open the wrong
+    //! screen. The card edges are those [HomeView] draws, scaled the same way.
     function hit(y as Number) as Number {
-        if (y >= CARD_Y && y <= CARD_Y + CARD_H) {
+        var cardTop = Screen.px(CARD_Y);
+        if (y >= cardTop && y <= cardTop + Screen.px(CARD_H)) {
             return HIT_CARD;
         }
-        if (y >= 320 && y <= 380) {
+        if (y >= Screen.px(320) && y <= Screen.px(380)) {
             return HIT_NEXT;
         }
-        if (y >= 110 && y <= 170) {
+        if (y >= Screen.px(110) && y <= Screen.px(170)) {
             return HIT_PREVIOUS;
         }
         return HIT_NONE;
@@ -221,9 +227,9 @@ module HomeList {
         return [font, text.substring(0, keep) + "…"];
     }
 
-    //! Width of the circle of radius `r`, centered on the 454 px glass, at height `y`.
+    //! Width of the circle of radius `r`, centered on the glass, at height `y`; `y` and `r` in px of this screen.
     function chordAt(y as Numeric, r as Number) as Number {
-        var dy = y - 227;
+        var dy = y - Screen.half;
         var squared = r * r - dy * dy;
         return squared > 0 ? (Math.sqrt(squared.toFloat()) * 2).toNumber() : 0;
     }

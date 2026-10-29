@@ -220,11 +220,12 @@ module Config {
         return pct > DesignTokens.HUD_SCALE_MAX_PCT ? DesignTokens.HUD_SCALE_MAX_PCT : pct;
     }
 
-    //! `px` size from `DesignTokens` at the scale of group `key`, rounded. **The
+    //! `px` size from `DesignTokens` at the scale of group `key`, rounded, in px of this screen. **The
     //! same integer arithmetic as `escala()` in `tools/design_tokens.py`**: it is what
-    //! guarantees that the range generated there holds here.
+    //! guarantees that the range generated there holds here. Then [Screen.px], the identity on the
+    //! Venu 4 45 mm, where that range was proven.
     function groupPx(px as Number, key as Number) as Number {
-        return (px * groupPct(key) + 50) / 100;
+        return Screen.px((px * groupPct(key) + 50) / 100);
     }
 
     //! Payload of a `CONFIG` (without the header): validates everything, and only then applies.

@@ -24,7 +24,8 @@ import Toybox.Math;
 module TurnArrow {
 
     //! Half-height at which the return arrow was measured until C16.5. Only the return arrow and
-    //! `scale()` still use it: its fixed box is the same as before.
+    //! `scale()` still use it: its fixed box is the same as before. It is in reference px (the Venu 4 45 mm):
+    //! the screen scale reaches the return arrow through [half], which is already in px of this screen.
     const BASE = 22;
 
     //! Temporary half-height, for the small glyph of the "and then" strip (C15b). `-1`: the
