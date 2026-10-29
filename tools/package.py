@@ -4,16 +4,17 @@
 - ``Bora-<watch version>-<device>.prg``: the watch app for sideloading over USB (release build), one per
   product of ``watch/manifest.xml``, because a ``.prg`` only installs on the watch it was built for.
 - ``Bora-<watch version>.iq``: the same app as a Connect IQ package (``monkeyc -e``).
-- ``Bora-<phone version>.apk``: the companion's release APK, zipaligned and signed.
+- ``Bora-<phone version>.apk``: the companion's release APK, as Gradle signed it.
 
 The watch side runs ``monkeyc`` with your Connect IQ developer key (see
 ``tools/build_watch.py`` for where it is looked up). The phone side does not run
-Gradle: build the unsigned APK first, then point this script at your keystore::
+Gradle: build the APK first, which Gradle signs with your machine's debug key
+(``companion/app/build.gradle.kts``), then run this script::
 
     cd companion && ./gradlew assembleRelease
-    BORA_KS_PASS=... python tools/package.py --keystore path/to/your.keystore --alias your_alias
+    python tools/package.py
 
-Keys and passwords are never copied into ``dist/``. ``--watch-only`` and
+Keys are never copied into ``dist/``. ``--watch-only`` and
 ``--phone-only`` build one side. ``--scrub-iq FILE.iq`` cleans an ``.iq`` that was already built (see
 ``scrub_iq``) and fixes its line in the ``SHA256SUMS.txt`` next to it.
 """
@@ -36,7 +37,7 @@ import build_watch  # noqa: E402
 ROOT = Path(__file__).resolve().parent.parent
 DIST = ROOT / "dist"
 GRADLE_APP = ROOT / "companion" / "app" / "build.gradle.kts"
-UNSIGNED_APK = ROOT / "companion" / "app" / "build" / "outputs" / "apk" / "release" / "app-release-unsigned.apk"
+RELEASE_APK = ROOT / "companion" / "app" / "build" / "outputs" / "apk" / "release" / "app-release.apk"
 
 
 def phone_version() -> str:
@@ -185,30 +186,19 @@ def watch(out: list[Path]) -> None:
     out.append(iq)
 
 
-def phone(out: list[Path], keystore: Path, alias: str) -> None:
-    if not UNSIGNED_APK.is_file():
-        sys.exit(f"{UNSIGNED_APK} not found: run `./gradlew assembleRelease` in companion/ first")
-    if "BORA_KS_PASS" not in os.environ:
-        sys.exit("set BORA_KS_PASS to the keystore password")
-    folder = build_tools()
-    aligned = DIST / "aligned.apk"
+def phone(out: list[Path]) -> None:
+    if not RELEASE_APK.is_file():
+        sys.exit(f"{RELEASE_APK} not found: run `./gradlew assembleRelease` in companion/ first")
     apk = DIST / f"Bora-{phone_version()}.apk"
-    run([tool(folder, "zipalign"), "-f", "-p", "4", str(UNSIGNED_APK), str(aligned)])
-    run([tool(folder, "apksigner"), "sign", "--ks", str(keystore), "--ks-key-alias", alias,
-         "--ks-pass", "env:BORA_KS_PASS", "--out", str(apk), str(aligned)])
-    aligned.unlink()
-    # The v4 signature file is only for incremental `adb install`; the APK carries v2/v3.
-    apk.with_name(apk.name + ".idsig").unlink(missing_ok=True)
-    run([tool(folder, "apksigner"), "verify", str(apk)])
+    shutil.copyfile(RELEASE_APK, apk)
+    run([tool(build_tools(), "apksigner"), "verify", str(apk)])
     out.append(apk)
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--keystore", type=Path, help="keystore that signs the APK")
-    parser.add_argument("--alias", help="key alias inside the keystore")
     parser.add_argument("--watch-only", action="store_true", help="build only the watch files")
-    parser.add_argument("--phone-only", action="store_true", help="sign only the APK")
+    parser.add_argument("--phone-only", action="store_true", help="only the APK")
     parser.add_argument("--scrub-iq", type=Path, nargs="+", metavar="IQ",
                         help="only clean these already built .iq files (and their SHA256SUMS.txt line)")
     args = parser.parse_args()
@@ -219,16 +209,13 @@ def main() -> int:
             fix_sums(iq)
         return 0
 
-    if not args.watch_only and not (args.keystore and args.alias):
-        parser.error("--keystore and --alias are needed to sign the APK (or use --watch-only)")
-
     shutil.rmtree(DIST, ignore_errors=True)
     DIST.mkdir()
     out: list[Path] = []
     if not args.phone_only:
         watch(out)
     if not args.watch_only:
-        phone(out, args.keystore, args.alias)
+        phone(out)
 
     lines = [f"{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.name}" for p in out]
     # newline="\n": on Windows the default turns into CRLF, and `sha256sum -c` on Linux/macOS then fails every line

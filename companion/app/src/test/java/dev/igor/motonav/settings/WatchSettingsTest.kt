@@ -78,11 +78,11 @@ class WatchSettingsTest {
     }
 
     @Test
-    fun `the screen groups show each key once`() {
+    fun `the screen groups show each key once, all but the bench levers`() {
         val keys = WatchSettings.sections.flatMap { it.keys }
         assertEquals(ConfigKey.VIBE_ON, keys.first())
         assertEquals(keys.size, keys.toSet().size)
-        assertEquals(ConfigKey.values().toSet(), keys.toSet())
+        assertEquals(ConfigKey.values().toSet() - WatchSettings.bench, keys.toSet())
     }
 
     @Test

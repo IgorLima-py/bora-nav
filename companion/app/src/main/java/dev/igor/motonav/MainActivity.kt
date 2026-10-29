@@ -48,7 +48,6 @@ import dev.igor.motonav.geo.PhotonGeocoder
 import dev.igor.motonav.geo.Place
 import dev.igor.motonav.geo.PlaceSearch
 import dev.igor.motonav.link.WatchLink
-import dev.igor.motonav.nav.KillDrill
 import dev.igor.motonav.nav.NavActivityBus
 import dev.igor.motonav.nav.NavForegroundService
 import dev.igor.motonav.nav.RerouteHub
@@ -248,8 +247,6 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     } else if (inSettings) {
-                        val drill = remember { KillDrill.prefs(applicationContext) }
-                        var drillArmed by remember { mutableStateOf(drill.armed) }
                         var avoidMotorways by remember { mutableStateOf(RoutePrefs.avoidMotorways(applicationContext)) }
                         Box(modifier = Modifier.systemBarsPadding()) {
                             SettingsScreen(
@@ -257,12 +254,6 @@ class MainActivity : ComponentActivity() {
                                 onSend = { values -> sendSettings(values) },
                                 onReset = { resetSettings() },
                                 onBack = { inSettings = false },
-                                drillArmed = drillArmed,
-                                onDrillArmed = { on ->
-                                    drill.armed = on
-                                    drillArmed = on
-                                    EventLog.i("Settings", "dead-app drill ${if (on) "armed" else "disarmed"}")
-                                },
                                 avoidMotorways = avoidMotorways,
                                 onAvoidMotorways = { on ->
                                     RoutePrefs.setAvoidMotorways(applicationContext, on)

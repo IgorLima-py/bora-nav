@@ -1,4 +1,3 @@
-import Toybox.Application.Storage;
 import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.Math;
@@ -55,14 +54,8 @@ import Toybox.System;
 //! ("Ruas em imagem", streets in image) exists to compare the two paths on the watch.
 class StreetCache {
 
-    //! `Storage` key of the switch. Outside the `CONFIG` values: the watch menu writes it, and
-    //! the phone's `CONFIG` 17 does too (C16, `MotoNavApp.applyMapSwitches`).
-    static const PREF = "streetCache";
-
-    //! The 16-bit image ([imageOptions]) or the SDK's default depth. On with no stored
-    //! value. C16 test switch (`CONFIG` 19): the 16-bit image had never been
-    //! checked on the wrist, and on the first ride with it the streets did not show up (2026-10-19).
-    static const PREF_16BIT = "street16bit";
+    //! The 16-bit image ([imageOptions]) or the SDK's default depth. The app always asks for 16 bits; the
+    //! default depth stays for the tests that compare the two.
     var sixteenBits as Boolean = true;
 
     //! Image side, in px. It must contain the glass (circle of radius [GLASS_PX]) at any
@@ -385,18 +378,6 @@ class StreetCache {
         failed = false;
         tiltRefused = false;
         drop();
-    }
-
-    //! The 16-bit switch in `Storage`. With no stored value, on.
-    static function wants16Bit() as Boolean {
-        var value = Storage.getValue(PREF_16BIT);
-        return value instanceof Boolean ? value as Boolean : true;
-    }
-
-    //! The `Storage` switch. With no stored value, on.
-    static function wanted() as Boolean {
-        var value = Storage.getValue(PREF);
-        return value instanceof Boolean ? value as Boolean : true;
     }
 
     //! Does the cache still have an image to draw?

@@ -294,6 +294,10 @@ repeats count times:
 | 21 | `vibe_on` | wrist vibration: turn warnings, arrival and leaving the route; 0 turns it off; a watch older than v1.2.7 ignores the key (C16) | 0..1 | 0 |
 | 22 | `radar_vibe` | vibration of the camera warning, independent of 21; 0 turns it off; a watch older than v1.2.9 ignores the key (C16.6) | 0..1 | 1 |
 
+- **Keys 16 to 20 are retired (watch v1.5.1, phone 1.4.3, 2026-10-29):** the watch still checks their ranges, so a
+  message from an older phone is not refused, and uses none of them: the map is always the default (16-bit tiles,
+  tilted) and the GPS drill is gone. The phone always sends the defaults and no longer shows them. The notes below on
+  the GPS drill, the map switches and the street diagnostics describe watches up to v1.5.0.
 - **The watch is the authority on the ranges.** The phone only packs.
 - **Partial message:** an absent key keeps the current value.
 - **`count = 0` resets everything to the default** and erases `Storage`.

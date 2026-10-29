@@ -102,20 +102,11 @@
     <string id="TurnContinue">Continue</string>
 
     <!-- Watch settings (QuickSettings.mc). -->
-    <string id="On">On</string>
-    <string id="Off">Off</string>
-    <string id="OnFem">On</string>
-    <string id="OffFem">Off</string>
-    <string id="OnTest">On (test)</string>
-    <string id="OffTest">Off (test)</string>
     <string id="HudSize">HUD size</string>
     <string id="Numbers">Numbers</string>
     <string id="StreetBrightness">Street brightness</string>
     <string id="ResetDefaults">Reset to default</string>
-    <string id="ResetHint">HUD, numbers, streets, outline and map</string>
-    <string id="StreetImages">Street images</string>
-    <string id="RouteCasing">Route outline (test)</string>
-    <string id="TiltMap">Tilted map (test)</string>
+    <string id="ResetHint">HUD, numbers and streets</string>
     <string id="TheRest">Everything else</string>
     <string id="OnThePhone">on the phone</string>
     <string id="CurrentValue">current</string>

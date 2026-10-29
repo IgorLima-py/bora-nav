@@ -26,8 +26,6 @@ class MotoNavApp extends Application.AppBase {
     private var _favoriteAsk as FavoriteAsk;
     //! The deadline for the app left open after arrival (C16.5).
     private var _arrivalExit as ArrivalExit;
-    //! The GPS gap drill (C16, the rides of 2026-10-19 and 20).
-    private var _gpsDrill as GpsDrill;
     private var _replay as ReplayRunner? = null;
 
     //! The phase navigation was in when the simulation started: it is the one it returns to
@@ -112,7 +110,6 @@ class MotoNavApp extends Application.AppBase {
         _fallback = new FixFallback();
         _favoriteAsk = new FavoriteAsk();
         _arrivalExit = new ArrivalExit();
-        _gpsDrill = new GpsDrill();
         _link.track = _track;
         _assembler.nav = _nav;
     }
@@ -286,7 +283,6 @@ class MotoNavApp extends Application.AppBase {
                 _nav.ridingZoomIndex = Config.zoomIndex();
                 savePrefs();
             }
-            applyMapSwitches();
             WatchUi.requestUpdate();
             return;
         }
@@ -332,37 +328,6 @@ class MotoNavApp extends Application.AppBase {
         } else {
             var home = new HomeView();
             WatchUi.switchToView(home, new HomeDelegate(home), WatchUi.SLIDE_IMMEDIATE);
-        }
-    }
-
-    //! **The map switches through `CONFIG` (C16):** keys 17 to 19 that came from the phone
-    //! rewrite the preferences that the watch menu writes and change the map right away, without ending the
-    //! route. Only the keys that came: an empty `CONFIG` brings all of them and puts the three back to default (on).
-    private function applyMapSwitches() as Void {
-        var keys = Config.lastKeys;
-        if (keys.indexOf(Config.KEY_STREET_IMG) >= 0) {
-            var on = QuickSettings.setStreets(Config.streetImage(), true);
-            _map.setStreetCache(on);
-        }
-        if (keys.indexOf(Config.KEY_MAP_TILT) >= 0) {
-            _map.tilt = QuickSettings.setTilt(Config.mapTilt(), true);
-        }
-        if (keys.indexOf(Config.KEY_STREET_16BIT) >= 0) {
-            var sixteen = Config.street16Bit();
-            try {
-                Storage.setValue(StreetCache.PREF_16BIT, sixteen);
-            } catch (ex) {
-                Diag.add("16-bit image not saved to Storage");
-            }
-            _map.setStreet16Bit(sixteen);
-        }
-        if (keys.indexOf(Config.KEY_STREET_DIAG) >= 0) {
-            var lever = Config.streetDiag();
-            if (lever != _map.streets().diag) {
-                Diag.add("streets diagnostics: " + lever.toString() + " "
-                    + (StreetCache.DIAG_NAMES[lever] as String));
-            }
-            _map.setStreetDiag(lever);
         }
     }
 
@@ -426,10 +391,6 @@ class MotoNavApp extends Application.AppBase {
                 replay.rebind(_route);
             }
         }
-        if (_nav.phase != NavPhase.NAVIGATING) {
-            // New trip. The recalculation arrives with the phase already navigating and does not re-arm the drill.
-            _gpsDrill.begin(Clock.nowMs());
-        }
         _nav.phase = NavPhase.NAVIGATING;
 
         try {
@@ -470,7 +431,6 @@ class MotoNavApp extends Application.AppBase {
         resetOffRoute();
         _nav.invalidateFix();
         _nav.endTrip();
-        _gpsDrill.end();
         _arrivalExit.reset();
         _hasLastFix = false;
         _nav.phase = NavPhase.IDLE;
@@ -552,17 +512,13 @@ class MotoNavApp extends Application.AppBase {
         if (auto instanceof Boolean) {
             _nav.autoZoom = auto;
         }
-        // The streets as an image (2026-10-17): on, unless the Settings switch says otherwise.
-        _map.setStreetCache(StreetCache.wanted());
-        // The streets as tiles (v1.2.9) in the normal drawing, in place of the single 640 px image.
+        // The map the C16 rides settled on, with no switch since v1.5.1: the streets as 16-bit tiles (v1.2.9,
+        // in place of the single 640 px image), the tilted map and the route outline (on from birth). The old test
+        // switches left in `Storage` are ignored.
+        _map.setStreetCache(true);
         _map.useStreetGrid();
-        // The diagnostic lever (v1.2.5) comes from the saved `CONFIG`, like the rest of the adjustment.
-        _map.setStreetDiag(Config.streetDiag());
-        _map.setStreet16Bit(StreetCache.wants16Bit());
-        // The route border and the tilted map (v1.1.5, sheet 8): on, unless the test
-        // settings say otherwise.
-        _map.routeCasing = MapRenderer.casingWanted();
-        _map.tilt = MapRenderer.tiltWanted();
+        _map.setStreet16Bit(true);
+        _map.tilt = true;
     }
 
     function savePrefs() as Void {
@@ -654,18 +610,6 @@ class MotoNavApp extends Application.AppBase {
         var degrees = location.toDegrees();
         var speed = info.speed;
         var quality = info.accuracy as Number?;
-        if (_nav.phase == NavPhase.NAVIGATING) {
-            // The C16 drill: while it pretends, the fix comes in like a tunnel's.
-            var drill = _gpsDrill.poll(Clock.nowMs(), Config.gpsDrillMin());
-            if (drill == GpsDrill.EVENT_START) {
-                Diag.add("gps drill: the watch fakes no gps for " + (_gpsDrill.LENGTH_MS / 1000).toString() + "s");
-            } else if (drill == GpsDrill.EVENT_END) {
-                Diag.add("gps drill: end, the watch gps is back");
-            }
-            if (_gpsDrill.muting) {
-                quality = null;
-            }
-        }
         _nav.fixSource = FixSource.GPS;
         applyFix(
             Projection.degreesToE5(degrees[0] as Double),

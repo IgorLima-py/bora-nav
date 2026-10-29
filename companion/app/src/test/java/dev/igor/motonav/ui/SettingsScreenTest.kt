@@ -31,10 +31,11 @@ class SettingsScreenTest {
     @get:Rule
     val compose = createAndroidComposeRule<ComponentActivity>()
 
+    /** As it opens: every group closed (2026-10-29). */
     @Test
     fun `photo of the settings screen`() = photo("settings", WatchSettings.defaults())
 
-    /** Vibration on and the sizes at the limit: the "back to default" and the limit warning show up. */
+    /** Vibration on and the sizes at the limit, two groups open: the "back to default" and the limit warning show up. */
     @Test
     fun `photo of the adjusted settings screen`() = photo(
         "settings-adjusted",
@@ -42,8 +43,8 @@ class SettingsScreenTest {
             ConfigKey.VIBE_ON to 1,
             ConfigKey.HUD_PCT to 112,
             ConfigKey.DIST_PCT to 110,
-            ConfigKey.STREET_DIAG to 3,
         ),
+        open = listOf("Turn alerts", "Size on screen"),
     )
 
     /** The finger on "Distância da curva": the preview lights up the number and turns off the rest. */
@@ -52,21 +53,21 @@ class SettingsScreenTest {
         "settings-highlight",
         WatchSettings.defaults() + (ConfigKey.DIST_PCT to 112),
         ConfigKey.DIST_PCT,
+        open = listOf("Size on screen"),
     )
 
-    /** All groups closed, with vibration and one size changed: the "fora do padrão" badge shows up. */
+    /** All groups closed, with vibration and one size changed: the "off the default" badge shows up. */
     @Test
     fun `photo of the screen with the groups closed`() = photo(
         "settings-closed",
         WatchSettings.defaults() + mapOf(ConfigKey.VIBE_ON to 1, ConfigKey.DIST_PCT to 110),
-        fechar = listOf("Avisos de curva", "Mapa", "Rota", "Tamanho na tela"),
     )
 
     private fun photo(
         name: String,
         values: Map<ConfigKey, Int>,
         active: ConfigKey? = null,
-        fechar: List<String> = emptyList(),
+        open: List<String> = emptyList(),
     ) {
         assumeTrue(System.getenv("MOTONAV_TELAS") == "1")
         compose.setContent {
@@ -80,7 +81,7 @@ class SettingsScreenTest {
                 )
             }
         }
-        fechar.forEach { compose.onNodeWithText(it).performClick() }
+        open.forEach { compose.onNodeWithText(it).performClick() }
         compose.waitForIdle()
         // `captureToImage` waits for a redraw that Robolectric does not deliver; drawing the window
         // to a bitmap gives the same photo.

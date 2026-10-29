@@ -110,20 +110,11 @@
     <string id="TurnContinue">Siga</string>
 
     <!-- Ajustes do relógio (QuickSettings.mc). -->
-    <string id="On">Ligado</string>
-    <string id="Off">Desligado</string>
-    <string id="OnFem">Ligada</string>
-    <string id="OffFem">Desligada</string>
-    <string id="OnTest">Ligado (teste)</string>
-    <string id="OffTest">Desligado (teste)</string>
     <string id="HudSize">Tamanho do HUD</string>
     <string id="Numbers">Números</string>
     <string id="StreetBrightness">Brilho das ruas</string>
     <string id="ResetDefaults">Voltar ao padrão</string>
-    <string id="ResetHint">HUD, números, ruas, borda e mapa</string>
-    <string id="StreetImages">Ruas em imagem</string>
-    <string id="RouteCasing">Borda da rota (teste)</string>
-    <string id="TiltMap">Mapa deitado (teste)</string>
+    <string id="ResetHint">HUD, números e ruas</string>
     <string id="TheRest">O resto</string>
     <string id="OnThePhone">no celular</string>
     <string id="CurrentValue">agora</string>

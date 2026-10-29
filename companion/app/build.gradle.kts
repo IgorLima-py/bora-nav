@@ -16,8 +16,8 @@ android {
         // Shown on the main screen and the share screen. Goes up with every
         // installed APK, independent of the watch: the two versions need not
         // match, each screen only has to show the right number for its side.
-        versionCode = 39
-        versionName = "1.4.2"
+        versionCode = 40
+        versionName = "1.4.3"
         // WIRELESS: the real watch, through Garmin Connect. Only `sim` turns this on.
         buildConfigField("boolean", "CIQ_TETHERED", "false")
     }
@@ -25,6 +25,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            // Signed by Gradle with the debug key of the machine that builds it (~/.android/debug.keystore, outside
+            // the repo), as `assembleDebug` is: no password to type. The author's machines share one debug key, so
+            // the phone updates from a Release without uninstalling; anyone else building gets their own key.
+            signingConfig = signingConfigs.getByName("debug")
         }
         // C7a: the companion on the `pato37` emulator talking to the app in the Connect IQ
         // simulator (`TETHERED`, via `adb forward tcp:7381 tcp:7381`). Its own package,

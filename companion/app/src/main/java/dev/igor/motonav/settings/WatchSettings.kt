@@ -8,10 +8,9 @@ import dev.igor.motonav.R
 import dev.igor.motonav.proto.ConfigKey
 
 /**
- * The twenty-one watch settings that the "Watch settings" screen shows (C8; the
- * four sizes per group came in C16.5, the sign's breathing room in v1.1.5, the
- * map switches in C16, the street diagnostic lever in 1.2.4 and
- * vibration in 1.2.6).
+ * The twenty-one watch settings of `CONFIG` (C8; the four sizes per group came in C16.5, the sign's
+ * breathing room in v1.1.5, the map switches in C16, the street diagnostic lever in 1.2.4 and
+ * vibration in 1.2.6). The "Watch settings" screen shows all but the [WatchSettings.bench] ones.
  *
  * **The watch is the authority on the ranges** (`Config.mc`, `05 §CONFIG`): these
  * minimums, maximums and defaults exist only so the screen does not offer what the
@@ -34,8 +33,6 @@ data class WatchSetting(
     val names: List<Int> = emptyList(),
     /** On/off (0 or 1) instead of a slider: the map switches (C16). */
     val switch: Boolean = false,
-    /** One option per line, only one selected, instead of a slider: the street levers. */
-    val radio: Boolean = false,
 ) {
     fun format(res: Resources, value: Int): String =
         if (names.isNotEmpty()) res.getString(names[(value - min).coerceIn(0, names.lastIndex)]) else "$value $unit".trim()
@@ -179,7 +176,7 @@ object WatchSettings {
             key = ConfigKey.STREET_DIAG,
             label = R.string.set_street_diag,
             hint = R.string.set_street_diag_hint,
-            unit = "", min = 0, max = 10, default = 0, radio = true,
+            unit = "", min = 0, max = 10, default = 0,
             names = listOf(
                 R.string.diag_0, R.string.diag_1, R.string.diag_2, R.string.diag_3, R.string.diag_4, R.string.diag_5,
                 R.string.diag_6, R.string.diag_7, R.string.diag_8, R.string.diag_9, R.string.diag_10,
@@ -204,20 +201,18 @@ object WatchSettings {
     )
 
     /**
-     * A screen group: title, icon and the keys, in the order they appear; [collapsed] opens the group
-     * closed. The icon lives here since C16.8b: before, it came through the Portuguese title.
+     * A screen group: title, icon and the keys, in the order they appear. The icon lives here since C16.8b:
+     * before, it came through the Portuguese title.
      */
     data class Section(
         @StringRes val title: Int,
         @DrawableRes val icon: Int,
         val keys: List<ConfigKey>,
-        val collapsed: Boolean = false,
     )
 
     /**
      * The screen groups (Igor's request, 2026-10-22: "muitas opções e não fica claro o que faz o quê").
-     * Riding comes first; bench stuff stays collapsed at the end. [all] stays in the order
-     * of `ConfigKey`, which is the wire's and `Config.mc`'s.
+     * Riding comes first. [all] stays in the order of `ConfigKey`, which is the wire's and `Config.mc`'s.
      */
     val sections: List<Section> = listOf(
         Section(R.string.section_turns, R.drawable.ic_turn, listOf(
@@ -229,11 +224,18 @@ object WatchSettings {
             ConfigKey.HUD_PCT, ConfigKey.DIST_PCT, ConfigKey.ETA_PCT, ConfigKey.TEXT_PCT, ConfigKey.ARROW_PCT,
             ConfigKey.PLATE_W_PCT, ConfigKey.PLATE_H_PCT,
         )),
-        Section(R.string.section_burn_in, R.drawable.ic_shield, listOf(ConfigKey.ORBIT_PX, ConfigKey.ORBIT_S), collapsed = true),
-        Section(R.string.section_tests, R.drawable.ic_flask, listOf(
-            ConfigKey.GPS_DRILL_MIN, ConfigKey.STREET_IMG, ConfigKey.MAP_TILT, ConfigKey.STREET_16BIT,
-            ConfigKey.STREET_DIAG,
-        ), collapsed = true),
+        Section(R.string.section_burn_in, R.drawable.ic_shield, listOf(ConfigKey.ORBIT_PX, ConfigKey.ORBIT_S)),
+    )
+
+    /**
+     * The C16 bench levers (GPS gap, the map switches and the street lever), off the screen since 1.4.3 at
+     * Igor's request (2026-10-29: "deixa o padrão"). They still go in every `CONFIG`, always at the default, and
+     * [WatchSettingsStore.load] ignores what was saved: the "D2" an old lever left on the watch goes away
+     * with the next send. Watch v1.5.1 ignores them anyway (`Config.mc`).
+     */
+    val bench: Set<ConfigKey> = setOf(
+        ConfigKey.GPS_DRILL_MIN, ConfigKey.STREET_IMG, ConfigKey.MAP_TILT, ConfigKey.STREET_16BIT,
+        ConfigKey.STREET_DIAG,
     )
 
     /** The four sizes per part, which `hud_pct` multiplies (`Config.groupPct`). */
@@ -287,7 +289,10 @@ class WatchSettingsStore(context: Context) {
     private val prefs = context.getSharedPreferences("motonav_watch_settings", Context.MODE_PRIVATE)
 
     fun load(): Map<ConfigKey, Int> = WatchSettings.all.associate { setting ->
-        val saved = prefs.getInt(setting.key.wireName, setting.default)
+        val saved = when (setting.key) {
+            in WatchSettings.bench -> setting.default
+            else -> prefs.getInt(setting.key.wireName, setting.default)
+        }
         setting.key to saved.coerceIn(setting.min, setting.max)
     }
 

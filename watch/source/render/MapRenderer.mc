@@ -1,4 +1,3 @@
-import Toybox.Application.Storage;
 import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.Math;
@@ -563,34 +562,19 @@ class MapRenderer {
     private var _destMaxPx as Float;
 
     //! **Streets in an image** ([StreetCache]): the frame pastes the rotated image instead of drawing
-    //! street by street, and the leash stops cutting streets. Off here and in the tests; the app turns it on through
-    //! the Settings switch ([setStreetCache], `StreetCache.wanted`).
+    //! street by street, and the leash stops cutting streets. Off here and in the tests; the app turns it on at
+    //! launch ([setStreetCache]).
     var streetCache as Boolean = false;
     private var _streets as StreetCache;
 
-    //! **"Route outline (test)"** (sheet 4, 2026-10-17): the dark route casing, without antialiasing and
-    //! underneath. **Since v1.1.5 it is the default** (sheet 8: the blue route without casing vanishes over the
-    //! expressway), and the setting remained to turn it off and compare on the wrist. It lives in the watch's `Storage`
-    //! ([CASING_PREF]), outside the `CONFIG`; "Reset to default" turns it back on.
+    //! **The route outline** (sheet 4, 2026-10-17): the dark route casing, without antialiasing and underneath.
+    //! The default since v1.1.5 (sheet 8: the blue route without casing vanishes over the expressway); the test
+    //! switch that turned it off left the watch menu in v1.5.1.
     var routeCasing as Boolean = true;
-    static const CASING_PREF = "route_casing";
 
-    //! The stored setting. With no value, on.
-    static function casingWanted() as Boolean {
-        var value = Storage.getValue(CASING_PREF);
-        return value instanceof Boolean ? value as Boolean : true;
-    }
-
-    //! **"Tilted map (test)"** (v1.1.5, sheet 8): the map flattened by `DesignTokens.TILT_K` around
-    //! the rider. Off here and in the tests; the app turns it on through the `Storage` [TILT_PREF], which
-    //! with no stored value is on ([tiltWanted]). Outside the `CONFIG`, like "Street images".
+    //! **The tilted map** (v1.1.5, sheet 8): the map flattened by `DesignTokens.TILT_K` around the rider. Off here
+    //! and in the tests; the app turns it on at launch, with no switch since v1.5.1.
     var tilt as Boolean = false;
-    static const TILT_PREF = "map_tilt";
-
-    static function tiltWanted() as Boolean {
-        var value = Storage.getValue(TILT_PREF);
-        return value instanceof Boolean ? value as Boolean : true;
-    }
 
     //! The last frame's flattening: 1 is flat. The pool that refused the tilted image leaves the map
     //! flat ([StreetCache.tiltRefused]).

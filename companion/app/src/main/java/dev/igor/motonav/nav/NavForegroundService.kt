@@ -70,7 +70,6 @@ class NavForegroundService : Service() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private var wakeLock: PowerManager.WakeLock? = null
     private var cpuJob: Job? = null
-    private var drillJob: Job? = null
 
     /** `startForeground` has been called: only from then on may the service be stopped. */
     private var inForeground = false
@@ -178,25 +177,10 @@ class NavForegroundService : Service() {
                 delay(RerouteController.ETA_REFRESH_MS)
             }
         }
-        // The dead-app drill (C16): the wait counts with the CPU awake, which the lock above holds.
-        val drill = KillDrill.prefs(this)
-        if (drill.armed) {
-            EventLog.i(TAG, "drill armed: the app kills itself ${KillDrill.AFTER_MS / 60_000} min after departure")
-            drillJob = scope.launch {
-                delay(KillDrill.AFTER_MS)
-                KillDrill(drill).fire(
-                    log = { EventLog.w(TAG, "$it (pid ${android.os.Process.myPid()})") },
-                    kill = { android.os.Process.killProcess(android.os.Process.myPid()) },
-                )
-            }
-        }
     }
 
     /** Outside navigation the CPU sleeps: the `ROUTE_UPDATE` loop has nothing to wait for. */
     private fun releaseCpu() {
-        // The trip ended before the 15 min: the drill stays armed for the next one.
-        drillJob?.cancel()
-        drillJob = null
         cpuJob?.cancel()
         cpuJob = null
         wakeLock?.let { if (it.isHeld) it.release() }

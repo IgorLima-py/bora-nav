@@ -130,7 +130,9 @@ DEMO_FIXTURES = {
 #: And the alert line with the radar's ``d``, the key of C16.7's crossing
 #: (``theRadarAlertLogsTheRadarDistance``): 217.
 #: And the two radars 50 m apart, which the phone sends and the watch alerts (``twoRadarsFiftyMetresApartBothAlert``): 218.
-MIN_TESTS = 218
+#: C16.12's ``ScreenTest`` took it to 220 without raising the floor; v1.5.1 removed the GPS gap drill and its four
+#: tests (``GpsDrillTest``): 216.
+MIN_TESTS = 216
 
 #: Port of the simulator's TCP shell (``shot_simulator.ps1``, notes). Accepting a
 #: connection on it is the signal that the simulator is ready for ``monkeydo``.

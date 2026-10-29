@@ -160,5 +160,5 @@ size. The file names are the ones on the release page, with the version in place
 ## Building from source
 
 See the [Build section of the README](README.md#build). To build release files like the ones above,
-`tools/package.py` makes one `.prg` per watch, the `.iq` and a signed APK in `dist/`, with your own
-developer key and keystore.
+`tools/package.py` makes one `.prg` per watch, the `.iq` and the APK in `dist/`, with your own
+developer key; Gradle signs the APK with your machine's debug key.

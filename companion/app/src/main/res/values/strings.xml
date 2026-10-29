@@ -184,8 +184,6 @@
     <string name="settings_conflict">The second alert (%1$d m) must come closer to the turn than “never alert closer than” (%2$d m); the watch would reject it.</string>
     <string name="settings_motorway">Avoid expressways</string>
     <string name="settings_motorway_hint">Routes and reroutes stay off the express lanes of the Marginal, where motorcycles are banned. Turn it off on the highway, where the highway is the way.</string>
-    <string name="settings_drill">Crash the app</string>
-    <string name="settings_drill_hint">On the next trip, %1$d min after leaving, the phone app kills itself once, as Android would, and the drill disarms itself. The watch keeps going on its own GPS; rerouting only comes back on the next trip.</string>
 
     <string name="section_turns">Turn alerts</string>
     <string name="section_radars">Speed cameras</string>
@@ -193,7 +191,6 @@
     <string name="section_route">Route</string>
     <string name="section_size">Size on screen</string>
     <string name="section_burn_in">Screen protection</string>
-    <string name="section_tests">Tests and diagnostics</string>
 
     <string name="set_lead_s">Alert before the turn</string>
     <string name="set_lead_s_hint">How long before the turn, at the speed you\'re going.</string>
@@ -236,9 +233,9 @@
     <string name="set_street_diag">Street diagnostics</string>
     <string name="set_street_diag_hint">One lever at a time, with “Tilted map” off. Pick one, wait about 10 seconds with the route on the map and see whether the streets show up; the watch shows “D” and the number to the left of the bike. On the probes (4 to 7), count how many colored X appear. On the grids (8 to 10), ride a bit and see whether the streets follow. Needs watch v1.2.9. Go back to Normal after the test.</string>
     <string name="set_vibe_on">Buzz on the wrist</string>
-    <string name="set_vibe_on_hint">Before each turn (2 buzzes for left, 3 for right), on arrival and when you leave the route. The settings below are only felt with this on. Needs watch v1.2.7.</string>
+    <string name="set_vibe_on_hint">Before each turn (2 buzzes for left, 3 for right), on arrival and when you leave the route. The settings below are only felt with this on.</string>
     <string name="set_radar_vibe">Buzz for speed cameras</string>
-    <string name="set_radar_vibe_hint">One buzz when the camera sign shows up, once per camera. Works even with “Buzz on the wrist” off. Needs watch v1.2.9.</string>
+    <string name="set_radar_vibe_hint">One buzz when the camera sign shows up, once per camera. Works even with “Buzz on the wrist” off.</string>
 
     <string name="zoom_0">0.6 m/px</string>
     <string name="zoom_1">1.2 m/px</string>

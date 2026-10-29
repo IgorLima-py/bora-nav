@@ -2,7 +2,7 @@
   <img alt="Watch: Connect IQ, Monkey C" src="https://img.shields.io/badge/watch-Connect_IQ_·_Monkey_C-0B0F13?style=flat-square">
   <img alt="Phone: Android, Kotlin" src="https://img.shields.io/badge/phone-Android_·_Kotlin-7F52FF?style=flat-square&logo=kotlin&logoColor=white">
   <img alt="Link: BLE, custom binary protocol" src="https://img.shields.io/badge/link-BLE_·_binary_protocol-2FD3FF?style=flat-square">
-  <img alt="Tests: 220 simulator, 319 JVM" src="https://img.shields.io/badge/tests-220_simulator_·_319_JVM-3FB950?style=flat-square">
+  <img alt="Tests: 216 simulator, 318 JVM" src="https://img.shields.io/badge/tests-216_simulator_·_318_JVM-3FB950?style=flat-square">
   <img alt="Ridden: 223.5 km" src="https://img.shields.io/badge/ridden-223.5_km-F0883E?style=flat-square">
   <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-8B98A5?style=flat-square">
 </p>
@@ -110,7 +110,7 @@ flowchart LR
   240,000-instruction budget. It only showed up once real neighborhood streets started arriving. With a
   pre-sized array, four times the corridor costs 4.9× instead of 16×, and parsing now runs in slices of
   450 points on a timer.
-- **220 tests in the watch simulator and 319 on the JVM**, all green on 2026-10-28, plus a virtual ride
+- **216 tests in the watch simulator and 318 on the JVM**, all green on 2026-10-29, plus a virtual ride
   that drives the whole São Paulo route through the same entry point as the GPS and checks every turn
   alert against the rule.
 - **Seven attempts on the street before the transfer worked**, each stopped by a different cause that
@@ -186,7 +186,7 @@ the phone app.
 ```bash
 python3 tools/sim.py all                                   # watch: simulator tests + debug and release builds
 cd companion && ./gradlew assembleDebug testDebugUnitTest  # phone: APK + JVM tests
-python3 tools/package.py --keystore your.keystore --alias your_alias   # release files in dist/
+cd companion && ./gradlew assembleRelease && cd .. && python3 tools/package.py   # release files in dist/
 ```
 
 ```

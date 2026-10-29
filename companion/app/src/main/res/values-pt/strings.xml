@@ -180,8 +180,6 @@
     <string name="settings_conflict">O segundo aviso (%1$d m) tem de vir mais perto da curva que o «nunca avisar a menos de» (%2$d m); o relógio recusaria o envio.</string>
     <string name="settings_motorway">Evitar vias expressas</string>
     <string name="settings_motorway_hint">A rota e o recálculo fogem da pista expressa da Marginal, proibida para moto. Desligue na estrada, onde a rodovia é o caminho.</string>
-    <string name="settings_drill">Derrubar o app</string>
-    <string name="settings_drill_hint">Na próxima viagem, %1$d min depois da saída, o app do celular se derruba uma vez, como o Android faria, e o ensaio desarma sozinho. O relógio segue com o GPS dele; recálculo só volta na viagem seguinte.</string>
 
     <string name="section_turns">Avisos de curva</string>
     <string name="section_radars">Radares</string>
@@ -189,7 +187,6 @@
     <string name="section_route">Rota</string>
     <string name="section_size">Tamanho na tela</string>
     <string name="section_burn_in">Proteção da tela</string>
-    <string name="section_tests">Testes e diagnóstico</string>
 
     <string name="set_lead_s">Avisar antes da curva</string>
     <string name="set_lead_s_hint">Quanto tempo antes da curva, na velocidade em que você está.</string>
@@ -232,9 +229,9 @@
     <string name="set_street_diag">Diagnóstico das ruas</string>
     <string name="set_street_diag_hint">Uma alavanca por vez, com «Mapa deitado» desligado. Escolha uma, espere uns 10 segundos com a rota no mapa e veja se as ruas aparecem; o relógio mostra «D» e o número à esquerda da moto. Nas sondas (4 a 7), conte quantos X coloridos aparecem. Nas grades (8 a 10), ande um pouco e veja se as ruas acompanham. Precisa do relógio v1.2.9. Volte para Normal depois do teste.</string>
     <string name="set_vibe_on">Vibrar no pulso</string>
-    <string name="set_vibe_on_hint">Antes de cada curva (2 toques para a esquerda, 3 para a direita), na chegada e quando você sai da rota. Os ajustes abaixo só se sentem com isto ligado. Precisa do relógio v1.2.7.</string>
+    <string name="set_vibe_on_hint">Antes de cada curva (2 toques para a esquerda, 3 para a direita), na chegada e quando você sai da rota. Os ajustes abaixo só se sentem com isto ligado.</string>
     <string name="set_radar_vibe">Vibrar no radar</string>
-    <string name="set_radar_vibe_hint">Um toque quando a placa do radar aparece, uma vez por radar. Vale mesmo com «Vibrar no pulso» desligado. Precisa do relógio v1.2.9.</string>
+    <string name="set_radar_vibe_hint">Um toque quando a placa do radar aparece, uma vez por radar. Vale mesmo com «Vibrar no pulso» desligado.</string>
 
     <string name="zoom_0">0,6 m/px</string>
     <string name="zoom_1">1,2 m/px</string>

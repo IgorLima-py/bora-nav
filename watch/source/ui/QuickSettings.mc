@@ -1,4 +1,3 @@
-import Toybox.Application.Storage;
 import Toybox.Lang;
 import Toybox.WatchUi;
 
@@ -15,72 +14,6 @@ module QuickSettings {
     //! The rows that change a value; the fourth is "Reset to default".
     const ROWS = 3;
     const RESET = 3;
-
-    //! **"Ruas em imagem" (streets in image)** (2026-10-17): the `StreetCache` test switch, for Igor to
-    //! compare on the wrist the streets pasted from an image with those drawn on every frame. It stays in the watch's
-    //! `Storage`, outside `CONFIG`: "Reset to default" does not touch it.
-    const STREETS = 4;
-
-    //! **"Route outline (test)"** (sheet 4, 2026-10-17): the dark edge under the route
-    //! ([MapRenderer.routeCasing]). Since v1.1.5 it is the default, and the setting serves to turn it off and
-    //! compare on the wrist. Also outside `CONFIG`, and "Reset to default" turns it back on.
-    const CASING = 5;
-
-    //! **"Tilted map (test)"** (v1.1.5, sheet 8): the map flattened around the rider
-    //! ([MapRenderer.tilt]). On by default; turning it off compares the `frame avg` of the two on the wrist.
-    //! Outside `CONFIG`, and "Reset to default" turns it back on.
-    const TILT = 6;
-
-    function tiltLabel(on as Boolean) as String {
-        return Tr.s(on ? Rez.Strings.On : Rez.Strings.Off);
-    }
-
-    //! Saves the tilted map setting. `persist` false is for the tests. Returns the new value.
-    function setTilt(on as Boolean, persist as Boolean) as Boolean {
-        if (persist) {
-            try {
-                Storage.setValue(MapRenderer.TILT_PREF, on);
-            } catch (ex) {
-                Diag.add("tilted map did not save to Storage");
-            }
-        }
-        Diag.add("watch setting: tilted map " + (on ? "on" : "off"));
-        return on;
-    }
-
-    function casingLabel(on as Boolean) as String {
-        return Tr.s(on ? Rez.Strings.OnFem : Rez.Strings.OffFem);
-    }
-
-    //! Saves the edge setting. `persist` false is for the tests. Returns the new value.
-    function setCasing(on as Boolean, persist as Boolean) as Boolean {
-        if (persist) {
-            try {
-                Storage.setValue(MapRenderer.CASING_PREF, on);
-            } catch (ex) {
-                Diag.add("route casing did not save to Storage");
-            }
-        }
-        Diag.add("watch setting: route casing " + (on ? "on" : "off"));
-        return on;
-    }
-
-    function streetsLabel(on as Boolean) as String {
-        return Tr.s(on ? Rez.Strings.OnTest : Rez.Strings.OffTest);
-    }
-
-    //! Saves the switch. `persist` false is for the tests. Returns the new value.
-    function setStreets(on as Boolean, persist as Boolean) as Boolean {
-        if (persist) {
-            try {
-                Storage.setValue(StreetCache.PREF, on);
-            } catch (ex) {
-                Diag.add("street images did not save to Storage");
-            }
-        }
-        Diag.add("watch setting: street images " + (on ? "on" : "off"));
-        return on;
-    }
 
     //! The name of each row on the screen.
     function label(row as Number) as String {
@@ -161,12 +94,6 @@ function pushQuickSettings() as Boolean {
     }
     menu.addItem(new WatchUi.MenuItem(Rez.Strings.ResetDefaults, Rez.Strings.ResetHint, QuickSettings.RESET,
         {}));
-    menu.addItem(new WatchUi.MenuItem(Rez.Strings.StreetImages,
-        QuickSettings.streetsLabel(getApp().getMap().streetCache), QuickSettings.STREETS, {}));
-    menu.addItem(new WatchUi.MenuItem(Rez.Strings.RouteCasing,
-        QuickSettings.casingLabel(getApp().getMap().routeCasing), QuickSettings.CASING, {}));
-    menu.addItem(new WatchUi.MenuItem(Rez.Strings.TiltMap,
-        QuickSettings.tiltLabel(getApp().getMap().tilt), QuickSettings.TILT, {}));
     menu.addItem(new WatchUi.MenuItem(Rez.Strings.TheRest, Rez.Strings.OnThePhone, :none, {}));
     Diag.add("settings opened");
     WatchUi.pushView(menu, new QuickSettingsDelegate(menu), WatchUi.SLIDE_LEFT);
@@ -188,38 +115,7 @@ class QuickSettingsDelegate extends WatchUi.Menu2InputDelegate {
             return;
         }
         var row = id as Number;
-        if (row == QuickSettings.STREETS) {
-            var map = getApp().getMap();
-            var on = QuickSettings.setStreets(!map.streetCache, true);
-            map.setStreetCache(on);
-            item.setSubLabel(QuickSettings.streetsLabel(on));
-            WatchUi.requestUpdate();
-            return;
-        }
-        if (row == QuickSettings.CASING) {
-            var map = getApp().getMap();
-            map.routeCasing = QuickSettings.setCasing(!map.routeCasing, true);
-            item.setSubLabel(QuickSettings.casingLabel(map.routeCasing));
-            WatchUi.requestUpdate();
-            return;
-        }
-        if (row == QuickSettings.TILT) {
-            var map = getApp().getMap();
-            map.tilt = QuickSettings.setTilt(!map.tilt, true);
-            item.setSubLabel(QuickSettings.tiltLabel(map.tilt));
-            WatchUi.requestUpdate();
-            return;
-        }
         if (row == QuickSettings.RESET) {
-            var map = getApp().getMap();
-            if (!map.routeCasing) {
-                map.routeCasing = QuickSettings.setCasing(true, true);
-                relabel(QuickSettings.CASING, QuickSettings.casingLabel(true));
-            }
-            if (!map.tilt) {
-                map.tilt = QuickSettings.setTilt(true, true);
-                relabel(QuickSettings.TILT, QuickSettings.tiltLabel(true));
-            }
             if (QuickSettings.reset(true)) {
                 for (var r = 0; r < QuickSettings.ROWS; r++) {
                     var line = _menu.getItem(r);
@@ -245,15 +141,6 @@ class QuickSettingsDelegate extends WatchUi.Menu2InputDelegate {
         }
         choices.setFocus(focus);
         WatchUi.pushView(choices, new QuickChoiceDelegate(row, item), WatchUi.SLIDE_LEFT);
-    }
-
-    //! Changes the text below the menu row `id`, if it is there.
-    private function relabel(id as Number, text as String) as Void {
-        var at = _menu.findItemById(id);
-        var line = at >= 0 ? _menu.getItem(at) : null;
-        if (line != null) {
-            line.setSubLabel(text);
-        }
     }
 
     function onBack() as Void {

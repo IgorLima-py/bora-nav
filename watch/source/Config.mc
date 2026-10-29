@@ -37,13 +37,14 @@ module Config {
     //! v1.1.5: the warning plate's padding, in %, at the sides and at top and bottom (see [plateWidePct]).
     const KEY_PLATE_W_PCT = 14;
     const KEY_PLATE_H_PCT = 15;
-    //! C16: the GPS gap drill, in minutes after departure (see [gpsDrillMin]).
+    //! **16 to 20 are the C16 bench levers:** the GPS gap drill, the map test switches (streets as an image,
+    //! tilted map, 16-bit image) and the street diagnostic lever. Since v1.5.1 the watch still checks their range,
+    //! so an old phone's `CONFIG` is not refused, and uses none of them: the map is always the default
+    //! (`MotoNavApp`, at launch) and the drill is gone.
     const KEY_GPS_DRILL_MIN = 16;
-    //! C16: the map test switches, 0/1, sent from the phone (see [streetImage]).
     const KEY_STREET_IMG = 17;
     const KEY_MAP_TILT = 18;
     const KEY_STREET_16BIT = 19;
-    //! C16 (v1.2.5): the street image diagnostic lever, 0 to 10 (see [streetDiag]).
     const KEY_STREET_DIAG = 20;
     //! The lever's ceiling, the same 10 as in [MAXS] (a literal there, because the phone's `WatchSettingsTest`
     //! reads `MAXS` and only resolves numbers and `DesignTokens` constants).
@@ -156,38 +157,6 @@ module Config {
     //! tallest of the 31 arrows (`Hud.drawPlate`).
     function plateTallPct() as Number {
         return values[KEY_PLATE_H_PCT - 1] as Number;
-    }
-
-    //! The GPS gap drill ([GpsDrill], C16): how many minutes after
-    //! departure the watch fakes 90 s without GPS, once per trip. 0 (the default) turns it off.
-    function gpsDrillMin() as Number {
-        return values[KEY_GPS_DRILL_MIN - 1] as Number;
-    }
-
-    //! **The map switches (C16):** "Ruas em imagem", "Mapa deitado" and the 16-bit image,
-    //! the same test settings as the watch menu, brought to the phone so Igor can compare on the
-    //! wrist without ending the route (2026-10-19: the streets did not show up on the first ride with the image).
-    //! What counts for the map is the `Storage` preference that the menu also writes: the app rewrites it
-    //! when one of these keys arrives (`MotoNavApp.applyMapSwitches`), and the last one to touch it wins.
-    function streetImage() as Boolean {
-        return (values[KEY_STREET_IMG - 1] as Number) == 1;
-    }
-
-    function mapTilt() as Boolean {
-        return (values[KEY_MAP_TILT - 1] as Number) == 1;
-    }
-
-    function street16Bit() as Boolean {
-        return (values[KEY_STREET_16BIT - 1] as Number) == 1;
-    }
-
-    //! **The street diagnostic lever (C16, v1.2.5):** on the wrist the street image is assembled and
-    //! pasted but does not show up (log of 2026-10-22), while street by street the avenue shows up. 1 is the street
-    //! by street control; 2 and 3 the single image of 454 and 480 px, 4 to 7 the probes and 8 to [STREET_DIAG_MAX] the
-    //! tile grids (`StreetCache.DIAG_NAMES`, v1.2.9); 0 is the normal drawing. It is a single number, so only one
-    //! holds at a time.
-    function streetDiag() as Number {
-        return values[KEY_STREET_DIAG - 1] as Number;
     }
 
     //! **The wrist vibration (C16, v1.2.7):** turned off on the bench on 2026-10-02 (Igor's request,

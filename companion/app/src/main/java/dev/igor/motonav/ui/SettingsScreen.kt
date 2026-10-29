@@ -12,11 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -35,7 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import dev.igor.motonav.R
 import dev.igor.motonav.proto.ConfigKey
@@ -58,13 +55,12 @@ import kotlinx.coroutines.launch
  * empty `CONFIG`, which returns the watch to its default.
  *
  * Since 1.2.6 the screen is in groups ([WatchSettings.sections]): Igor found the list of 22
- * lines confusing (2026-10-22). Bench groups stay collapsed and say in the title
- * how many settings are off the default.
+ * lines confusing (2026-10-22). Since 1.4.3 every group opens closed and says in the title how many
+ * settings are off the default, and the preview, the letters and the attribution got smaller (Igor,
+ * 2026-10-29: the screen took too much room).
  *
  * @param initial what was sent last time ([dev.igor.motonav.settings.WatchSettingsStore]).
  * @param onSend receives the values and returns whether the watch confirmed (ACK 0x09).
- * @param drillArmed the dead-app drill (C16, [dev.igor.motonav.nav.KillDrill]) is armed;
- *   it sits in the tests group, but belongs to the phone, not to `CONFIG`.
  * @param avoidMotorways the "Evitar vias expressas" (C16, [dev.igor.motonav.route.RoutePrefs]), also
  *   the phone's: it applies to the next route request.
  * @param previewActive the control the watch preview starts by highlighting; only the screenshot
@@ -76,8 +72,6 @@ fun SettingsScreen(
     onSend: suspend (values: Map<ConfigKey, Int>) -> Boolean,
     onReset: suspend () -> Boolean,
     onBack: () -> Unit,
-    drillArmed: Boolean = false,
-    onDrillArmed: (Boolean) -> Unit = {},
     avoidMotorways: Boolean = true,
     onAvoidMotorways: (Boolean) -> Unit = {},
     previewActive: ConfigKey? = null,
@@ -123,8 +117,8 @@ fun SettingsScreen(
     Surface(modifier = Modifier.fillMaxSize()) {
         // The groups scroll; the send result and the two buttons stay fixed at the bottom.
         Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -133,43 +127,40 @@ fun SettingsScreen(
             ) {
                 Text(
                     text = stringResource(R.string.settings_title),
-                    style = MaterialTheme.typography.headlineMedium,
+                    style = MaterialTheme.typography.titleLarge,
                 )
                 TextButton(onClick = onBack) { Text(stringResource(R.string.settings_back)) }
             }
             Text(
                 text = stringResource(R.string.settings_intro),
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.labelSmall,
                 color = Fg2,
             )
             // The preview stays fixed on top, in view while the list scrolls.
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(6.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 WatchPreview(values = values, active = active, modifier = Modifier.size(PREVIEW_SIZE))
                 val part = active?.let { previewPartName(it) }
                 Text(
                     text = part?.let { stringResource(R.string.settings_touching, stringResource(it)) }
                         ?: stringResource(R.string.settings_touch_hint),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.labelSmall,
                     color = if (part != null) Cyan else Fg2,
                 )
             }
 
             Column(
                 modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 WatchSettings.sections.forEach { section ->
-                    val isTests = section.keys.contains(ConfigKey.STREET_DIAG)
-                    val changed = section.keys.count { values[it] != WatchSettings.of(it).default } +
-                        if (isTests && drillArmed) 1 else 0
+                    val changed = section.keys.count { values[it] != WatchSettings.of(it).default }
                     SettingsSection(
                         title = stringResource(section.title),
                         icon = section.icon,
-                        startOpen = !section.collapsed,
                         badge = if (changed == 0) null else pluralStringResource(R.plurals.settings_changed, changed, changed),
                     ) {
                         section.keys.forEach { key ->
@@ -184,7 +175,6 @@ fun SettingsScreen(
                                 },
                             )
                         }
-                        if (isTests) DrillRow(armed = drillArmed, onChange = onDrillArmed)
                     }
                     // The route belongs to the phone and has no `CONFIG`: it comes right after the map.
                     if (section.keys.contains(ConfigKey.ZOOM)) {
@@ -193,6 +183,14 @@ fun SettingsScreen(
                         }
                     }
                 }
+                // ODbL requires attribution where the data appears: the watch's streets and cameras (C16.6), and
+                // the pardal asks for its sources, CET-SP (CC BY) first (C16.7b, `PardalAttributionTest`). At the
+                // end of the list since 1.4.3: fixed under the buttons it took four lines of the screen.
+                Text(
+                    text = stringResource(R.string.osm_attribution),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Fg2,
+                )
             }
 
             val conflict = WatchSettings.conflict(values)
@@ -234,33 +232,25 @@ fun SettingsScreen(
                     Text(stringResource(R.string.settings_reset))
                 }
             }
-            // ODbL requires attribution where the data appears: the watch's streets and cameras (C16.6), and
-            // the pardal asks for its sources, CET-SP (CC BY) first (C16.7b, `PardalAttributionTest`).
-            Text(
-                text = stringResource(R.string.osm_attribution),
-                style = MaterialTheme.typography.bodySmall,
-                color = Fg2,
-            )
         }
     }
 }
 
 /**
- * A screen group: a card that opens and closes by its title (Igor's request, 2026-10-22). Closed,
- * it shows in the title how many of its settings are off the default, so no test lever
- * gets forgotten.
+ * A screen group: a card that opens and closes by its title (Igor's request, 2026-10-22), closed when the
+ * screen opens (2026-10-29). Closed, it shows in the title how many of its settings are off the default,
+ * so no change gets forgotten.
  */
 @Composable
 private fun SettingsSection(
     title: String,
     @DrawableRes icon: Int,
-    startOpen: Boolean = true,
     badge: String? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    var open by rememberSaveable(title) { mutableStateOf(startOpen) }
+    var open by rememberSaveable(title) { mutableStateOf(false) }
     Surface(color = Surface1, shape = MaterialTheme.shapes.medium, modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
+        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -270,10 +260,10 @@ private fun SettingsSection(
                 IconLabel(
                     icon = icon,
                     text = title,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleSmall,
                     tint = Cyan,
                     modifier = Modifier.weight(1f),
-                    iconSize = 22,
+                    iconSize = 18,
                 )
                 badge?.takeIf { !open }?.let {
                     Text(
@@ -308,20 +298,16 @@ private fun SettingRow(
         SwitchRow(setting, value, enabled, onChange)
         return
     }
-    if (setting.radio) {
-        RadioRow(setting, value, enabled, onChange)
-        return
-    }
     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             IconLabel(
                 icon = settingIcon(setting.key),
                 text = stringResource(setting.label),
-                style = MaterialTheme.typography.titleSmall,
+                style = MaterialTheme.typography.bodyMedium,
                 tint = Fg2,
                 modifier = Modifier.weight(1f),
             )
-            Text(setting.format(LocalContext.current.resources, value), style = MaterialTheme.typography.titleSmall, color = Cyan)
+            Text(setting.format(LocalContext.current.resources, value), style = MaterialTheme.typography.bodyMedium, color = Cyan)
         }
         // With more than 20 positions the dots become a dotted strip that does not help aiming
         // (63..112 % has 49): the control stays smooth and the value still jumps step by step.
@@ -337,7 +323,7 @@ private fun SettingRow(
             steps = steps,
             enabled = enabled,
         )
-        Text(text = stringResource(setting.hint), style = MaterialTheme.typography.bodySmall, color = Fg2)
+        Text(text = stringResource(setting.hint), style = MaterialTheme.typography.labelSmall, color = Fg2)
         if (setting.key in WatchSettings.groupKeys) {
             EffectiveSize(setting.key, values)
         }
@@ -360,12 +346,12 @@ private fun EffectiveSize(key: ConfigKey, values: Map<ConfigKey, Int>) {
     when {
         effective != raw -> Text(
             text = stringResource(R.string.settings_effective_capped, effective),
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.labelSmall,
             color = Amber,
         )
         effective != own -> Text(
             text = stringResource(R.string.settings_effective, effective, hud),
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.labelSmall,
             color = Fg2,
         )
     }
@@ -375,7 +361,7 @@ private fun EffectiveSize(key: ConfigKey, values: Map<ConfigKey, Int>) {
 private fun BackToDefault(setting: WatchSetting, enabled: Boolean, onChange: (Int) -> Unit) {
     Text(
         text = stringResource(R.string.settings_default, setting.format(LocalContext.current.resources, setting.default)),
-        style = MaterialTheme.typography.bodySmall,
+        style = MaterialTheme.typography.labelSmall,
         color = Cyan,
         modifier = Modifier
             .clickable(enabled = enabled) { onChange(setting.default) }
@@ -396,17 +382,17 @@ private fun SwitchRow(
             IconLabel(
                 icon = settingIcon(setting.key),
                 text = stringResource(setting.label),
-                style = MaterialTheme.typography.titleSmall,
+                style = MaterialTheme.typography.bodyMedium,
                 tint = Fg2,
                 modifier = Modifier.weight(1f),
             )
             Switch(checked = value == 1, onCheckedChange = { onChange(if (it) 1 else 0) }, enabled = enabled)
         }
-        Text(text = stringResource(setting.hint), style = MaterialTheme.typography.bodySmall, color = Fg2)
+        Text(text = stringResource(setting.hint), style = MaterialTheme.typography.labelSmall, color = Fg2)
     }
 }
 
-/** The "Evitar vias expressas" (C16): the phone's, without `CONFIG`, like [DrillRow]. */
+/** The "Evitar vias expressas" (C16): the phone's, without `CONFIG`, so it changes right away, with no send. */
 @Composable
 private fun MotorwayRow(on: Boolean, onChange: (Boolean) -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
@@ -414,7 +400,7 @@ private fun MotorwayRow(on: Boolean, onChange: (Boolean) -> Unit) {
             IconLabel(
                 icon = R.drawable.ic_highway,
                 text = stringResource(R.string.settings_motorway),
-                style = MaterialTheme.typography.titleSmall,
+                style = MaterialTheme.typography.bodyMedium,
                 tint = Fg2,
                 modifier = Modifier.weight(1f),
             )
@@ -422,61 +408,7 @@ private fun MotorwayRow(on: Boolean, onChange: (Boolean) -> Unit) {
         }
         Text(
             text = stringResource(R.string.settings_motorway_hint),
-            style = MaterialTheme.typography.bodySmall,
-            color = Fg2,
-        )
-    }
-}
-
-/** A watch setting with options, one per line and only one selected (the street levers, C16). */
-@Composable
-private fun RadioRow(
-    setting: WatchSetting,
-    value: Int,
-    enabled: Boolean,
-    onChange: (Int) -> Unit,
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-        IconLabel(
-            icon = settingIcon(setting.key),
-            text = stringResource(setting.label),
-            style = MaterialTheme.typography.titleSmall,
-            tint = Fg2,
-        )
-        Text(text = stringResource(setting.hint), style = MaterialTheme.typography.bodySmall, color = Fg2)
-        for (option in setting.min..setting.max) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .selectable(selected = value == option, enabled = enabled, role = Role.RadioButton) {
-                        onChange(option)
-                    },
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                RadioButton(selected = value == option, onClick = null, enabled = enabled)
-                Text(setting.format(LocalContext.current.resources, option), style = MaterialTheme.typography.bodyMedium)
-            }
-        }
-    }
-}
-
-/** The dead-app drill (C16): the phone's, without `CONFIG`, so it changes right away, with no send. */
-@Composable
-private fun DrillRow(armed: Boolean, onChange: (Boolean) -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            IconLabel(
-                icon = R.drawable.ic_bolt,
-                text = stringResource(R.string.settings_drill),
-                style = MaterialTheme.typography.titleSmall,
-                tint = Fg2,
-                modifier = Modifier.weight(1f),
-            )
-            Switch(checked = armed, onCheckedChange = onChange)
-        }
-        Text(
-            text = stringResource(R.string.settings_drill_hint, (dev.igor.motonav.nav.KillDrill.AFTER_MS / 60_000).toInt()),
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.labelSmall,
             color = Fg2,
         )
     }
@@ -492,8 +424,8 @@ private const val AUTO_SEND_MS = 700L
 /** Up to how many positions the control shows the dots for each step. */
 private const val MAX_TICKS = 20
 
-/** The watch preview's side: big enough to read the sign, without taking the screen. */
-private val PREVIEW_SIZE = 200.dp
+/** The watch preview's side: the sign still reads at 140 dp, and the list gets the room (Igor, 2026-10-29). */
+private val PREVIEW_SIZE = 140.dp
 
 /** How long the preview holds the highlight after the last touch. A choice, not a measurement. */
 private const val PREVIEW_HOLD_MS = 2500L

@@ -12,5 +12,5 @@ import Toybox.Lang;
 //! prove which build is running on that device (docs/ESTADO.md §Versioning).
 module AppVersion {
 
-    const LABEL = "v1.5.0";
+    const LABEL = "v1.5.1";
 }
